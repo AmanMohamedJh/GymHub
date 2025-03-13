@@ -1,0 +1,157 @@
+/* Navbar Styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px; /* Adjusted height for better sizing */
+  z-index: 50;
+  background-color: rgba(17, 17, 17, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease; /* Added transition for background */
+  width: 100%; /* Ensure full width */
+}
+
+.navbar-container {
+  height: 100%;
+  max-width: 1200px; /* Set a fixed max-width for better alignment */
+  margin: 0 auto; /* Center the navbar */
+  padding: 0 20px; /* Added padding for better spacing */
+  width: 100%; /* Ensure full width */
+}
+
+.navbar-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjusted gap for better spacing */
+}
+
+.brand-name {
+  font-size: 1.8rem; /* Adjusted font size for better visibility */
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  letter-spacing: -0.025em;
+}
+
+.brand-name span {
+  color: rgb(227, 73, 50); /* Changed to gold for consistency */
+}
+
+.navbar-links {
+  display: none; /* Hidden by default for mobile */
+}
+
+@media (min-width: 768px) {
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Adjusted gap for better spacing */
+  }
+}
+
+.nav-link {
+  font-size: 1rem; /* Adjusted font size for better visibility */
+  font-weight: 500;
+  color: var(--gray-300);
+  text-decoration: none;
+  padding: 10px 15px; /* Adjusted padding for better button size */
+  border-radius: 5px; /* Adjusted border radius for better look */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Added transition for hover effect */
+}
+
+.nav-link:hover {
+  color: white;
+  background-color: rgba(248, 199, 5, 0.2); /* Added hover effect */
+}
+
+.nav-link.active {
+  color: rgb(227, 73, 50);
+  background-color: rgba(255, 204, 0, 0.3); /* Adjusted active state */
+}
+
+.navbar-auth {
+  display: none; /* Hidden by default for mobile */
+}
+
+@media (min-width: 768px) {
+  .navbar-auth {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Adjusted gap for better spacing */
+  }
+}
+
+.mobile-menu-button-container {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .mobile-menu-button-container {
+    display: none; /* Hide mobile menu button on larger screens */
+  }
+}
+
+.mobile-menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px; /* Adjusted padding for better button size */
+  color: var(--gray-300);
+  background-color: transparent;
+  border: none;
+  border-radius: 5px; /* Adjusted border radius for better look */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Added transition for hover effect */
+}
+
+.mobile-menu-button:hover {
+  color: white;
+  background-color: rgba(255, 204, 0, 0.2); /* Added hover effect */
+}
+
+.mobile-menu {
+  position: absolute;
+  top: 70px; /* Adjusted to match navbar height */
+  left: 0;
+  right: 0;
+  background-color: rgba(17, 17, 17, 0.95);
+  border-bottom: 1px solid var(--gray-800);
+  padding: 20px; /* Adjusted padding for better spacing */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Adjusted gap for better spacing */
+}
+
+.mobile-nav-link {
+  display: block;
+  padding: 10px 15px; /* Adjusted padding for better button size */
+  color: var(--gray-300);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 5px; /* Adjusted border radius for better look */
+  transition: background-color 0.3s ease; /* Added transition for hover effect */
+}
+
+.mobile-nav-link:hover {
+  color: white;
+  background-color: rgba(255, 204, 0, 0.2); /* Added hover effect */
+}
+
+.mobile-auth {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Adjusted gap for better spacing */
+  margin-top: 10px; /* Adjusted margin for better spacing */
+  padding-top: 10px; /* Adjusted padding for better spacing */
+  border-top: 1px solid var(--gray-800);
+}
