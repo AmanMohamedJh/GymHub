@@ -1,0 +1,220 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.login-page .navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.login-page .auth-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 90px 20px 20px;
+  position: relative;
+  background-image: url("../../Images/gym-background.jpg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+.login-page .auth-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+}
+
+.login-page .auth-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.login-page .auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-page .auth-header h2 {
+  color: #2d3748;
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.login-page .auth-header p {
+  color: #718096;
+  font-size: 0.975rem;
+}
+
+.login-page .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.login-page .form-label {
+  display: block;
+  color: #4a5568;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.login-page .input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-page .input-icon {
+  position: absolute;
+  left: 1rem;
+  color: #718096;
+}
+
+.login-page .input-field {
+  width: 100%;
+  padding: 0.75rem;
+  padding-left: 2.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 0.975rem;
+  transition: all 0.3s ease;
+}
+
+.login-page .input-field:focus {
+  outline: none;
+  border-color: rgb(227, 73, 50);
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.login-page .input-field::placeholder {
+  color: #a0aec0;
+}
+
+.login-page .form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-page .checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.login-page .custom-checkbox {
+  width: 1rem;
+  height: 1rem;
+  accent-color: rgb(227, 73, 50);
+}
+
+.login-page .checkbox-label {
+  color: #4a5568;
+  font-size: 0.875rem;
+}
+
+.login-page .forgot-password {
+  color: rgb(227, 73, 50);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-page .forgot-password:hover {
+  color: rgb(227, 73, 50);
+}
+
+.login-page .btn-primary {
+  width: 100%;
+  background-color: rgb(227, 73, 50);
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-page .btn-primary:hover {
+  background-color: rgb(227, 73, 50);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(66, 153, 225, 0.4);
+}
+
+.login-page .btn-primary:active {
+  transform: translateY(0);
+}
+
+.login-page .auth-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #4a5568;
+  font-size: 0.875rem;
+}
+
+.login-page .auth-link {
+  color: rgb(227, 73, 50);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.login-page .auth-link:hover {
+  color: rgb(227, 73, 50);
+}
+
+@media (max-width: 480px) {
+  .login-page .auth-card {
+    padding: 1.5rem;
+  }
+
+  .login-page .auth-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .login-page .form-options {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+}
