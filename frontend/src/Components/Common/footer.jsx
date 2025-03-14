@@ -16,21 +16,27 @@ export default function Footer() {
             </p>
             <div className="social-links flex space-x-4">
               <a
-                href="#"
+                href="https://facebook.com/gymhub"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="social-link text-gray-400 hover:text-gym-gold"
                 aria-label="Facebook"
               >
                 <FaFacebook className="h-6 w-6" />
               </a>
               <a
-                href="#"
+                href="https://twitter.com/gymhub"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="social-link text-gray-400 hover:text-gym-gold"
                 aria-label="Twitter"
               >
                 <FaTwitter className="h-6 w-6" />
               </a>
               <a
-                href="#"
+                href="https://instagram.com/gymhub"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="social-link text-gray-400 hover:text-gym-gold"
                 aria-label="Instagram"
               >
@@ -71,19 +77,19 @@ export default function Footer() {
             </h3>
             <div className="footer-links space-y-2">
               <Link
-                to="/register"
+                to="/register-gym"
                 className="footer-link text-gray-400 hover:text-gym-gold"
               >
                 List Your Gym
               </Link>
               <Link
-                to="/register"
+                to="/register-trainer"
                 className="footer-link text-gray-400 hover:text-gym-gold"
               >
                 Become a Trainer
               </Link>
               <Link
-                to="#"
+                to="/support"
                 className="footer-link text-gray-400 hover:text-gym-gold"
               >
                 Partner Support

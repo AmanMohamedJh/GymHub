@@ -1,0 +1,218 @@
+.owner-dashboard-container {
+  padding: 5rem;
+  min-height: calc(100vh - 140px);
+  position: relative;
+  overflow: hidden;
+}
+
+.owner-dashboard-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("./images/gym-background2.jpg.jpg") center/cover no-repeat;
+  filter: blur(5px); /* Reduced blur for better balance */
+  z-index: -1;
+  transform: scale(1.1); /* Prevents blur edges from showing */
+}
+
+.owner-dashboard-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Adjusted opacity for better readability */
+  z-index: -1;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-header h2 {
+  color: #ffffff;
+  font-size: 2.5rem; /* Increased size for better visibility */
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Added shadow for better contrast */
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  text-align: center;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  color: #e74c3c;
+  margin-bottom: 1rem;
+}
+
+.stat-card h3 {
+  color: #555;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card .number {
+  color: #e74c3c;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.add-gym-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.content-section {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.content-section h3 {
+  color: #333;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #eee;
+}
+
+.gym-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.gym-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.gym-card-image {
+  width: 100%;
+  height: 200px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  object-fit: cover;
+  background: url("./images/gym-background2.jpg.jpg") center/cover no-repeat;
+}
+
+.gym-card h4 {
+  color: #2c3e50;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.feedback-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.feedback-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.feedback-header h4 {
+  color: #e74c3c;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.feedback-message {
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.feedback-rating {
+  color: #3498db;
+  font-weight: 500;
+}
+
+.primary-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.primary-button:hover {
+  background-color: #c0392b;
+}
+
+.secondary-button {
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.secondary-button:hover {
+  background-color: #ff1900;
+}
