@@ -1,10 +1,23 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import "../styles/Login/login.css";
-import Navbar from "../Components/Common/Navbar";
-import Footer from "../Components/Common/footer";
+import { useLogin } from "../hooks/useLogin";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login, error, isLoading } = useLogin();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const success = await login(email, password);
+    if (success) {
+      navigate("/");
+    }
+  };
+
   return (
     <div className="login-page">
       <div className="auth-container">
@@ -14,7 +27,7 @@ export default function Login() {
             <p>Sign in to continue your fitness journey</p>
           </div>
 
-          <form className="auth-form">
+          <form className="auth-form" onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="email" className="form-label">
                 Email Address
@@ -25,11 +38,12 @@ export default function Login() {
                 </div>
                 <input
                   type="email"
-                  name="email"
                   id="email"
                   required
                   className="input-field"
                   placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -44,36 +58,24 @@ export default function Login() {
                 </div>
                 <input
                   type="password"
-                  name="password"
                   id="password"
                   required
                   className="input-field"
                   placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
 
-            <div className="form-options">
-              <div className="checkbox-group">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="custom-checkbox"
-                />
-                <label htmlFor="remember-me" className="checkbox-label">
-                  Remember me
-                </label>
-              </div>
-              <a href="#" className="forgot-password">
-                Forgot password?
-              </a>
-            </div>
-
-            <button type="submit" className="btn-primary auth-submit">
-              Sign In
+            <button
+              type="submit"
+              className="btn-primary auth-submit"
+              disabled={isLoading}
+            >
+              {isLoading ? "Signing in..." : "Sign In"}
             </button>
-
+            {error && <div className="error-message">{error}</div>}
             <div className="auth-footer">
               <p>
                 Don't have an account?{" "}
