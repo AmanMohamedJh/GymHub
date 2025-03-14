@@ -313,65 +313,120 @@ th {
   margin-bottom: 1rem;
 }
 
-.modal {
+/* Modal Styles */
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(4px);
 }
 
 .modal-content {
   background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 500px;
+  padding: 2.5rem;
+  border-radius: 12px;
+  max-width: 450px;
   width: 90%;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .modal-content h3 {
-  color: #000000;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  color: #e74c3c;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 .modal-content p {
-  color: #000000;
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  text-align: center;
 }
 
 .modal-buttons {
   display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 20px;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 .modal-buttons button {
-  padding: 10px 20px;
+  min-width: 140px;
+  padding: 0.875rem 1.75rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
+  justify-content: center;
+  gap: 0.75rem;
+  height: 45px;
+  transition: all 0.3s ease;
 }
 
-.modal-buttons button:first-child {
+.modal-buttons .cancel-button {
   background: #95a5a6;
   color: white;
 }
 
-.modal-buttons button:first-child:hover {
+.modal-buttons .delete-button {
+  background: #e74c3c;
+  color: white;
+}
+
+.modal-buttons .cancel-button:hover {
   background: #7f8c8d;
+  transform: translateY(-1px);
+}
+
+.modal-buttons .delete-button:hover {
+  background: #c0392b;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+  .modal-buttons button {
+    width: 100%;
+  }
 }
 
 /* Responsive Design */

@@ -280,8 +280,8 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.75);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 1000;
   backdrop-filter: blur(4px);
 }
@@ -290,14 +290,22 @@
   background: white;
   padding: 2.5rem;
   border-radius: 12px;
-  max-width: 500px;
+  max-width: 450px;
   width: 90%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .modal-content {
@@ -308,6 +316,7 @@
   color: #e74c3c;
   font-size: 1.75rem;
   margin-bottom: 1.5rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -325,23 +334,60 @@
   display: flex;
   gap: 1.5rem;
   justify-content: center;
+  margin-top: 2rem;
 }
 
 .modal-buttons button {
   min-width: 140px;
   padding: 0.875rem 1.75rem;
+  border: none;
   border-radius: 6px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.75rem;
+  height: 45px;
+  transition: all 0.3s ease;
 }
 
-/* Responsive Design */
+.modal-buttons .cancel-button {
+  background: #95a5a6;
+  color: white;
+}
+
+.modal-buttons .delete-button {
+  background: #e74c3c;
+  color: white;
+}
+
+.modal-buttons .cancel-button:hover {
+  background: #7f8c8d;
+  transform: translateY(-1px);
+}
+
+.modal-buttons .delete-button:hover {
+  background: #c0392b;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .modal {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+  .modal-buttons button {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .owner-profile-container {
     padding: 1rem;
@@ -362,19 +408,5 @@
   .button-group button {
     width: 100%;
     justify-content: center;
-  }
-
-  .modal {
-    width: 95%;
-    margin: 1rem;
-    padding: 1.5rem;
-  }
-
-  .modal-buttons {
-    flex-direction: column;
-  }
-
-  .modal-buttons button {
-    width: 100%;
   }
 }
