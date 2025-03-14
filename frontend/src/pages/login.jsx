@@ -7,7 +7,6 @@ import Footer from "../Components/Common/footer";
 export default function Login() {
   return (
     <div className="login-page">
-      <Navbar />
       <div className="auth-container">
         <div className="auth-card card">
           <div className="auth-header">
@@ -86,7 +85,6 @@ export default function Login() {
           </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

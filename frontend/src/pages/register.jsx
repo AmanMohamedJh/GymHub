@@ -61,7 +61,6 @@ export default function Register() {
 
   return (
     <>
-      <Navbar />
       <main className="register-page">
         <div className="auth-container">
           <div className="auth-card register-card">
@@ -267,7 +266,6 @@ export default function Register() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

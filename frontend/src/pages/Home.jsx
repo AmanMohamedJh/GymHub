@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../Components/Common/Navbar.jsx"; // Importing the Navbar component
+import Navbar from "../Components/Common/Navbar.jsx"; //no need of navbar and footer bcs its already in the App.js with routes
 import gymImage1 from "../Images/gym1.jpg.jpg";
 import gymImage2 from "../Images/gym2.jpg.jpg";
 import gymImage3 from "../Images/gym3.jpg.jpg";
@@ -9,7 +9,6 @@ import Footer from "../Components/Common/footer.jsx";
 export default function Home() {
   return (
     <>
-      <Navbar /> {/* Adding the Navbar at the top */}
       <main>
         {/* Hero Section */}
         <section className="hero-section">
@@ -116,7 +115,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   );
 }
