@@ -1,11 +1,11 @@
-.owner-profile-container {
+.owner-dashboard-container {
   padding: 5rem;
   min-height: calc(100vh - 140px);
   position: relative;
   overflow: hidden;
 }
 
-.owner-profile-container::before {
+.owner-dashboard-container::before {
   content: "";
   position: absolute;
   top: 0;
@@ -13,297 +13,206 @@
   right: 0;
   bottom: 0;
   background: url("./images/gym-background2.jpg.jpg") center/cover no-repeat;
-  filter: blur(5px);
+  filter: blur(5px); /* Reduced blur for better balance */
   z-index: -1;
-  transform: scale(1.1);
+  transform: scale(1.1); /* Prevents blur edges from showing */
 }
 
-.owner-profile-container::after {
+.owner-dashboard-container::after {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5); /* Adjusted opacity for better readability */
   z-index: -1;
 }
 
-.profile-content {
-  max-width: 900px;
-  margin: 0 auto;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.profile-header {
-  text-align: center;
+.dashboard-header {
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
-.profile-header h1 {
-  color: #e74c3c;
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+.dashboard-header h2 {
+  color: #ffffff;
+  font-size: 2.5rem; /* Increased size for better visibility */
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Added shadow for better contrast */
 }
 
-.profile-header p {
-  color: #2c3e50;
-  font-size: 1.1rem;
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
-.profile-section {
-  background: #ffffff;
+.stat-card {
+  background: rgba(255, 255, 255, 0.9);
   padding: 1.5rem;
   border-radius: 8px;
-  margin-bottom: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(231, 76, 60, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  text-align: center;
 }
 
-.profile-section h2 {
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-icon {
+  font-size: 2rem;
   color: #e74c3c;
+  margin-bottom: 1rem;
+}
+
+.stat-card h3 {
+  color: #555;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card .number {
+  color: #e74c3c;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.add-gym-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.content-section {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.content-section h3 {
+  color: #333;
   font-size: 1.3rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e74c3c;
+  border-bottom: 2px solid #eee;
+}
+
+.gym-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.gym-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.gym-card-image {
+  width: 100%;
+  height: 200px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  object-fit: cover;
+  background: url("./images/gym-background2.jpg.jpg") center/cover no-repeat;
+}
+
+.gym-card h4 {
+  color: #2c3e50;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.location {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-weight: bold;
+  color: #666;
+  margin-bottom: 1rem;
 }
 
-.profile-info {
-  display: flex;
-  flex-direction: column;
+.feedback-list {
+  display: grid;
   gap: 1rem;
 }
 
-.info-item {
+.feedback-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.5rem 0;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.info-item label {
-  font-weight: 600;
-  min-width: 100px;
-  color: #2c3e50;
-}
-
-.info-item p {
-  color: #34495e;
+.feedback-header h4 {
+  color: #e74c3c;
+  font-size: 1.2rem;
   margin: 0;
+}
+
+.feedback-message {
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.feedback-rating {
+  color: #3498db;
   font-weight: 500;
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #e74c3c;
+.primary-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
   border-radius: 4px;
   font-size: 1rem;
-  color: #2c3e50;
-  background: #fff;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #e74c3c;
-  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
-}
-
-.form-group input::placeholder {
-  color: #95a5a6;
-}
-
-.button-group {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.edit-button,
-.save-button,
-.cancel-button,
-.change-password-button,
-.delete-account-button {
+  font-weight: 500;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: #e74c3c;
+  transition: background-color 0.2s ease;
+}
+
+.primary-button:hover {
+  background-color: #c0392b;
+}
+
+.secondary-button {
+  background-color: #000000;
   color: white;
-  padding: 0.75rem 1.5rem;
   border: none;
+  padding: 0.75rem 1.5rem;
   border-radius: 4px;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
-}
-
-.edit-button:hover,
-.save-button:hover,
-.cancel-button:hover,
-.change-password-button:hover,
-.delete-account-button:hover {
-  background: #c0392b;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.danger-zone {
-  border: 2px solid #e74c3c;
-  background: rgba(231, 76, 60, 0.05);
-}
-
-.delete-confirm {
-  background: #ffffff;
-  padding: 1.5rem;
-  border-radius: 4px;
-  border: 2px solid #e74c3c;
-}
-
-.delete-confirm p {
-  color: #c0392b;
-  margin-bottom: 1rem;
-  font-weight: 600;
-}
-
-.error-message {
-  background: rgba(231, 76, 60, 0.1);
-  color: #c0392b;
-  padding: 1rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  border: 1px solid #e74c3c;
-  font-weight: 500;
-}
-
-.success-message {
-  background: rgba(46, 204, 113, 0.1);
-  color: #27ae60;
-  padding: 1rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  border: 1px solid #2ecc71;
-  font-weight: 500;
-  text-align: center;
-}
-
-.loading {
-  text-align: center;
-  padding: 2rem;
-  color: #2c3e50;
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.edit-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: start;
-}
-
-.current-details {
-  background: #ffffff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 2px solid #e74c3c;
-}
-
-.current-details h3,
-.edit-form h3 {
-  color: #e74c3c;
-  margin-bottom: 1.5rem;
-  font-size: 1.2rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e74c3c;
-  font-weight: bold;
-}
-
-.edit-form {
-  background: #ffffff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 2px solid #e74c3c;
-}
-
-.profile-picture-container {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
   align-items: center;
-  margin-bottom: 20px;
-  position: relative;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
 }
 
-.profile-picture {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #3498db;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.profile-picture-upload {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: rgba(52, 152, 219, 0.9);
-  padding: 8px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.profile-picture-upload:hover {
-  background: rgba(41, 128, 185, 1);
-}
-
-.upload-label {
-  color: white;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  .owner-profile-container {
-    padding: 2rem 1rem;
-  }
-
-  .edit-section {
-    grid-template-columns: 1fr;
-  }
-
-  .profile-content {
-    margin: 0 1rem;
-  }
+.secondary-button:hover {
+  background-color: #ff1900;
 }
