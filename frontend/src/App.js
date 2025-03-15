@@ -10,6 +10,8 @@ import ManageGym from "./pages/Gym_Owner/ManageGym.jsx";
 import OwnerProfile from "./pages/Gym_Owner/OwnerProfile.jsx";
 import TrainerDashboard from "./pages/Trainer/TrainerDashboard.jsx";
 import ClientDashboard from "./pages/Clientt/ClientDashboard.jsx";
+import GymList from "./pages/Clientt/GymList.jsx";
+import TrainerList from "./pages/Trainer/TrainerList.jsx";
 import ProtectedRoute from "./Route Protector/ProtectedRoute.jsx";
 import "./App.css";
 
@@ -68,6 +70,34 @@ function App() {
               element={
                 <ProtectedRoute allowedRole="client">
                   <ClientDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/gym-list"
+              element={
+                <ProtectedRoute
+                  allowedRole={["client", "trainer", "gym_owner"]}
+                >
+                  <GymList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer-list"
+              element={
+                <ProtectedRoute
+                  allowedRole={["client", "trainer", "gym_owner"]}
+                >
+                  <TrainerList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/manage-gym"
+              element={
+                <ProtectedRoute allowedRole="gym_owner">
+                  <ManageGym />
                 </ProtectedRoute>
               }
             />
