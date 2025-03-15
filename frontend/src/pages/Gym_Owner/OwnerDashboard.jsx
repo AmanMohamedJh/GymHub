@@ -1,16 +1,21 @@
 import React from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   FaPlus,
   FaMapMarkerAlt,
-  FaTimes,
   FaComments,
+  FaTimes,
   FaDollarSign,
   FaUsers,
   FaDumbbell,
+  FaUserCheck,
+  FaUserClock,
+  FaCog,
+  FaStar,
+  FaUser,
 } from "react-icons/fa";
-import "./Styles/OwnerDashboard.css";
+import "./Styles/Dashboard.css";
 import gymImage from "./Styles/images/gym-background2.jpg.jpg";
 
 const OwnerDashboard = () => {
@@ -20,135 +25,136 @@ const OwnerDashboard = () => {
   // Mock data - replace with actual data from your context/API
   const analytics = {
     totalGyms: 5,
-    totalClients: 150,
-    monthlyRevenue: 25000,
+    registeredGyms: 3,
+    pendingGyms: 2,
   };
 
   const registeredGyms = [
     {
-      id: 1,
+      _id: 1,
       name: "FitZone",
       location: "New York",
-      image: gymImage,
+      images: [gymImage],
     },
     {
-      id: 2,
+      _id: 2,
       name: "PowerHouse",
       location: "Los Angeles",
-      image: gymImage,
+      images: [gymImage],
     },
   ];
 
   const pendingGyms = [
     {
-      id: 3,
+      _id: 3,
       name: "Elite Fitness",
       location: "Chicago",
-      image: gymImage,
+      images: [gymImage],
     },
     {
-      id: 4,
+      _id: 4,
       name: "Strong Life",
       location: "Miami",
-      image: gymImage,
+      images: [gymImage],
     },
   ];
 
-  const feedbacks = [
+  const feedback = [
     {
-      id: 1,
-      gymName: "FitZone",
+      _id: 1,
+      clientName: "John Doe",
       message: "Great facilities and trainers!",
       rating: 5,
     },
     {
-      id: 2,
-      gymName: "PowerHouse",
+      _id: 2,
+      clientName: "Jane Doe",
       message: "Excellent equipment and atmosphere",
       rating: 4,
     },
   ];
 
+  const defaultGymImage = gymImage;
+
   return (
-    <div className="owner-dashboard-container">
-      <div className="dashboard-header">
+    <div className="dashboard-main-container">
+      <div className="dashboard-header-main">
         <h2>Welcome, {user?.name}</h2>
       </div>
 
       {/* Analytics Section */}
-      <div className="dashboard-stats">
-        <div className="stat-card">
-          <FaDumbbell className="stat-icon" />
+      <div className="dashboard-stats-grid">
+        <div className="dashboard-stat-item">
+          <FaDumbbell className="dashboard-icon" />
           <h3>Total Gyms</h3>
-          <div className="number">{analytics.totalGyms}</div>
+          <div className="dashboard-number">{analytics.totalGyms}</div>
         </div>
-        <div className="stat-card">
-          <FaUsers className="stat-icon" />
-          <h3>Total Clients</h3>
-          <div className="number">{analytics.totalClients}</div>
+        <div className="dashboard-stat-item">
+          <FaUserCheck className="dashboard-icon" />
+          <h3>Registered Gyms</h3>
+          <div className="dashboard-number">{analytics.registeredGyms}</div>
         </div>
-        <div className="stat-card">
-          <FaDollarSign className="stat-icon" />
-          <h3>Monthly Revenue</h3>
-          <div className="number">${analytics.monthlyRevenue}</div>
+        <div className="dashboard-stat-item">
+          <FaUserClock className="dashboard-icon" />
+          <h3>Pending Gyms</h3>
+          <div className="dashboard-number">{analytics.pendingGyms}</div>
         </div>
       </div>
 
-      {/* Add Gym Section */}
-      <div className="add-gym-section">
-        <button
-          className="primary-button"
-          onClick={() => navigate("/register-gym")}
-        >
-          <FaPlus /> Register Your Dream Gym Here
-        </button>
+      {/* Add Gym Button */}
+      <div className="dashboard-add-section">
+        <Link to="/register-gym">
+          <button className="dashboard-btn-primary">
+            <FaPlus /> Add New Gym
+          </button>
+        </Link>
       </div>
 
       {/* Registered Gyms Section */}
-      <div className="content-section">
-        <h3>Gyms Registered</h3>
-        <div className="gym-grid">
+      <div className="dashboard-content-box">
+        <h3>Registered Gyms</h3>
+        <div className="dashboard-gym-grid">
           {registeredGyms.map((gym) => (
-            <div className="gym-card" key={gym.id}>
+            <div key={gym._id} className="dashboard-gym-item">
               <div
-                className="gym-card-image"
-                style={{ backgroundImage: `url(${gym.image})` }}
-              />
+                className="dashboard-gym-image"
+                style={{
+                  backgroundImage: `url(${gym.images[0] || defaultGymImage})`,
+                }}
+              ></div>
               <h4>{gym.name}</h4>
-              <div className="location">
-                <FaMapMarkerAlt /> {gym.location}
+              <div className="dashboard-location">
+                <FaMapMarkerAlt />
+                {gym.location}
               </div>
-              <button
-                className="primary-button"
-                onClick={() => navigate(`/gym-dashboard/${gym.id}`)}
-              >
-                Manage Gym
-              </button>
+              <Link to={`/gym-dashboard/${gym._id}`}>
+                <button className="dashboard-btn-secondary">
+                  <FaCog /> Manage Gym
+                </button>
+              </Link>
             </div>
           ))}
         </div>
       </div>
 
       {/* Pending Gyms Section */}
-      <div className="content-section">
+      <div className="dashboard-content-box">
         <h3>Pending Gyms</h3>
-        <div className="gym-grid">
+        <div className="dashboard-gym-grid">
           {pendingGyms.map((gym) => (
-            <div className="gym-card" key={gym.id}>
+            <div key={gym._id} className="dashboard-gym-item">
               <div
-                className="gym-card-image"
-                style={{ backgroundImage: `url(${gym.image})` }}
-              />
-              <h4>{gym.name}</h4>
-              <div className="location">
-                <FaMapMarkerAlt /> {gym.location}
-              </div>
-              <button
-                className="secondary-button"
-                onClick={() => {
-                  /* Handle cancel request */
+                className="dashboard-gym-image"
+                style={{
+                  backgroundImage: `url(${gym.images[0] || defaultGymImage})`,
                 }}
-              >
+              ></div>
+              <h4>{gym.name}</h4>
+              <div className="dashboard-location">
+                <FaMapMarkerAlt />
+                {gym.location}
+              </div>
+              <button className="dashboard-btn-secondary dashboard-btn-danger">
                 <FaTimes /> Cancel Request
               </button>
             </div>
@@ -156,18 +162,21 @@ const OwnerDashboard = () => {
         </div>
       </div>
 
-      {/* Feedback Section */}
-      <div className="content-section">
-        <h3>Client Feedback</h3>
-        <div className="feedback-list">
-          {feedbacks.map((feedback) => (
-            <div className="feedback-card" key={feedback.id}>
-              <div className="feedback-header">
-                <FaComments />
-                <h4>{feedback.gymName}</h4>
+      {/* Client Feedback Section */}
+      <div className="dashboard-content-box">
+        <h3>Recent Client Feedback</h3>
+        <div className="dashboard-feedback-grid">
+          {feedback.map((item) => (
+            <div key={item._id} className="dashboard-feedback-item">
+              <div className="dashboard-feedback-header">
+                <FaUser />
+                <h4>{item.clientName}</h4>
               </div>
-              <p className="feedback-message">{feedback.message}</p>
-              <div className="feedback-rating">Rating: {feedback.rating}/5</div>
+              <div className="dashboard-feedback-message">{item.message}</div>
+              <div className="dashboard-feedback-rating">
+                <FaStar />
+                {item.rating}/5
+              </div>
             </div>
           ))}
         </div>
