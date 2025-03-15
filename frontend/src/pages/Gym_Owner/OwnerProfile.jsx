@@ -1,86 +1,133 @@
-import React, { useState } from 'react';
-import { FaUser, FaKey, FaEdit, FaTrash, FaUpload } from 'react-icons/fa';
-import './Styles/OwnerProfile.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useProfile } from "../../hooks/useProfile";
+import { FaUser, FaKey, FaEdit, FaTrash } from "react-icons/fa";
+import "./Styles/OwnerProfile.css";
 
 const OwnerProfile = () => {
+  const navigate = useNavigate();
+  const { user, logout } = useAuthContext();
+  const {
+    getProfile,
+    updateProfile,
+    updatePassword,
+    deleteAccount,
+    isLoading,
+    error,
+  } = useProfile();
+
   const [profileData, setProfileData] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "+91 9876543210",
-    profilePicture: "./images/default-profile.jpg",
-    currentPassword: ""
+    name: "",
+    email: "",
+    phone: "",
   });
 
   const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
     newPassword: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
-  const [imagePreview, setImagePreview] = useState(profileData.profilePicture);
+  const [updateError, setUpdateError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const data = await getProfile();
+      if (data) {
+        setProfileData({
+          name: data.name,
+          email: data.email,
+          phone: data.phone || "",
+        });
+      }
+    };
+    if (user) {
+      loadProfile();
+    }
+  }, [user]);
 
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
-    setProfileData(prev => ({
+    setProfileData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
-    setPasswordData(prev => ({
+    setPasswordData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setProfileData(prev => ({
-          ...prev,
-          profilePicture: reader.result
-        }));
-      };
-      reader.readAsDataURL(file);
+  const handleProfileSubmit = async (e) => {
+    e.preventDefault();
+    setUpdateError(null);
+
+    const response = await updateProfile(profileData);
+    if (response) {
+      setIsEditing(false);
     }
   };
 
-  const handlePasswordSubmit = (e) => {
+  const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert("New passwords don't match!");
+    setUpdateError(null);
+
+    // Password validation
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(passwordData.newPassword)) {
+      setUpdateError(
+        "Password must contain at least 8 characters, including uppercase, lowercase, number and special character"
+      );
       return;
     }
-    // Handle password update logic here
-    console.log("Password update requested");
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: ""
-    });
-    setShowPasswordForm(false);
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      setUpdateError("New passwords don't match!");
+      return;
+    }
+
+    try {
+      const response = await updatePassword({
+        newPassword: passwordData.newPassword,
+      });
+
+      if (response) {
+        setPasswordData({
+          newPassword: "",
+          confirmPassword: "",
+        });
+        setShowPasswordForm(false);
+        setSuccessMessage("Password updated successfully!");
+
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 3000);
+      }
+    } catch (error) {
+      setUpdateError(error.message);
+    }
   };
 
-  const handleProfileSubmit = (e) => {
-    e.preventDefault();
-    // Handle profile update logic here
-    console.log("Profile update requested");
-    setIsEditing(false);
+  const handleDeleteConfirm = async () => {
+    const response = await deleteAccount();
+    if (response) {
+      navigate("/");
+    }
   };
 
-  const handleDeleteAccount = () => {
-    // Handle account deletion logic here
-    console.log("Account deletion requested");
-    setShowDeleteConfirm(false);
-  };
+  if (isLoading) {
+    return <div className="loading">Loading...</div>;
+  }
 
   return (
     <div className="owner-profile-container">
@@ -90,27 +137,17 @@ const OwnerProfile = () => {
           <p>Manage your account settings and profile information</p>
         </div>
 
-        {/* Profile Information Section */}
+        {(error || updateError) && (
+          <div className="error-message">{error || updateError}</div>
+        )}
+        {successMessage && (
+          <div className="success-message">{successMessage}</div>
+        )}
+
         <div className="profile-section">
-          <h2><FaUser /> Profile Information</h2>
-          
-          {/* Profile Picture */}
-          <div className="profile-picture-section">
-            <div className="profile-picture">
-              <img src={imagePreview} alt="Profile" />
-              {isEditing && (
-                <label className="upload-button">
-                  <FaUpload />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    style={{ display: 'none' }}
-                  />
-                </label>
-              )}
-            </div>
-          </div>
+          <h2>
+            <FaUser /> Profile Information
+          </h2>
 
           {!isEditing ? (
             <div className="profile-info">
@@ -126,89 +163,95 @@ const OwnerProfile = () => {
                 <label>Phone:</label>
                 <p>{profileData.phone}</p>
               </div>
-              <button className="edit-button" onClick={() => setIsEditing(true)}>
+              <button
+                className="edit-button"
+                onClick={() => setIsEditing(true)}
+              >
                 <FaEdit /> Edit Profile
               </button>
             </div>
           ) : (
-            <form className="edit-form" onSubmit={handleProfileSubmit}>
-              <div className="form-group">
-                <label>Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={profileData.name}
-                  onChange={handleProfileChange}
-                  required
-                />
+            <div className="edit-section">
+              <div className="current-details">
+                <h3>Current Details:</h3>
+                <div className="info-item">
+                  <label>Name:</label>
+                  <p>{profileData.name}</p>
+                </div>
+                <div className="info-item">
+                  <label>Email:</label>
+                  <p>{profileData.email}</p>
+                </div>
+                <div className="info-item">
+                  <label>Phone:</label>
+                  <p>{profileData.phone}</p>
+                </div>
               </div>
-              <div className="form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={profileData.email}
-                  onChange={handleProfileChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Phone Number</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={profileData.phone}
-                  onChange={handleProfileChange}
-                  required
-                />
-              </div>
-              <div className="button-group">
-                <button type="submit" className="save-button">
-                  Save Changes
-                </button>
-                <button type="button" className="cancel-button" onClick={() => setIsEditing(false)}>
-                  Cancel
-                </button>
-              </div>
-            </form>
+              <form className="edit-form" onSubmit={handleProfileSubmit}>
+                <h3>Update Details:</h3>
+                <div className="form-group">
+                  <label>Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={profileData.name}
+                    onChange={handleProfileChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={profileData.email}
+                    onChange={handleProfileChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Phone Number</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={profileData.phone}
+                    onChange={handleProfileChange}
+                  />
+                </div>
+                <div className="button-group">
+                  <button
+                    type="submit"
+                    className="save-button"
+                    disabled={isLoading}
+                  >
+                    Save Changes
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-button"
+                    onClick={() => setIsEditing(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
           )}
         </div>
 
-        {/* Password Management Section */}
         <div className="profile-section">
-          <h2><FaKey /> Password Management</h2>
+          <h2>
+            <FaKey /> Password Management
+          </h2>
           {!showPasswordForm ? (
-            <div className="password-section">
-              <div className="form-group">
-                <label>Current Password</label>
-                <input
-                  type="password"
-                  name="currentPassword"
-                  value={profileData.currentPassword}
-                  onChange={handleProfileChange}
-                  placeholder="••••••••"
-                  disabled
-                />
-              </div>
-              <button 
-                className="change-password-button"
-                onClick={() => setShowPasswordForm(true)}
-              >
-                Change Password
-              </button>
-            </div>
+            <button
+              className="change-password-button"
+              onClick={() => setShowPasswordForm(true)}
+            >
+              Change Password
+            </button>
           ) : (
-            <form onSubmit={handlePasswordSubmit} className="password-form">
-              <div className="form-group">
-                <label>Current Password</label>
-                <input
-                  type="password"
-                  name="currentPassword"
-                  value={passwordData.currentPassword}
-                  onChange={handlePasswordChange}
-                  required
-                />
-              </div>
+            <form className="password-form" onSubmit={handlePasswordSubmit}>
               <div className="form-group">
                 <label>New Password</label>
                 <input
@@ -217,6 +260,8 @@ const OwnerProfile = () => {
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
                   required
+                  minLength="8"
+                  placeholder="Min 8 chars: uppercase, lowercase, number, special char"
                 />
               </div>
               <div className="form-group">
@@ -227,21 +272,27 @@ const OwnerProfile = () => {
                   value={passwordData.confirmPassword}
                   onChange={handlePasswordChange}
                   required
+                  minLength="8"
+                  placeholder="Re-enter your new password"
                 />
               </div>
               <div className="button-group">
-                <button type="submit" className="save-button">
+                <button
+                  type="submit"
+                  className="save-button"
+                  disabled={isLoading}
+                >
                   Update Password
                 </button>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="cancel-button"
                   onClick={() => {
                     setShowPasswordForm(false);
+                    setUpdateError(null);
                     setPasswordData({
-                      currentPassword: "",
                       newPassword: "",
-                      confirmPassword: ""
+                      confirmPassword: "",
                     });
                   }}
                 >
@@ -252,46 +303,41 @@ const OwnerProfile = () => {
           )}
         </div>
 
-        {/* Delete Account Section */}
         <div className="profile-section danger-zone">
-          <h2><FaTrash /> Delete Account</h2>
-          <p>Once you delete your account, there is no going back. Please be certain.</p>
-          <button
-            type="button"
-            className="delete-button"
-            onClick={() => setShowDeleteConfirm(true)}
-          >
-            Delete Account
-          </button>
-        </div>
-
-        {/* Delete Confirmation Modal */}
-        {showDeleteConfirm && (
-          <div className="modal-overlay">
-            <div className="modal">
-              <div className="modal-content">
-                <h2><FaTrash /> Delete Account</h2>
-                <p>Are you sure you want to delete your account? This action cannot be undone.</p>
-                <div className="modal-buttons">
-                  <button
-                    type="button"
-                    className="cancel-button"
-                    onClick={() => setShowDeleteConfirm(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    className="delete-button"
-                    onClick={handleDeleteAccount}
-                  >
-                    Delete Account
-                  </button>
-                </div>
+          <h2>
+            <FaTrash /> Delete Account
+          </h2>
+          {!showDeleteConfirm ? (
+            <button
+              className="delete-account-button"
+              onClick={() => setShowDeleteConfirm(true)}
+            >
+              Delete Account
+            </button>
+          ) : (
+            <div className="delete-confirm">
+              <p>
+                Are you sure you want to delete your account? This action cannot
+                be undone.
+              </p>
+              <div className="button-group">
+                <button
+                  className="confirm-delete-button"
+                  onClick={handleDeleteConfirm}
+                  disabled={isLoading}
+                >
+                  Yes, Delete My Account
+                </button>
+                <button
+                  className="cancel-button"
+                  onClick={() => setShowDeleteConfirm(false)}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
