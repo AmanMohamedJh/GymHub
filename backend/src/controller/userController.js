@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 
 //import of Json Web Token (JWT Authorizations)
 const jwt = require("jsonwebtoken");
+const path = require("path");
 
 // Function to create a JWT token
 
@@ -122,12 +123,20 @@ const updateUserProfile = async (req, res) => {
     if (email) user.email = email;
     if (phone) user.phone = phone;
 
+    // Handle profile picture upload
+    if (req.file) {
+      // Create the URL for the uploaded file
+      const profilePicUrl = `/uploads/profiles/${req.file.filename}`;
+      user.profilePicture = profilePicUrl;
+    }
+
     const updatedUser = await user.save();
     res.status(200).json({
       name: updatedUser.name,
       email: updatedUser.email,
       phone: updatedUser.phone,
       role: updatedUser.role,
+      profilePicture: updatedUser.profilePicture,
     });
   } catch (error) {
     console.error("Profile update error:", error);

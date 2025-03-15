@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useProfile } from "../../hooks/useProfile";
-import { FaUser, FaKey, FaEdit, FaTrash } from "react-icons/fa";
+import { FaUser, FaKey, FaEdit, FaTrash, FaCamera } from "react-icons/fa";
 import "./Styles/OwnerProfile.css";
 
 const OwnerProfile = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuthContext();
+  const { user } = useAuthContext();
   const {
     getProfile,
     updateProfile,
@@ -21,8 +21,10 @@ const OwnerProfile = () => {
     name: "",
     email: "",
     phone: "",
+    profilePicture: "",
   });
 
+  const [selectedImage, setSelectedImage] = useState(null);
   const [passwordData, setPasswordData] = useState({
     newPassword: "",
     confirmPassword: "",
@@ -42,6 +44,7 @@ const OwnerProfile = () => {
           name: data.name,
           email: data.email,
           phone: data.phone || "",
+          profilePicture: data.profilePicture || "",
         });
       }
     };
@@ -49,6 +52,26 @@ const OwnerProfile = () => {
       loadProfile();
     }
   }, [user]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        // here we have to select the image for the 5MB limit for that we installed multer package
+        setUpdateError("Image size should be less than 5MB");
+        return;
+      }
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileData((prev) => ({
+          ...prev,
+          profilePicture: reader.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
@@ -70,9 +93,18 @@ const OwnerProfile = () => {
     e.preventDefault();
     setUpdateError(null);
 
-    const response = await updateProfile(profileData);
+    const formData = new FormData();
+    formData.append("name", profileData.name);
+    formData.append("email", profileData.email);
+    formData.append("phone", profileData.phone);
+    if (selectedImage) {
+      formData.append("profilePicture", selectedImage);
+    }
+
+    const response = await updateProfile(formData);
     if (response) {
       setIsEditing(false);
+      setSelectedImage(null);
     }
   };
 
@@ -80,7 +112,7 @@ const OwnerProfile = () => {
     e.preventDefault();
     setUpdateError(null);
 
-    // Password validation
+    // Password validation  //it is easier to validate like this
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(passwordData.newPassword)) {
@@ -108,7 +140,7 @@ const OwnerProfile = () => {
         setShowPasswordForm(false);
         setSuccessMessage("Password updated successfully!");
 
-        // Clear success message after 3 seconds
+        // Clear success message after 3 seconds the timing will be done after 3 seconds
         setTimeout(() => {
           setSuccessMessage(null);
         }, 3000);
@@ -133,6 +165,29 @@ const OwnerProfile = () => {
     <div className="owner-profile-container">
       <div className="profile-content">
         <div className="profile-header">
+          <div className="profile-picture-container">
+            <img
+              src={
+                profileData.profilePicture || "https://via.placeholder.com/150" //placeholder is linked to a website product/image
+              }
+              alt="Profile"
+              className="profile-picture"
+            />
+            {isEditing && (
+              <div className="profile-picture-upload">
+                <label htmlFor="profile-picture-input" className="upload-label">
+                  <FaCamera /> Change Picture
+                </label>
+                <input
+                  type="file"
+                  id="profile-picture-input"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                />
+              </div>
+            )}
+          </div>
           <h1>Profile Settings</h1>
           <p>Manage your account settings and profile information</p>
         </div>

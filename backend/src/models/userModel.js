@@ -22,6 +22,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  profilePicture: {
+    type: String,
+    default: "", //A dummy default picture is here before uploading image//Aman//
+  },
   role: {
     type: String,
     enum: ["client", "gym_owner", "trainer"],

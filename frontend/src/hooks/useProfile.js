@@ -1,57 +1,66 @@
-import { useState } from 'react';
-import { useAuthContext } from './useAuthContext';
+import { useState } from "react";
+import { useAuthContext } from "./useAuthContext";
 
 export const useProfile = () => {
+  const { user, dispatch } = useAuthContext();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { user, dispatch } = useAuthContext();
 
   const getProfile = async () => {
-    setIsLoading(true);
-    setError(null);
+    if (!user) {
+      setError("You must be logged in");
+      return;
+    }
 
     try {
-      const response = await fetch('/api/user/profile', {
+      const response = await fetch("/api/user/profile", {
         headers: {
-          'Authorization': `Bearer ${user.token}`
-        }
+          Authorization: `Bearer ${user.token}`,
+        },
       });
       const json = await response.json();
 
       if (!response.ok) {
-        throw new Error(json.error);
+        setError(json.error);
+        return null;
       }
 
       return json;
     } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
+      setError("Failed to fetch profile");
+      return null;
     }
   };
 
-  const updateProfile = async (updateData) => {
+  const updateProfile = async (formData) => {
+    if (!user) {
+      setError("You must be logged in");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await fetch('/api/user/profile', {
-        method: 'PATCH',
+      const response = await fetch("/api/user/profile", {
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
+          Authorization: `Bearer ${user.token}`,
         },
-        body: JSON.stringify(updateData)
+        body: formData,
       });
+
       const json = await response.json();
 
       if (!response.ok) {
-        throw new Error(json.error);
+        setError(json.error);
+        return null;
       }
 
       return json;
     } catch (error) {
-      setError(error.message);
+      setError("Failed to update profile");
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -62,25 +71,25 @@ export const useProfile = () => {
     setError(null);
 
     try {
-      console.log('Sending password update request:', updateData);
-      const response = await fetch('/api/user/update-password', {
-        method: 'POST',
+      console.log("Sending password update request:", updateData);
+      const response = await fetch("/api/user/update-password", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
-        body: JSON.stringify(updateData)
+        body: JSON.stringify(updateData),
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to update password');
+        throw new Error(data.error || "Failed to update password");
       }
 
       return data;
     } catch (error) {
-      console.error('Password update error:', error);
+      console.error("Password update error:", error);
       setError(error.message);
       throw error;
     } finally {
@@ -93,11 +102,11 @@ export const useProfile = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/user/profile', {
-        method: 'DELETE',
+      const response = await fetch("/api/user/profile", {
+        method: "DELETE",
         headers: {
-          'Authorization': `Bearer ${user.token}`
-        }
+          Authorization: `Bearer ${user.token}`,
+        },
       });
       const json = await response.json();
 
@@ -106,8 +115,8 @@ export const useProfile = () => {
       }
 
       // Logout user after successful deletion
-      localStorage.removeItem('user');
-      dispatch({ type: 'LOGOUT' });
+      localStorage.removeItem("user");
+      dispatch({ type: "LOGOUT" });
       return json;
     } catch (error) {
       setError(error.message);
@@ -116,5 +125,12 @@ export const useProfile = () => {
     }
   };
 
-  return { getProfile, updateProfile, updatePassword, deleteAccount, isLoading, error };
+  return {
+    getProfile,
+    updateProfile,
+    updatePassword,
+    deleteAccount,
+    isLoading,
+    error,
+  };
 };
