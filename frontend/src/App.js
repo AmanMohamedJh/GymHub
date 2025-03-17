@@ -8,6 +8,7 @@ import OwnerDashboard from "./pages/Gym_Owner/OwnerDashboard.jsx";
 import RegisterGym from "./pages/Gym_Owner/RegisterGym.jsx";
 import ManageGym from "./pages/Gym_Owner/ManageGym.jsx";
 import OwnerProfile from "./pages/Gym_Owner/OwnerProfile.jsx";
+import OwnerReviewsDashboard from "./pages/Gym_Owner/OwnerReviewsDashboard.jsx";
 import TrainerDashboard from "./pages/Trainer/TrainerDashboard.jsx";
 import ClientDashboard from "./pages/Clientt/ClientDashboard.jsx";
 import GymList from "./pages/Clientt/GymList.jsx";
@@ -98,6 +99,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRole="gym_owner">
                   <ManageGym />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reviews-dashboard"
+              element={
+                <ProtectedRoute allowedRole="gym_owner">
+                  <OwnerReviewsDashboard />
                 </ProtectedRoute>
               }
             />

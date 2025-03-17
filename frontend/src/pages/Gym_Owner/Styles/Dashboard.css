@@ -248,6 +248,17 @@
   gap: 0.5rem;
 }
 
+.dashboard-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-section-header h3 {
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   .dashboard-main-container {
     padding: 2rem 1rem;

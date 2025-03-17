@@ -164,7 +164,14 @@ const OwnerDashboard = () => {
 
       {/* Client Feedback Section */}
       <div className="dashboard-content-box">
-        <h3>Recent Client Feedback</h3>
+        <div className="dashboard-section-header">
+          <h3>Recent Client Feedback</h3>
+          <Link to="/reviews-dashboard">
+            <button className="dashboard-btn-primary">
+              <FaComments /> Manage Reviews
+            </button>
+          </Link>
+        </div>
         <div className="dashboard-feedback-grid">
           {feedback.map((item) => (
             <div key={item._id} className="dashboard-feedback-item">

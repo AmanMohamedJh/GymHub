@@ -1,0 +1,184 @@
+/* Main container */
+.search-container {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1.2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgb(248, 246, 246);
+  margin: 1rem 0 2rem 0;
+  transition: all 0.3s ease;
+  max-width: 950px;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-container:hover {
+  box-shadow: 0 6px 15px rgba(231, 76, 60, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Input wrappers */
+.search-input-wrapper {
+  position: relative;
+  flex: 1.5;
+  max-width: 400px;
+}
+
+.date-input-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 300px;
+  margin-left: 80px;
+}
+
+/* Common input styles */
+.search-input,
+.date-input {
+  width: 100%;
+  padding: 12px 40px;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #333;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+/* Input focus states */
+.search-input:focus,
+.date-input:focus {
+  outline: none;
+  border-color: #e74c3c;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+/* Input hover states */
+.search-input:hover,
+.date-input:hover {
+  border-color: #e74c3c;
+  background: white;
+}
+
+/* Icons */
+.search-icon,
+.calendar-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #e74c3c;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+/* Icon animations on input focus */
+.search-input-wrapper:focus-within .search-icon,
+.date-input-wrapper:focus-within .calendar-icon {
+  color: #e74c3c;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Placeholder styling */
+.search-input::placeholder {
+  color: #999;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus::placeholder {
+  opacity: 0.7;
+}
+
+/* Date input specific styles */
+.date-input {
+  cursor: pointer;
+  padding-right: 30px; /* Space for the calendar icon */
+}
+
+.calendar-icon {
+  pointer-events: none; /* Allow clicks to pass through to the input */
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  opacity: 0.6;
+  filter: invert(40%) sepia(52%) saturate(2476%) hue-rotate(338deg) brightness(87%) contrast(96%);
+}
+
+.date-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .search-container {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    margin: 0.8rem 0 1.5rem 0;
+  }
+
+  .search-input-wrapper,
+  .date-input-wrapper {
+    width: 100%;
+  }
+
+  .search-input,
+  .date-input {
+    padding: 12px 40px;
+    font-size: 0.9rem;
+    width: 100%;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .search-container {
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .search-input,
+  .date-input {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: #444;
+    color: #000000;
+  }
+
+  .search-input:hover,
+  .date-input:hover {
+    background: rgb(255, 255, 255);
+  }
+
+  .search-input:focus,
+  .date-input:focus {
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .search-input::placeholder {
+    color: #000000;
+  }
+}
+
+/* Animation for container mount */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-container {
+  animation: slideIn 0.3s ease-out;
+}
