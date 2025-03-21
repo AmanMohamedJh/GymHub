@@ -1,0 +1,98 @@
+/* Container Styles */
+.progress-container {
+  background-color: #111;
+  color: #fff;
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+/* Header Section */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-section h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+}
+
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.client-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.client-info h3 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.client-info p {
+  font-size: 16px;
+  color: #bbb;
+}
+
+/* Progress Overview Section */
+.overview-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.workout-summary {
+  width: 45%;
+}
+
+.summary-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.summary-item h5 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.summary-item p {
+  font-size: 16px;
+  color: #ffd700;
+}
+
+/* Workout History Section */
+.history-section {
+  margin-bottom: 30px;
+}
+
+.history-section h4 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.history-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.history-section li {
+  font-size: 16px;
+  margin-bottom: 10px;
+}

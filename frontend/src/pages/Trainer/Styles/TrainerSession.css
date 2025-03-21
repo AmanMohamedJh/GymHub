@@ -1,0 +1,194 @@
+.SessionContainer {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.SessionHeading {
+  color: #333;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.SessionDivider {
+  border: none;
+  border-top: 2px solid #e74c3c;
+  margin: 2rem 0;
+}
+
+.SessionContent {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+/* Form Styles */
+.SessionForm {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.SessionForm h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.FormGroup {
+  margin-bottom: 1.5rem;
+}
+
+.FormGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.FormGroup select,
+.FormGroup input,
+.FormGroup textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.FormGroup textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.AddButton {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.AddButton:hover {
+  background: #c0392b;
+}
+
+/* Sessions List Styles */
+.SessionsList {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.SessionsList h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.NoSessions {
+  color: #666;
+  text-align: center;
+  font-style: italic;
+}
+
+.SessionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.SessionCard {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.SessionCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.SessionCardHeader h3 {
+  color: #e74c3c;
+  margin: 0;
+}
+
+.SessionActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.EditBtn,
+.DeleteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.EditBtn {
+  color: #3498db;
+}
+
+.DeleteBtn {
+  color: #e74c3c;
+}
+
+.EditBtn:hover {
+  background: rgba(52, 152, 219, 0.1);
+}
+
+.DeleteBtn:hover {
+  background: rgba(231, 76, 60, 0.1);
+}
+
+.SessionCardContent p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .SessionContent {
+    grid-template-columns: 1fr;
+  }
+  
+  .SessionsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .SessionContainer {
+    margin: 1rem auto;
+  }
+  
+  .SessionForm,
+  .SessionsList {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .SessionsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .FormGroup select,
+  .FormGroup input,
+  .FormGroup textarea {
+    font-size: 0.9rem;
+  }
+}

@@ -86,24 +86,12 @@ export default function Home() {
       case "trainer":
         return (
           <div className="role-buttons">
-            <Link
-              to="/trainer-dashboard"
-              className="role-button trainer-dashboard"
-            >
-              <FaUsers className="button-icon" />
+            <Link to="/trainer-dashboard" className="role-button trainer-list">
+              <FaUserPlus className="button-icon" />
               <div className="button-text">
                 <span className="button-title">Trainer Dashboard</span>
                 <span className="button-subtitle">
                   Manage your clients and sessions
-                </span>
-              </div>
-            </Link>
-            <Link to="/trainer-list" className="role-button trainer-list">
-              <FaUserPlus className="button-icon" />
-              <div className="button-text">
-                <span className="button-title">Join Gyms</span>
-                <span className="button-subtitle">
-                  Connect with fitness centers
                 </span>
               </div>
             </Link>

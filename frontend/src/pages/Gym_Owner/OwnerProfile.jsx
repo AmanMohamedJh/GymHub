@@ -112,7 +112,7 @@ const OwnerProfile = () => {
     e.preventDefault();
     setUpdateError(null);
 
-    // Password validation  //it is easier to validate like this
+    // Password validation  //it is easier to validate like this //aman
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(passwordData.newPassword)) {

@@ -13,6 +13,8 @@ const navigation = [
   { name: "Home", href: "/" },
   { name: "Gyms", href: "/gyms" },
   { name: "Trainers", href: "/trainers" },
+  { name: "Contact Us", href: "/contact" },
+  { name: "About Us", href: "/about" },
 ];
 
 const getDashboardRoute = (role) => {

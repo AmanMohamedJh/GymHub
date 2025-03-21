@@ -10,10 +10,16 @@ import ManageGym from "./pages/Gym_Owner/ManageGym.jsx";
 import OwnerProfile from "./pages/Gym_Owner/OwnerProfile.jsx";
 import OwnerReviewsDashboard from "./pages/Gym_Owner/OwnerReviewsDashboard.jsx";
 import TrainerDashboard from "./pages/Trainer/TrainerDashboard.jsx";
+import TrainerRegistration from "./pages/Trainer/TrainerRegistration.jsx";
 import ClientDashboard from "./pages/Clientt/ClientDashboard.jsx";
 import GymList from "./pages/Clientt/GymList.jsx";
 import TrainerList from "./pages/Trainer/TrainerList.jsx";
+import AboutUs from "./pages/AboutUs.jsx";
+import ContactUs from "./pages/ContactUs.jsx";
 import ProtectedRoute from "./Route Protector/ProtectedRoute.jsx";
+import TrainerSession from "./pages/Trainer/TrainerDashboard.jsx";
+import TrainerWorkoutPlans from "./pages/Trainer/TrainerWorkoutPlans.jsx";
+import ClientProgress from "./pages/Trainer/ClientProgress.jsx";
 import "./App.css";
 
 function App() {
@@ -26,6 +32,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<ContactUs />} />
             <Route
               path="/owner-dashboard"
               element={
@@ -63,6 +71,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRole="trainer">
                   <TrainerDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/registration"
+              element={
+                <ProtectedRoute allowedRole="trainer">
+                  <TrainerRegistration />
                 </ProtectedRoute>
               }
             />
@@ -107,6 +123,30 @@ function App() {
               element={
                 <ProtectedRoute allowedRole="gym_owner">
                   <OwnerReviewsDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/session"
+              element={
+                <ProtectedRoute allowedRole="trainer">
+                  <TrainerSession />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/workout-plans"
+              element={
+                <ProtectedRoute allowedRole="trainer">
+                  <TrainerWorkoutPlans />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainer/client-progress"
+              element={
+                <ProtectedRoute allowedRole="trainer">
+                  <ClientProgress />
                 </ProtectedRoute>
               }
             />
