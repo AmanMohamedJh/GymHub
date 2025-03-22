@@ -1,8 +1,9 @@
 .register-gym-container {
-  padding: 5rem;
   min-height: calc(100vh - 140px);
   position: relative;
   overflow: hidden;
+  padding: 2rem;
+  z-index: 1;
 }
 
 .register-gym-container::before {
@@ -25,17 +26,19 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   z-index: -1;
 }
 
 .register-gym-form {
-  max-width: 900px;
-  margin: 0 auto;
-  background: rgba(255, 255, 255, 0.9);
+  position: relative;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  max-width: 800px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .form-header {
@@ -44,14 +47,9 @@
 }
 
 .form-header h2 {
-  color: #ff0000;
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.form-header p {
-  color: #000000;
-  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 2rem;
 }
 
 .form-section {
@@ -76,20 +74,21 @@
 
 .form-group label {
   display: block;
-  color: #000000;
-  font-weight: 500;
+  font-weight: 600;
+  color: #555;
   margin-bottom: 0.5rem;
+  font-size: 1.1rem;
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #e74c3c;
-  border-radius: 4px;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
   font-size: 1rem;
-  color: #000000;
+  background-color: white;
 }
 
 .form-group input:focus,
@@ -101,14 +100,8 @@
 }
 
 .form-group textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #e74c3c;
-  border-radius: 4px;
-  font-size: 1rem;
-  color: #000000;
-  resize: vertical;
   min-height: 120px;
+  resize: vertical;
   font-family: inherit;
 }
 
@@ -337,14 +330,32 @@
   background: #c0392b;
 }
 
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 2rem;
+  transition: background-color 0.3s;
+  font-size: 1.1rem;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .register-gym-container {
-    padding: 3rem 1rem;
+    padding: 1rem;
   }
 
-  .form-header h2 {
-    font-size: 2rem;
+  .register-gym-form {
+    padding: 1.5rem;
   }
 
   .image-previews {
@@ -377,5 +388,9 @@
 
   .form-group textarea {
     min-height: 100px;
+  }
+
+  .form-header h2 {
+    font-size: 1.75rem;
   }
 }

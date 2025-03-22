@@ -2,15 +2,9 @@ import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 const ProtectedRoute = ({ children, allowedRole }) => {
-  const { user, isLoading } = useAuthContext();
-
-  // Show nothing while checking authentication
-  if (isLoading) {
-    return null;
-  }
+  const { user } = useAuthContext();
 
   if (!user) {
-    // Only redirect to login if we're sure there's no user
     return <Navigate to="/login" />;
   }
 

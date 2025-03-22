@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 import {
   FaDumbbell,
   FaClipboardList,
@@ -14,7 +14,7 @@ import gymImage2 from "../Images/gym2.jpg.jpg";
 import gymImage3 from "../Images/gym3.jpg.jpg";
 
 export default function Home() {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuthContext();
 
   const renderActionButtons = () => {
     if (!user) {
@@ -104,7 +104,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div className="home">
       <main>
         {/* Hero Section */}
         <section className="hero-section">
@@ -235,6 +235,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-    </>
+    </div>
   );
 }

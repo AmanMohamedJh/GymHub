@@ -1,11 +1,12 @@
-.owner-profile-container {
-  padding: 5rem;
+.owner-dashboard-container {
   min-height: calc(100vh - 140px);
   position: relative;
   overflow: hidden;
+  padding: 2rem;
+  z-index: 1;
 }
 
-.owner-profile-container::before {
+.owner-dashboard-container::before {
   content: "";
   position: absolute;
   top: 0;
@@ -18,15 +19,121 @@
   transform: scale(1.1);
 }
 
-.owner-profile-container::after {
+.owner-dashboard-container::after {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.6);
   z-index: -1;
+}
+
+.dashboard-content {
+  position: relative;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h2 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+  text-align: center;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+  color: #666;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.recent-activity {
+  background-color: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recent-activity h3 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #007bff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.activity-details h4 {
+  color: #333;
+  margin: 0 0 0.25rem 0;
+}
+
+.activity-details p {
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
 }
 
 .profile-content {
@@ -295,8 +402,21 @@ button:disabled {
 }
 
 @media (max-width: 768px) {
-  .owner-profile-container {
-    padding: 2rem 1rem;
+  .owner-dashboard-container {
+    padding: 1rem;
+  }
+
+  .dashboard-content {
+    padding: 1.5rem;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
   }
 
   .edit-section {

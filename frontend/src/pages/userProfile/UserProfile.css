@@ -1,0 +1,470 @@
+.user-profile {
+  min-height: calc(100vh - 140px);
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+  z-index: 1;
+}
+
+.user-profile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../Gym_Owner/Styles/images/gym-background2.jpg.jpg") center/cover no-repeat;
+  filter: blur(5px);
+  z-index: -1;
+  transform: scale(1.1);
+}
+
+.user-profile::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: -1;
+}
+
+.profile-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #333;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: #333;
+}
+
+.profile-picture-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 1.5rem;
+}
+
+.profile-picture {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #ff4757;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-picture-upload {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: #ff4757;
+  border-radius: 50%;
+  padding: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.profile-picture-upload:hover {
+  transform: scale(1.1);
+  background: #ff6b81;
+}
+
+.upload-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.profile-section {
+  background: #fff;
+  border-radius: 10px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f1f1f1;
+  color: #ff4757;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.profile-form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.form-preview {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 10px;
+  border-left: 4px solid #ff4757;
+}
+
+.preview-title {
+  color: #ff4757;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.preview-item {
+  margin-bottom: 1.5rem;
+}
+
+.preview-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.preview-value {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.8rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e1e1e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #ff4757;
+  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+  outline: none;
+}
+
+.form-group input:disabled {
+  background: #f8f9fa;
+  cursor: not-allowed;
+  border-color: #e1e1e1;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.edit-button,
+.save-button,
+.cancel-button,
+.delete-button {
+  padding: 0.8rem 1.8rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.edit-button {
+  background: transparent;
+  color: #ff4757;
+  border: 2px solid #ff4757;
+}
+
+.edit-button:hover {
+  background: rgba(255, 71, 87, 0.1);
+}
+
+.save-button {
+  background: #ff4757;
+  color: white;
+}
+
+.save-button:hover {
+  background: #ff6b81;
+  transform: translateY(-1px);
+}
+
+.cancel-button {
+  background: #6c757d;
+  color: white;
+}
+
+.cancel-button:hover {
+  background: #5a6268;
+}
+
+.delete-button,
+.confirm-delete-button {
+  background: #dc3545;
+  color: white;
+}
+
+.delete-button:hover,
+.confirm-delete-button:hover {
+  background: #c82333;
+}
+
+.danger-zone {
+  border: 2px solid #dc3545;
+  background: #fff5f5;
+  padding: 2rem;
+  border-radius: 10px;
+  margin-top: 2rem;
+}
+
+.danger-zone .section-header {
+  color: #dc3545;
+  border-bottom-color: #dc3545;
+}
+
+.delete-confirm {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(220, 53, 69, 0.1);
+}
+
+.warning-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.delete-confirm h3 {
+  color: #dc3545;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.delete-confirm p {
+  color: #6c757d;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.delete-confirmation-input {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.delete-confirmation-input label {
+  display: block;
+  color: #dc3545;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+
+.delete-confirmation-input input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #dc3545;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.delete-confirmation-input input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+}
+
+.delete-confirmation-input input::placeholder {
+  color: #dc354580;
+}
+
+.delete-button {
+  background: transparent;
+  color: #dc3545;
+  border: 2px solid #dc3545;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delete-button:hover {
+  background: #dc3545;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.confirm-delete-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirm-delete-button:disabled {
+  background: #dc354580;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.confirm-delete-button:not(:disabled):hover {
+  background: #bb2d3b;
+  transform: translateY(-1px);
+}
+
+.danger-zone .button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.danger-zone .cancel-button {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.danger-zone .cancel-button:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 140px);
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.deletion-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.deletion-content {
+  background: white;
+  padding: 3rem;
+  border-radius: 15px;
+  text-align: center;
+  animation: fadeIn 0.3s ease-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.deletion-content h2 {
+  color: #dc3545;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.deletion-content p {
+  color: #6c757d;
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #dc3545;
+  border-radius: 50%;
+  margin: 0 auto 2rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

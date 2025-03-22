@@ -99,20 +99,18 @@ export default function Navbar() {
                             </Link>
                           )}
                         </Menu.Item>
-                        {user.role === "gym_owner" && (
-                          <Menu.Item>
-                            {({ active }) => (
-                              <Link
-                                to="/owner-profile"
-                                className={`dropdown-item ${
-                                  active ? "active" : ""
-                                }`}
-                              >
-                                Profile Settings
-                              </Link>
-                            )}
-                          </Menu.Item>
-                        )}
+                        <Menu.Item>
+                          {({ active }) => (
+                            <Link
+                              to="/user-profile"
+                              className={`dropdown-item ${
+                                active ? "active" : ""
+                              }`}
+                            >
+                              Profile Settings
+                            </Link>
+                          )}
+                        </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
                             <button
@@ -174,11 +172,9 @@ export default function Navbar() {
                   >
                     Dashboard
                   </Link>
-                  {user.role === "gym_owner" && (
-                    <Link to="/owner-profile" className="mobile-nav-link">
-                      Profile Settings
-                    </Link>
-                  )}
+                  <Link to="/user-profile" className="mobile-nav-link">
+                    Profile Settings
+                  </Link>
                   <button onClick={handleLogout} className="mobile-nav-link">
                     Logout
                   </button>

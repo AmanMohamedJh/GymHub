@@ -4,45 +4,66 @@ const User = require("../models/userModel");
 //import of Json Web Token (JWT Authorizations)
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const nodemailer = require("nodemailer");
+
+// Configure nodemailer
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS, // This should be an App Password
+  },
+  tls: {
+    rejectUnauthorized: false, // Allow self-signed certificates
+  },
+});
 
 // Function to create a JWT token
-
-const createToken = (_id, role) => {
-  return jwt.sign({ _id, role }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "3d",
-  });
+const createToken = (_id) => {
+  return jwt.sign({ _id }, process.env.JWT_SECRET_KEY, { expiresIn: "3d" });
 };
 
-//login user
-
+// login user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.login(email, password);
+    const token = createToken(user._id);
 
-    // Create token including role
-    const token = createToken(user._id, user.role);
-
-    res.status(200).json({ email, name: user.name, role: user.role, token });
+    // Return user data including isEmailVerified status
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isEmailVerified: user.isEmailVerified,
+      token,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-//signup user
-
+// signup user
 const signupUser = async (req, res) => {
   const { name, email, phone, password, role } = req.body;
 
   try {
     const user = await User.signup(name, email, phone, password, role);
+    const token = createToken(user._id);
 
-    //create Token using JWT
-
-    const token = createToken(user._id, user.role);
-
-    res.status(200).json({ name, email, role, token });
+    // Return user data including isEmailVerified status
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isEmailVerified: false,
+      token,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -157,6 +178,149 @@ const deleteUserAccount = async (req, res) => {
   }
 };
 
+// Send verification code
+const sendVerificationCode = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (user.isEmailVerified) {
+      return res.status(400).json({ error: "Email is already verified" });
+    }
+
+    // Generate a random 6-digit code
+    const verificationCode = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
+    const codeExpiry = new Date(Date.now() + 30 * 60000); // Code expires in 30 minutes
+
+    // Save the code to user
+    user.verificationCode = verificationCode;
+    user.verificationCodeExpires = codeExpiry;
+    await user.save();
+
+    // Create a transporter
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS, // This should be an App Password
+      },
+      tls: {
+        rejectUnauthorized: false, // Allow self-signed certificates
+      },
+    });
+
+    // Send email
+    const mailOptions = {
+      from: `"GYMHUB" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: "GYMHUB - Email Verification",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #333; text-align: center;">Email Verification</h2>
+          <p style="color: #666;">Hello ${user.name},</p>
+          <p style="color: #666;">Here is your verification code:</p>
+          <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
+            <h3 style="color: #007bff; margin: 0; font-size: 24px;">${verificationCode}</h3>
+          </div>
+          <p style="color: #666;">Enter this code on the verification page to verify your email address.</p>
+          <p style="color: #666;">This code will expire in 30 minutes.</p>
+        </div>
+      `,
+    };
+
+    // Verify connection configuration
+    await new Promise((resolve, reject) => {
+      transporter.verify(function (error, success) {
+        if (error) {
+          console.log("Transporter verification error:", error);
+          reject(error);
+        } else {
+          console.log("Server is ready to take our messages");
+          resolve(success);
+        }
+      });
+    });
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: "Verification code sent successfully" });
+  } catch (error) {
+    console.error("Email error:", error);
+    res
+      .status(400)
+      .json({ error: "Failed to send verification code. Please try again." });
+  }
+};
+
+// Verify email
+const verifyEmail = async (req, res) => {
+  try {
+    const { verificationCode } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (user.isEmailVerified) {
+      return res.status(400).json({ error: "Email is already verified" });
+    }
+
+    if (!user.verificationCode || !user.verificationCodeExpires) {
+      return res.status(400).json({
+        error: "No verification code found. Please request a new one.",
+      });
+    }
+
+    if (Date.now() > user.verificationCodeExpires) {
+      return res.status(400).json({
+        error: "Verification code has expired. Please request a new one.",
+      });
+    }
+
+    if (verificationCode !== user.verificationCode) {
+      return res.status(400).json({ error: "Invalid verification code" });
+    }
+
+    user.isEmailVerified = true;
+    user.verificationCode = null;
+    user.verificationCodeExpires = null;
+    await user.save();
+
+    res.status(200).json({
+      message: "Email verified successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isEmailVerified: true,
+      },
+    });
+  } catch (error) {
+    console.error("Verification error:", error);
+    res
+      .status(400)
+      .json({ error: "Failed to verify email. Please try again." });
+  }
+};
+
+// Verify token
+const verifyToken = async (req, res) => {
+  try {
+    // If the middleware passed, the token is valid
+    res.status(200).json({ valid: true });
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+};
+
 module.exports = {
   loginUser,
   signupUser,
@@ -164,4 +328,7 @@ module.exports = {
   updateUserProfile,
   updatePassword,
   deleteUserAccount,
+  sendVerificationCode,
+  verifyEmail,
+  verifyToken,
 };

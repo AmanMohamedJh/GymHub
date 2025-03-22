@@ -1,0 +1,107 @@
+.email-verification-container {
+  min-height: calc(100vh - 140px);
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.email-verification-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("../Gym_Owner/Styles/images/gym-background2.jpg.jpg") center/cover no-repeat;
+  filter: blur(5px);
+  z-index: -1;
+  transform: scale(1.1);
+}
+
+.email-verification-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: -1;
+}
+
+.email-verification-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  color: white;
+}
+
+.email-verification-card h2 {
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.email-verification-card p {
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.verification-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.verification-form input {
+  padding: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+}
+
+.verification-form input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.send-code-btn,
+.verify-btn {
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.send-code-btn:hover,
+.verify-btn:hover {
+  background-color: #ff6b81;
+}
+
+.send-code-btn:disabled,
+.verify-btn:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+.message {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}

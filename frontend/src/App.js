@@ -1,13 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useAuthContext } from "./hooks/useAuthContext";
+import Navbar from "./Components/Common/Navbar";
+import VerificationBanner from "./Components/Layout/VerificationBanner";
+import Footer from "./Components/Common/footer.jsx";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/login.jsx";
 import Register from "./pages/register.jsx";
-import Navbar from "./Components/Common/Navbar";
-import Footer from "./Components/Common/footer.jsx";
 import OwnerDashboard from "./pages/Gym_Owner/OwnerDashboard.jsx";
 import RegisterGym from "./pages/Gym_Owner/RegisterGym.jsx";
 import ManageGym from "./pages/Gym_Owner/ManageGym.jsx";
-import OwnerProfile from "./pages/Gym_Owner/OwnerProfile.jsx";
+import UserProfile from "./pages/userProfile/UserProfile.jsx";
 import OwnerReviewsDashboard from "./pages/Gym_Owner/OwnerReviewsDashboard.jsx";
 import TrainerDashboard from "./pages/Trainer/TrainerDashboard.jsx";
 import TrainerRegistration from "./pages/Trainer/TrainerRegistration.jsx";
@@ -20,13 +22,17 @@ import ProtectedRoute from "./Route Protector/ProtectedRoute.jsx";
 import TrainerSession from "./pages/Trainer/TrainerDashboard.jsx";
 import TrainerWorkoutPlans from "./pages/Trainer/TrainerWorkoutPlans.jsx";
 import ClientProgress from "./pages/Trainer/ClientProgress.jsx";
+import EmailVerification from "./pages/EmailVerification/EmailVerification";
 import "./App.css";
 
 function App() {
+  const { user } = useAuthContext();
+
   return (
     <div className="App">
       <BrowserRouter>
         <Navbar />
+        <VerificationBanner />
         <div className="pages">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -34,6 +40,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contact" element={<ContactUs />} />
+            <Route path="/email-verification" element={<EmailVerification />} />
             <Route
               path="/owner-dashboard"
               element={
@@ -59,10 +66,20 @@ function App() {
               }
             />
             <Route
-              path="/owner-profile"
+              path="/user-profile"
+              element={
+                <ProtectedRoute
+                  allowedRole={["client", "trainer", "gym_owner"]}
+                >
+                  <UserProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reviews-dashboard"
               element={
                 <ProtectedRoute allowedRole="gym_owner">
-                  <OwnerProfile />
+                  <OwnerReviewsDashboard />
                 </ProtectedRoute>
               }
             />
@@ -115,14 +132,6 @@ function App() {
               element={
                 <ProtectedRoute allowedRole="gym_owner">
                   <ManageGym />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/reviews-dashboard"
-              element={
-                <ProtectedRoute allowedRole="gym_owner">
-                  <OwnerReviewsDashboard />
                 </ProtectedRoute>
               }
             />

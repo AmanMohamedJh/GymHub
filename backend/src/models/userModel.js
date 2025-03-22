@@ -31,6 +31,18 @@ const userSchema = new Schema({
     enum: ["client", "gym_owner", "trainer"],
     required: true,
   },
+  isEmailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationCode: {
+    type: String,
+    default: null,
+  },
+  verificationCodeExpires: {
+    type: Date,
+    default: null,
+  },
 });
 
 //// Static signup method needs to be defined before exporting the model to ensure it is part of the schema(Not an AI generated comment)
