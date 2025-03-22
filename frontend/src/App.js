@@ -19,6 +19,14 @@ import TrainerList from "./pages/Trainer/TrainerList.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import ContactUs from "./pages/ContactUs.jsx";
 import ProtectedRoute from "./Route Protector/ProtectedRoute.jsx";
+import AdminRoute from "./Route Protector/AdminRoute.jsx";
+import NonAdminRoute from "./Route Protector/NonAdminRoute.jsx";
+import AdminLayout from "./pages/Admin/AdminLayout.jsx";
+import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
+import AdminGymManagement from "./pages/Admin/AdminGymManagement.jsx";
+import AdminTrainerManagement from "./pages/Admin/AdminTrainerManagement.jsx";
+import AdminClientManagement from "./pages/Admin/AdminClientManagement.jsx";
+import ContactUsManagement from "./pages/Admin/ContactUsManagement.jsx";
 import TrainerSession from "./pages/Trainer/TrainerDashboard.jsx";
 import TrainerWorkoutPlans from "./pages/Trainer/TrainerWorkoutPlans.jsx";
 import ClientProgress from "./pages/Trainer/ClientProgress.jsx";
@@ -28,140 +36,227 @@ import "./App.css";
 function App() {
   const { user } = useAuthContext();
 
+  // Check if the current user is an admin
+  const isAdmin = user && user.role === "admin";
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
-        <VerificationBanner />
+        {/* Only show Navbar and VerificationBanner if user is not admin */}
+        {!isAdmin && <Navbar />}
+        {!isAdmin && <VerificationBanner />}
         <div className="pages">
           <Routes>
-            <Route path="/" element={<Home />} />
+            {/* Public Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/contact" element={<ContactUs />} />
             <Route path="/email-verification" element={<EmailVerification />} />
+
+            {/* Non-Admin Routes */}
+            <Route
+              path="/"
+              element={
+                <NonAdminRoute>
+                  <Home />
+                </NonAdminRoute>
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <NonAdminRoute>
+                  <AboutUs />
+                </NonAdminRoute>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <NonAdminRoute>
+                  <ContactUs />
+                </NonAdminRoute>
+              }
+            />
+
+            {/* Admin Routes */}
+            <Route
+              path="/admin/*"
+              element={
+                <AdminRoute>
+                  <AdminLayout>
+                    <Routes>
+                      <Route path="/" element={<AdminDashboard />} />
+                      <Route path="/dashboard" element={<AdminDashboard />} />
+                      <Route path="/gyms" element={<AdminGymManagement />} />
+                      <Route
+                        path="/trainers"
+                        element={<AdminTrainerManagement />}
+                      />
+                      <Route
+                        path="/clients"
+                        element={<AdminClientManagement />}
+                      />
+                      <Route
+                        path="/messages"
+                        element={<ContactUsManagement />}
+                      />
+                    </Routes>
+                  </AdminLayout>
+                </AdminRoute>
+              }
+            />
+
+            {/* Protected Non-Admin Routes */}
             <Route
               path="/owner-dashboard"
               element={
-                <ProtectedRoute allowedRole="gym_owner">
-                  <OwnerDashboard />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="gym_owner">
+                    <OwnerDashboard />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/register-gym"
               element={
-                <ProtectedRoute allowedRole="gym_owner">
-                  <RegisterGym />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="gym_owner">
+                    <RegisterGym />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/gym-dashboard/:gymId"
               element={
-                <ProtectedRoute allowedRole="gym_owner">
-                  <ManageGym />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="gym_owner">
+                    <ManageGym />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/user-profile"
               element={
-                <ProtectedRoute
-                  allowedRole={["client", "trainer", "gym_owner"]}
-                >
-                  <UserProfile />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute
+                    allowedRole={["client", "trainer", "gym_owner"]}
+                  >
+                    <UserProfile />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/reviews-dashboard"
               element={
-                <ProtectedRoute allowedRole="gym_owner">
-                  <OwnerReviewsDashboard />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="gym_owner">
+                    <OwnerReviewsDashboard />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/trainer-dashboard"
               element={
-                <ProtectedRoute allowedRole="trainer">
-                  <TrainerDashboard />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="trainer">
+                    <TrainerDashboard />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/trainer/registration"
               element={
-                <ProtectedRoute allowedRole="trainer">
-                  <TrainerRegistration />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="trainer">
+                    <TrainerRegistration />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/client-dashboard"
               element={
-                <ProtectedRoute allowedRole="client">
-                  <ClientDashboard />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="client">
+                    <ClientDashboard />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/gym-list"
               element={
-                <ProtectedRoute
-                  allowedRole={["client", "trainer", "gym_owner"]}
-                >
-                  <GymList />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute
+                    allowedRole={["client", "trainer", "gym_owner"]}
+                  >
+                    <GymList />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/trainer-list"
               element={
-                <ProtectedRoute
-                  allowedRole={["client", "trainer", "gym_owner"]}
-                >
-                  <TrainerList />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute
+                    allowedRole={["client", "trainer", "gym_owner"]}
+                  >
+                    <TrainerList />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/manage-gym"
               element={
-                <ProtectedRoute allowedRole="gym_owner">
-                  <ManageGym />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="gym_owner">
+                    <ManageGym />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/trainer/session"
               element={
-                <ProtectedRoute allowedRole="trainer">
-                  <TrainerSession />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="trainer">
+                    <TrainerSession />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/trainer/workout-plans"
               element={
-                <ProtectedRoute allowedRole="trainer">
-                  <TrainerWorkoutPlans />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="trainer">
+                    <TrainerWorkoutPlans />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
             <Route
               path="/trainer/client-progress"
               element={
-                <ProtectedRoute allowedRole="trainer">
-                  <ClientProgress />
-                </ProtectedRoute>
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="trainer">
+                    <ClientProgress />
+                  </ProtectedRoute>
+                </NonAdminRoute>
               }
             />
           </Routes>
         </div>
-        <Footer />
+        {/* Only show Footer if user is not admin */}
+        {!isAdmin && <Footer />}
       </BrowserRouter>
     </div>
   );

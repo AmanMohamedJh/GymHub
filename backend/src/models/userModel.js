@@ -28,7 +28,7 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["client", "gym_owner", "trainer"],
+    enum: ["client", "gym_owner", "trainer", "admin"],
     required: true,
   },
   isEmailVerified: {
@@ -52,7 +52,8 @@ userSchema.statics.signup = async function (
   email,
   phone,
   password,
-  role
+  role,
+  adminKey
 ) {
   //Here im going to validate the inputs
 
@@ -67,6 +68,17 @@ userSchema.statics.signup = async function (
   if (!validator.isStrongPassword(password)) {
     throw Error("Password is not Strong Enough");
   }
+
+  // Validate admin key if registering as admin
+  if (role === "admin") {
+    if (!adminKey) {
+      throw Error("Admin key is required for admin registration");
+    }
+    if (adminKey !== process.env.ADMIN_SECRET_KEY) {
+      throw Error("Invalid admin key");
+    }
+  }
+
   const exists = await this.findOne({ email });
 
   if (exists) {

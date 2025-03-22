@@ -80,47 +80,43 @@
   font-size: 1.1rem;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
+.register-gym-form .form-group input,
+.register-gym-form .form-group textarea,
+.register-gym-form .form-group select {
   width: 100%;
   padding: 0.8rem;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 1rem;
   background-color: white;
+  color: #333;
 }
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
+.register-gym-form .form-group input:focus,
+.register-gym-form .form-group textarea:focus,
+.register-gym-form .form-group select:focus {
   outline: none;
   border-color: #e74c3c;
   box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
 }
 
-.form-group textarea {
+.register-gym-form .form-group textarea {
   min-height: 120px;
   resize: vertical;
   font-family: inherit;
 }
 
-.form-group textarea:focus {
-  outline: none;
-  border-color: #e74c3c;
-  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
-}
-
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group input[type="url"] {
+.register-gym-form .form-group input[type="email"],
+.register-gym-form .form-group input[type="tel"],
+.register-gym-form .form-group input[type="url"] {
   font-family: inherit;
+  color: #333;
 }
 
-.form-group input[type="email"]::placeholder,
-.form-group input[type="tel"]::placeholder,
-.form-group input[type="url"]::placeholder,
-.form-group textarea::placeholder {
+.register-gym-form .form-group input[type="email"]::placeholder,
+.register-gym-form .form-group input[type="tel"]::placeholder,
+.register-gym-form .form-group input[type="url"]::placeholder,
+.register-gym-form .form-group textarea::placeholder {
   color: #95a5a6;
 }
 

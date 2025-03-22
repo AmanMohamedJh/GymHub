@@ -47,11 +47,11 @@
 }
 
 .dashboard-header h2 {
-  color: #333;
+  color: #ff4757;
   margin-bottom: 1rem;
 }
 
-.dashboard-stats {
+.stats-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
@@ -59,12 +59,12 @@
 }
 
 .stat-card {
-  background-color: white;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
   border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
+  transition: transform 0.3s ease;
 }
 
 .stat-card:hover {
@@ -72,26 +72,26 @@
 }
 
 .stat-card h3 {
-  color: #333;
-  margin-bottom: 0.5rem;
+  color: #ff4757;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 .stat-card p {
-  color: #666;
-  font-size: 1.5rem;
+  color: #333;
+  font-size: 2rem;
   font-weight: 600;
-  margin: 0;
 }
 
 .recent-activity {
-  background-color: white;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
   border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .recent-activity h3 {
-  color: #333;
+  color: #ff4757;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -117,7 +117,7 @@
 .activity-icon {
   width: 40px;
   height: 40px;
-  background-color: #007bff;
+  background-color: #ff4757;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -151,7 +151,7 @@
 }
 
 .profile-header h1 {
-  color: #e74c3c;
+  color: #ff4757;
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
   font-weight: bold;
@@ -169,15 +169,15 @@
   border-radius: 8px;
   margin-bottom: 2rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(231, 76, 60, 0.2);
+  border: 1px solid rgba(255, 71, 87, 0.2);
 }
 
 .profile-section h2 {
-  color: #e74c3c;
+  color: #ff4757;
   font-size: 1.3rem;
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e74c3c;
+  border-bottom: 2px solid #ff4757;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -223,7 +223,7 @@
 .form-group input {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e74c3c;
+  border: 2px solid #ff4757;
   border-radius: 4px;
   font-size: 1rem;
   color: #2c3e50;
@@ -232,8 +232,8 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #e74c3c;
-  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+  border-color: #ff4757;
+  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.2);
 }
 
 .form-group input::placeholder {
@@ -254,7 +254,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: #e74c3c;
+  background: #ff4757;
   color: white;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -272,36 +272,36 @@
 .cancel-button:hover,
 .change-password-button:hover,
 .delete-account-button:hover {
-  background: #c0392b;
+  background: #ff2e43;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .danger-zone {
-  border: 2px solid #e74c3c;
-  background: rgba(231, 76, 60, 0.05);
+  border: 2px solid #ff4757;
+  background: rgba(255, 71, 87, 0.05);
 }
 
 .delete-confirm {
   background: #ffffff;
   padding: 1.5rem;
   border-radius: 4px;
-  border: 2px solid #e74c3c;
+  border: 2px solid #ff4757;
 }
 
 .delete-confirm p {
-  color: #c0392b;
+  color: #ff2e43;
   margin-bottom: 1rem;
   font-weight: 600;
 }
 
 .error-message {
-  background: rgba(231, 76, 60, 0.1);
-  color: #c0392b;
+  background: rgba(255, 71, 87, 0.1);
+  color: #ff2e43;
   padding: 1rem;
   border-radius: 4px;
   margin-bottom: 1rem;
-  border: 1px solid #e74c3c;
+  border: 1px solid #ff4757;
   font-weight: 500;
 }
 
@@ -340,16 +340,16 @@ button:disabled {
   background: #ffffff;
   padding: 1.5rem;
   border-radius: 8px;
-  border: 2px solid #e74c3c;
+  border: 2px solid #ff4757;
 }
 
 .current-details h3,
 .edit-form h3 {
-  color: #e74c3c;
+  color: #ff4757;
   margin-bottom: 1.5rem;
   font-size: 1.2rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e74c3c;
+  border-bottom: 2px solid #ff4757;
   font-weight: bold;
 }
 
@@ -357,7 +357,7 @@ button:disabled {
   background: #ffffff;
   padding: 1.5rem;
   border-radius: 8px;
-  border: 2px solid #e74c3c;
+  border: 2px solid #ff4757;
 }
 
 .profile-picture-container {
@@ -410,7 +410,7 @@ button:disabled {
     padding: 1.5rem;
   }
 
-  .dashboard-stats {
+  .stats-section {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
