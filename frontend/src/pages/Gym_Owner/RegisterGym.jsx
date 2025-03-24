@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUpload } from "react-icons/fa";
+import { useSubscription } from "../../context/Subscription/SubscriptionContext";
 import "./Styles/RegisterGym.css";
 
 const RegisterGym = () => {
   const navigate = useNavigate();
+  const { subscription } = useSubscription();
   const [formData, setFormData] = useState({
     name: "",
     location: "",
@@ -30,6 +32,13 @@ const RegisterGym = () => {
     quantity: "",
     condition: "Good",
   });
+
+  useEffect(() => {
+    // Check subscription status
+    if (!subscription || subscription.status !== "Active") {
+      navigate("/subscription");
+    }
+  }, [subscription, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

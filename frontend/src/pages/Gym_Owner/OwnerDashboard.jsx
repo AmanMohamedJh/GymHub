@@ -14,15 +14,18 @@ import {
   FaCog,
   FaStar,
   FaUser,
+  FaArrowUp,
+  FaArrowDown,
+  FaTools,
 } from "react-icons/fa";
-import "./Styles/Dashboard.css";
+import "./Styles/OwnerDashboard.css";
+
 import gymImage from "./Styles/images/gym-background2.jpg.jpg";
 
 const OwnerDashboard = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
-  // Mock data - replace with actual data from your context/API
   const analytics = {
     totalGyms: 5,
     registeredGyms: 3,
@@ -77,60 +80,76 @@ const OwnerDashboard = () => {
   const defaultGymImage = gymImage;
 
   return (
-    <div className="dashboard-main-container">
-      <div className="dashboard-header-main">
+    <div className="owner_dashboard_container">
+      <div className="owner_dashboard_header">
         <h2>Welcome, {user?.name}</h2>
       </div>
 
       {/* Analytics Section */}
-      <div className="dashboard-stats-grid">
-        <div className="dashboard-stat-item">
-          <FaDumbbell className="dashboard-icon" />
-          <h3>Total Gyms</h3>
-          <div className="dashboard-number">{analytics.totalGyms}</div>
+      <div className="owner_dashboard_stats">
+        <div className="owner_stat_card">
+          <FaDumbbell className="owner_stat_icon" />
+          <div className="owner_stat_content">
+            <h3>Total Gyms</h3>
+            <div className="owner_stat_number">{analytics.totalGyms}</div>
+            <div className="owner_stat_trend positive">
+              <FaArrowUp /> 12% this month
+            </div>
+          </div>
         </div>
-        <div className="dashboard-stat-item">
-          <FaUserCheck className="dashboard-icon" />
-          <h3>Registered Gyms</h3>
-          <div className="dashboard-number">{analytics.registeredGyms}</div>
+
+        <div className="owner_stat_card">
+          <FaUserCheck className="owner_stat_icon" />
+          <div className="owner_stat_content">
+            <h3>Registered Gyms</h3>
+            <div className="owner_stat_number">{analytics.registeredGyms}</div>
+            <div className="owner_stat_trend positive">
+              <FaArrowUp /> 8% this month
+            </div>
+          </div>
         </div>
-        <div className="dashboard-stat-item">
-          <FaUserClock className="dashboard-icon" />
-          <h3>Pending Gyms</h3>
-          <div className="dashboard-number">{analytics.pendingGyms}</div>
+
+        <div className="owner_stat_card">
+          <FaUserClock className="owner_stat_icon" />
+          <div className="owner_stat_content">
+            <h3>Pending Gyms</h3>
+            <div className="owner_stat_number">{analytics.pendingGyms}</div>
+            <div className="owner_stat_trend negative">
+              <FaArrowDown /> 3% this month
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Add Gym Button */}
-      <div className="dashboard-add-section">
-        <Link to="/register-gym">
-          <button className="dashboard-btn-primary">
-            <FaPlus /> Add New Gym
-          </button>
+      <div className="owner_add_gym">
+        <Link to="/register-gym" className="owner_add_btn">
+          <FaPlus /> Add New Gym
         </Link>
       </div>
 
       {/* Registered Gyms Section */}
-      <div className="dashboard-content-box">
+      <div className="owner_content_section">
         <h3>Registered Gyms</h3>
-        <div className="dashboard-gym-grid">
+        <div className="owner_gym_grid">
           {registeredGyms.map((gym) => (
-            <div key={gym._id} className="dashboard-gym-item">
+            <div key={gym._id} className="owner_gym_card">
               <div
-                className="dashboard-gym-image"
+                className="owner_gym_image"
                 style={{
                   backgroundImage: `url(${gym.images[0] || defaultGymImage})`,
                 }}
               ></div>
               <h4>{gym.name}</h4>
-              <div className="dashboard-location">
+              <div className="owner_gym_location">
                 <FaMapMarkerAlt />
                 {gym.location}
               </div>
-              <Link to={`/gym-dashboard/${gym._id}`}>
-                <button className="dashboard-btn-secondary">
-                  <FaCog /> Manage Gym
-                </button>
+              <Link
+                to={`/gym-dashboard/${gym._id}`}
+                className="owner_manage_btn"
+              >
+                <FaCog /> Manage Gym
               </Link>
             </div>
           ))}
@@ -186,6 +205,33 @@ const OwnerDashboard = () => {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Equipment Management Section - Enhanced */}
+      <div className="owner_content_section">
+        <h3>Equipment Management</h3>
+        <div className="dashboard-action-cards">
+          <Link to="/equipment-management" className="dashboard-action-card">
+            <div className="dashboard-action-icon">
+              <FaTools />
+            </div>
+            <div className="dashboard-action-content">
+              <h4>Equipment Inventory</h4>
+              <p>
+                Track, maintain and manage all your gym equipment in one place
+              </p>
+            </div>
+          </Link>
+          <Link to="/register-gym" className="dashboard-action-card">
+            <div className="dashboard-action-icon">
+              <FaPlus />
+            </div>
+            <div className="dashboard-action-content">
+              <h4>Add New Equipment</h4>
+              <p>Register new equipment items for your gym facilities</p>
+            </div>
+          </Link>
         </div>
       </div>
     </div>

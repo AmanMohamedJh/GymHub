@@ -4,6 +4,7 @@ import SearchBar from "../../Components/Search/SearchBar";
 import "./Styles/OwnerReviewsDashboard.css";
 
 const OwnerReviewsDashboard = () => {
+  const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState("");
@@ -14,29 +15,49 @@ const OwnerReviewsDashboard = () => {
 
   // Mock data - replace with actual API call
   useEffect(() => {
-    const mockReviews = [
-      {
-        id: 1,
-        clientName: "John Doe",
-        rating: 4,
-        text: "Great facilities and excellent trainers!",
-        date: "2025-03-15",
-        gymName: "FitZone",
-        gymLocation: "New York",
-        reply: "",
-      },
-      {
-        id: 2,
-        clientName: "Jane Smith",
-        rating: 5,
-        text: "Best gym experience ever. Very clean and well-maintained.",
-        date: "2025-03-16",
-        gymName: "PowerHouse",
-        gymLocation: "Los Angeles",
-        reply: "",
-      },
-    ];
-    setReviews(mockReviews);
+    const fetchReviews = async () => {
+      try {
+        setLoading(true);
+        // In a real app, you would fetch data from your API here
+        // const response = await fetch('/api/owner/reviews');
+        // const data = await response.json();
+        // setReviews(data);
+
+        // For now, use mock data
+        const mockReviews = [
+          {
+            id: 1,
+            clientName: "John Doe",
+            rating: 4,
+            text: "Great facilities and excellent trainers!",
+            date: "2025-03-15",
+            gymName: "FitZone",
+            gymLocation: "New York",
+            reply: "",
+          },
+          {
+            id: 2,
+            clientName: "Jane Smith",
+            rating: 5,
+            text: "Best gym experience ever. Very clean and well-maintained.",
+            date: "2025-03-16",
+            gymName: "PowerHouse",
+            gymLocation: "Los Angeles",
+            reply: "",
+          },
+        ];
+
+        // Simulate API delay
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setReviews(mockReviews);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
   }, []);
 
   const calculateStats = () => {
@@ -88,6 +109,15 @@ const OwnerReviewsDashboard = () => {
       review.gymName.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (!dateFilter || review.date === dateFilter)
   );
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading reviews...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="owner-reviews-main">

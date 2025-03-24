@@ -5,6 +5,7 @@ import {
   XMarkIcon as XIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
+import { FaTools } from "react-icons/fa";
 import { Fragment } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import "../Common/Navbar.css";
@@ -99,6 +100,38 @@ export default function Navbar() {
                             </Link>
                           )}
                         </Menu.Item>
+                        {/* Show MySubscription for gym owners and trainers */}
+                        {(user.role === "gym_owner" ||
+                          user.role === "trainer") && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                to="/my-subscription"
+                                className={`dropdown-item ${
+                                  active ? "active" : ""
+                                }`}
+                              >
+                                My Subscription
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        )}
+                        {/* Equipment Management for gym owners */}
+                        {user.role === "gym_owner" && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                to="/equipment-management"
+                                className={`dropdown-item ${
+                                  active ? "active" : ""
+                                }`}
+                              >
+                                <FaTools className="menu-icon" />
+                                Equipment Management
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        )}
                         <Menu.Item>
                           {({ active }) => (
                             <Link
@@ -163,33 +196,42 @@ export default function Navbar() {
                 {item.name}
               </Link>
             ))}
-            <div className="mobile-auth">
-              {user ? (
-                <>
-                  <Link
-                    to={getDashboardRoute(user.role)}
-                    className="mobile-nav-link"
-                  >
-                    Dashboard
+            {user ? (
+              <>
+                <Link
+                  to={getDashboardRoute(user.role)}
+                  className="mobile-nav-link"
+                >
+                  Dashboard
+                </Link>
+                {(user.role === "gym_owner" || user.role === "trainer") && (
+                  <Link to="/my-subscription" className="mobile-nav-link">
+                    My Subscription
                   </Link>
-                  <Link to="/user-profile" className="mobile-nav-link">
-                    Profile Settings
+                )}
+                {user.role === "gym_owner" && (
+                  <Link to="/equipment-management" className="mobile-nav-link">
+                    <FaTools className="menu-icon" />
+                    Equipment Management
                   </Link>
-                  <button onClick={handleLogout} className="mobile-nav-link">
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" className="btn-secondary">
-                    Login
-                  </Link>
-                  <Link to="/register" className="btn-primary">
-                    Register
-                  </Link>
-                </>
-              )}
-            </div>
+                )}
+                <Link to="/user-profile" className="mobile-nav-link">
+                  Profile Settings
+                </Link>
+                <button onClick={handleLogout} className="mobile-nav-link">
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="btn-secondary">
+                  Login
+                </Link>
+                <Link to="/register" className="btn-primary">
+                  Register
+                </Link>
+              </>
+            )}
           </Disclosure.Panel>
         </>
       )}

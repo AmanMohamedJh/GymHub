@@ -39,6 +39,9 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+//Auth context provider helps and The AuthContextProvider wraps the app,
+// making the user and dispatch accessible wherever needed.
+
 export default AuthContext;
 
 // what happen in this
