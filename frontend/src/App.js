@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useAuthContext } from "./hooks/useAuthContext";
 import {
   SubscriptionProvider,
   RequireSubscription,
@@ -7,6 +6,7 @@ import {
 import "./context/Subscription/SubscriptionContext.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "./hooks/useAuthContext";
 
 // Layout Components
 import Navbar from "./Components/Common/Navbar";
@@ -37,8 +37,13 @@ import TrainerWorkoutPlans from "./pages/Trainer/TrainerWorkoutPlans.jsx";
 import ClientProgress from "./pages/Trainer/ClientProgress.jsx";
 
 // Client Components
-import ClientDashboard from "./pages/Clientt/ClientDashboard.jsx";
-import GymList from "./pages/Clientt/GymList.jsx";
+import ClientDashboard from "./pages/Clientt/Dashboard.jsx";
+import ClientBrowseGym from "./pages/Clientt/BrowseGym.jsx";
+import ClientBrowseTrainer from "./pages/Clientt/BrowseTrainers.jsx";
+import ClientProgressTracking from "./pages/Clientt/ProgressTracking.jsx";
+import ClientWorkoutlogForm from "./pages/Clientt/workoutLogForm.jsx";
+import ClientFitnessGoalForm from "./pages/Clientt/FitnessGoalForm.jsx";
+import ClientBMIUpdateForm from "./pages/Clientt/BMIUpdateForm.jsx";
 
 // Admin Components
 import AdminLayout from "./pages/Admin/AdminLayout.jsx";
@@ -55,13 +60,6 @@ import NonAdminRoute from "./Route Protector/NonAdminRoute.jsx";
 
 // Verification and Subscription
 import EmailVerification from "./pages/EmailVerification/EmailVerification";
-import ClientDashboard from "./pages/Clientt/Dashboard.jsx";
-import ClientBrowseGym from "./pages/Clientt/BrowseGym.jsx";
-import ClientBrowseTrainer from "./pages/Clientt/BrowseTrainers.jsx";
-import ClientProgressTracking from "./pages/Clientt/ProgressTracking.jsx";
-import ClientWorkoutlogForm from "./pages/Clientt/workoutLogForm.jsx";
-import ClientFitnessGoalForm from "./pages/Clientt/FitnessGoalForm.jsx";
-import ClientBMIUpdateForm from "./pages/Clientt/BMIUpdateForm.jsx";
 import SubscriptionPage from "./pages/Subscription/SubscriptionPage";
 import SuccessPage from "./pages/Subscription/SuccessPage";
 import FailurePage from "./pages/Subscription/FailurePage";
@@ -70,6 +68,8 @@ import MySubscription from "./pages/Subscription/MySubscription";
 import "./App.css";
 
 function App() {
+
+  const { user } = useAuthContext();
 
   return (
     <div className="App">
@@ -237,10 +237,6 @@ function App() {
             <Route
               path="/gym-list"
               element={
-                <ProtectedRoute
-                  allowedRole={["client", "trainer", "gym_owner"]}
-                >
-                </ProtectedRoute>
                 <NonAdminRoute>
                   <ProtectedRoute
                     allowedRole={["client", "trainer", "gym_owner"]}
@@ -373,7 +369,6 @@ function App() {
                   <ProtectedRoute
                     allowedRole={["client", "trainer", "gym_owner"]}
                   >
-                    <GymList />
                   </ProtectedRoute>
                 </NonAdminRoute>
               }

@@ -34,15 +34,15 @@ app.use("/api/subscription", subscriptionRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 //Routes
-App.use("/api/user", userRoutes); //importing the route for user
+app.use("/api/user", userRoutes); //importing the route for user
 
 //contact us router and route
 const contactUsRouter = require("./src/routes/contactUs");
-App.use("/api/contactUs", contactUsRouter);
+app.use("/api/contactUs", contactUsRouter);
 
 //client router and route
 const clientRouter = require("./src/routes/client");
-App.use("/api/client", clientRouter);
+app.use("/api/client", clientRouter);
 
 
 //listen for request
