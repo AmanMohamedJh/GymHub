@@ -925,3 +925,170 @@
 .equip-actions-bar {
   margin-top: 2.5rem;
 }
+
+/* Gym Name Column Styles */
+.gym-name,
+.no-gym {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.gym-name {
+  color: #2c3e50;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.no-gym {
+  color: #7f8c8d;
+  background-color: #f8f9fa;
+}
+
+.gym-icon,
+.inventory-icon {
+  font-size: 1rem;
+}
+
+.gym-name-group {
+  margin-bottom: 1rem;
+}
+
+.gym-name-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.no-gym-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.no-gym-checkbox input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.no-gym-checkbox label {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.gym-name-hint {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+/* Disabled input styles */
+.equip-form input:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Add Existing Equipment Button and Modal */
+.equip-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #ecf0f1;
+}
+
+.equip-btn-cancel {
+  background-color: #95a5a6;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.equip-btn-cancel:hover {
+  background-color: #7f8c8d;
+}
+
+.equip-btn-existing {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #3498db;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.equip-btn-existing:hover {
+  background-color: #2980b9;
+}
+
+.equip-btn-save {
+  background-color: #e74c3c;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.equip-btn-save:hover {
+  background-color: #c0392b;
+}
+
+/* Existing Equipment Modal */
+.equip-existing-modal {
+  max-width: 800px;
+  width: 90%;
+}
+
+.existing-equipment-list {
+  padding: 1.5rem;
+}
+
+.existing-equipment-info {
+  color: #7f8c8d;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+.no-inventory-message {
+  text-align: center;
+  color: #7f8c8d;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  font-style: italic;
+}
+
+.equip-btn-add-to-gym {
+  background-color: #2ecc71;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.9rem;
+}
+
+.equip-btn-add-to-gym:hover {
+  background-color: #27ae60;
+}

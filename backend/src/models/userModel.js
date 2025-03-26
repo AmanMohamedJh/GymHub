@@ -92,7 +92,14 @@ userSchema.statics.signup = async function (
 
   // Create and save the new user with the hashed password(password with salt )
 
-  const user = await this.create({ name, email, phone, password: hash, role });
+  const user = await this.create({
+    name,
+    email,
+    phone,
+    password: hash,
+    role,
+    isEmailVerified: role === "admin" ? true : false, // Automatically verify admin accounts
+  });
 
   return user;
 };

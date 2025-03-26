@@ -1,15 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUpload } from "react-icons/fa";
+import { FaUpload, FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import { useSubscription } from "../../context/Subscription/SubscriptionContext";
 import "./Styles/RegisterGym.css";
 
 const RegisterGym = () => {
   const navigate = useNavigate();
   const { subscription } = useSubscription();
+  const mapRef = useRef(null);
+  const searchBoxRef = useRef(null);
+  const [map, setMap] = useState(null);
+  const [marker, setMarker] = useState(null);
+
   const [formData, setFormData] = useState({
     name: "",
-    location: "",
+    location: {
+      address: "",
+      coordinates: {
+        lat: 0,
+        lng: 0,
+      },
+      placeId: "",
+      url: "", // Google Maps URL
+    },
     images: [],
     amenities: [],
     hours: {
@@ -17,10 +30,6 @@ const RegisterGym = () => {
       weekends: "",
     },
     allowedGenders: "Both",
-    pricing: {
-      monthly: "",
-      yearly: "",
-    },
     equipment: [],
     notes: "",
   });
@@ -39,6 +48,101 @@ const RegisterGym = () => {
       navigate("/subscription");
     }
   }, [subscription, navigate]);
+
+  useEffect(() => {
+    // Load Google Maps script
+    const loadGoogleMapsScript = () => {
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = initializeMap;
+      document.head.appendChild(script);
+    };
+
+    loadGoogleMapsScript();
+  }, []);
+
+  const initializeMap = () => {
+    if (!mapRef.current) return;
+
+    // Initialize map centered on a default location (e.g., Sri Lanka)
+    const defaultLocation = { lat: 7.8731, lng: 80.7718 };
+    const mapInstance = new window.google.maps.Map(mapRef.current, {
+      center: defaultLocation,
+      zoom: 8,
+      styles: [
+        {
+          featureType: "poi",
+          elementType: "labels",
+          stylers: [{ visibility: "off" }],
+        },
+      ],
+    });
+
+    // Initialize search box
+    const searchBox = new window.google.maps.places.SearchBox(
+      searchBoxRef.current
+    );
+    mapInstance.controls[window.google.maps.ControlPosition.TOP_CENTER].push(
+      searchBoxRef.current
+    );
+
+    // Create marker
+    const markerInstance = new window.google.maps.Marker({
+      map: mapInstance,
+      draggable: true,
+    });
+
+    // Listen for search box changes
+    searchBox.addListener("places_changed", () => {
+      const places = searchBox.getPlaces();
+      if (places.length === 0) return;
+
+      const place = places[0];
+      if (!place.geometry || !place.geometry.location) return;
+
+      // Update map and marker
+      mapInstance.setCenter(place.geometry.location);
+      mapInstance.setZoom(15);
+      markerInstance.setPosition(place.geometry.location);
+
+      // Update form data
+      updateLocationData(place);
+    });
+
+    // Listen for marker drag events
+    markerInstance.addListener("dragend", () => {
+      const position = markerInstance.getPosition();
+      const geocoder = new window.google.maps.Geocoder();
+
+      geocoder.geocode({ location: position }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          updateLocationData(results[0]);
+        }
+      });
+    });
+
+    setMap(mapInstance);
+    setMarker(markerInstance);
+  };
+
+  const updateLocationData = (place) => {
+    const location = {
+      address: place.formatted_address,
+      coordinates: {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      },
+      placeId: place.place_id,
+      url: `https://www.google.com/maps/place/?q=place_id:${place.place_id}`,
+    };
+
+    setFormData((prev) => ({
+      ...prev,
+      location,
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -117,15 +221,34 @@ const RegisterGym = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="location">Location *</label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                required
-              />
+              <label>Location *</label>
+              <div className="location-search-container">
+                <div className="search-box-wrapper">
+                  <FaSearch className="search-icon" />
+                  <input
+                    ref={searchBoxRef}
+                    type="text"
+                    placeholder="Search for your gym location..."
+                    className="location-search-input"
+                  />
+                </div>
+                <div className="map-container" ref={mapRef}></div>
+                {formData.location.address && (
+                  <div className="location-details">
+                    <p className="formatted-address">
+                      <FaMapMarkerAlt /> {formData.location.address}
+                    </p>
+                    <a
+                      href={formData.location.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="view-on-maps"
+                    >
+                      View on Google Maps
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Gym Images */}
@@ -213,46 +336,13 @@ const RegisterGym = () => {
           <div className="form-section">
             <h3>Equipment Management</h3>
             <div className="form-group">
-              <div className="equipment-input-group">
-                <input
-                  type="text"
-                  value={equipmentInput.name}
-                  onChange={(e) =>
-                    setEquipmentInput((prev) => ({
-                      ...prev,
-                      name: e.target.value,
-                    }))
-                  }
-                  placeholder="Equipment name"
-                />
-                <input
-                  type="number"
-                  value={equipmentInput.quantity}
-                  onChange={(e) =>
-                    setEquipmentInput((prev) => ({
-                      ...prev,
-                      quantity: e.target.value,
-                    }))
-                  }
-                  placeholder="Quantity"
-                  min="1"
-                />
-                <select
-                  value={equipmentInput.condition}
-                  onChange={(e) =>
-                    setEquipmentInput((prev) => ({
-                      ...prev,
-                      condition: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="Excellent">Excellent</option>
-                  <option value="Good">Good</option>
-                  <option value="Fair">Fair</option>
-                  <option value="Poor">Poor</option>
-                </select>
+              <div
+                className="equipment-input-group"
+                style={{ justifyContent: "center" }}
+              >
                 <button
                   type="button"
+                  className="add-equipment-button"
                   onClick={() => {
                     if (equipmentInput.name && equipmentInput.quantity) {
                       setFormData((prev) => ({
@@ -309,31 +399,47 @@ const RegisterGym = () => {
             </div>
           </div>
 
-          {/* Membership Pricing */}
+          {/* Certificate Upload */}
           <div className="form-section">
-            <h3>Membership Pricing</h3>
+            <h3>Gym Registration Certificate</h3>
             <div className="form-group">
-              <label htmlFor="pricing.monthly">Monthly Fee (Rs) *</label>
-              <input
-                type="number"
-                id="pricing.monthly"
-                name="pricing.monthly"
-                value={formData.pricing.monthly}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="pricing.yearly">Yearly Fee (Rs) *</label>
-              <input
-                type="number"
-                id="pricing.yearly"
-                name="pricing.yearly"
-                value={formData.pricing.yearly}
-                onChange={handleChange}
-                required
-              />
+              <p className="certificate-info">
+                Please upload your official gym registration certificate. This
+                document helps verify your gym's legal status and compliance
+                with local regulations.
+              </p>
+              <div className="certificate-upload-container">
+                <label className="certificate-upload-button">
+                  <FaUpload /> Upload Certificate
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setFormData((prev) => ({
+                          ...prev,
+                          certificate: file,
+                        }));
+                      }
+                    }}
+                    style={{ display: "none" }}
+                  />
+                </label>
+                {formData.certificate && (
+                  <div className="certificate-preview">
+                    <span>{formData.certificate.name}</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setFormData((prev) => ({ ...prev, certificate: null }))
+                      }
+                    >
+                      &times;
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

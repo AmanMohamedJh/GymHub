@@ -69,8 +69,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <SubscriptionProvider>
-          <Navbar />
-          {user && <VerificationBanner />}
+          {/* Only show Navbar if user is not admin */}
+          {(!user || user.role !== "admin") && <Navbar />}
+          {user && user.role !== "admin" && <VerificationBanner />}
           {user && user.role === "gym_owner" && <SubscriptionBanner />}
           <Routes>
             {/* Public Routes */}
@@ -249,32 +250,33 @@ function App() {
               path="/admin"
               element={
                 <AdminRoute>
-                  <AdminLayout>
-                    <Routes>
-                      <Route index element={<AdminDashboard />} />
-                      <Route
-                        path="gym-management"
-                        element={<AdminGymManagement />}
-                      />
-                      <Route
-                        path="trainer-management"
-                        element={<AdminTrainerManagement />}
-                      />
-                      <Route
-                        path="client-management"
-                        element={<AdminClientManagement />}
-                      />
-                      <Route
-                        path="contact-management"
-                        element={<ContactUsManagement />}
-                      />
-                    </Routes>
-                  </AdminLayout>
+                  <AdminLayout />
                 </AdminRoute>
               }
-            />
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="gym-management" element={<AdminGymManagement />} />
+              <Route
+                path="trainer-management"
+                element={<AdminTrainerManagement />}
+              />
+              <Route
+                path="client-management"
+                element={<AdminClientManagement />}
+              />
+              <Route
+                path="contact-management"
+                element={<ContactUsManagement />}
+              />
+              <Route
+                path="contact-management"
+                element={<ContactUsManagement />}
+              />
+            </Route>
           </Routes>
-          <Footer />
+          {/* Only show Footer if user is not admin */}
+          {(!user || user.role !== "admin") && <Footer />}
         </SubscriptionProvider>
       </BrowserRouter>
     </div>

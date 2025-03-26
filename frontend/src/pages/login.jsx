@@ -14,7 +14,13 @@ export default function Login() {
     e.preventDefault();
     const success = await login(email, password);
     if (success) {
-      navigate("/");
+      // Get the user from localStorage to check role
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user && user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
     }
   };
 

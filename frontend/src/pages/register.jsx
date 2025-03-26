@@ -46,7 +46,11 @@ export default function Register() {
       role === "admin" ? formData.adminKey : undefined
     );
     if (success) {
-      navigate(role === "admin" ? "/admin/dashboard" : "/");
+      if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
     }
   };
 

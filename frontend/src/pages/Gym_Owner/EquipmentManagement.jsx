@@ -15,6 +15,9 @@ import {
   FaSort,
   FaSortAmountDown,
   FaSortAmountUp,
+  FaWarehouse,
+  FaBoxOpen,
+  FaExchangeAlt,
 } from "react-icons/fa";
 import "./Styles/EquipmentManagement.css";
 
@@ -26,14 +29,17 @@ const EquipmentManagement = () => {
   const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showReportsModal, setShowReportsModal] = useState(false);
+  const [showExistingEquipModal, setShowExistingEquipModal] = useState(false);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
+  const [targetGymName, setTargetGymName] = useState("");
 
   // State for form data
   const [formData, setFormData] = useState({
     name: "",
-    location: "",
+    gymName: "",
     condition: "",
     notes: "",
+    noGymAssigned: false,
   });
 
   // State for maintenance data
@@ -54,51 +60,46 @@ const EquipmentManagement = () => {
     {
       id: 1,
       name: "Treadmill",
-      location: "Cardio Zone",
+      gymName: "Fitness Plus",
       condition: "Excellent",
       lastMaintenance: "2023-10-15",
       category: "Cardio",
-      gymLocation: "Main Floor",
       notes: "Regular maintenance performed monthly",
     },
     {
       id: 2,
       name: "Bench Press",
-      location: "Strength Area",
+      gymName: "",
       condition: "Good",
       lastMaintenance: "2023-09-12",
       category: "Strength",
-      gymLocation: "Weight Room",
       notes: "Some wear on padding",
     },
     {
       id: 3,
       name: "Dumbbells (Set)",
-      location: "Free Weights",
+      gymName: "Fitness Plus",
       condition: "Fair",
       lastMaintenance: "2023-08-30",
       category: "Weights",
-      gymLocation: "Main Floor",
       notes: "Some rust on 15kg and 20kg weights",
     },
     {
       id: 4,
       name: "Elliptical Machine",
-      location: "Cardio Zone",
+      gymName: "Fitness Plus",
       condition: "Poor",
       lastMaintenance: "2023-07-22",
       category: "Cardio",
-      gymLocation: "Main Floor",
       notes: "Display needs replacement",
     },
     {
       id: 5,
       name: "Rowing Machine",
-      location: "Cardio Zone",
+      gymName: "Fitness Plus",
       condition: "Excellent",
       lastMaintenance: "2023-10-05",
       category: "Cardio",
-      gymLocation: "Main Floor",
       notes: "",
     },
   ]);
@@ -122,9 +123,10 @@ const EquipmentManagement = () => {
     setSelectedEquipment(equipment);
     setFormData({
       name: equipment.name,
-      location: equipment.location,
+      gymName: equipment.gymName,
       condition: equipment.condition,
       notes: equipment.notes || "",
+      noGymAssigned: !equipment.gymName,
     });
     setShowEditModal(true);
   };
@@ -158,9 +160,10 @@ const EquipmentManagement = () => {
     setSelectedEquipment(null);
     setFormData({
       name: "",
-      location: "",
+      gymName: "",
       condition: "Good",
       notes: "",
+      noGymAssigned: false,
     });
     setShowEditModal(true);
   };
@@ -169,13 +172,21 @@ const EquipmentManagement = () => {
     setShowReportsModal(true);
   };
 
+  const handleAddToGym = (equipmentId, gymName) => {
+    setEquipmentList((prevList) =>
+      prevList.map((item) =>
+        item.id === equipmentId ? { ...item, gymName } : item
+      )
+    );
+  };
+
   // Filter and sort functions
   const getFilteredEquipment = () => {
     return equipmentList
       .filter((item) => {
         const matchesSearch =
           item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.location.toLowerCase().includes(searchTerm.toLowerCase());
+          item.gymName.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCondition =
           filterCondition === "all" ||
           item.condition.toLowerCase() === filterCondition.toLowerCase();
@@ -265,9 +276,9 @@ const EquipmentManagement = () => {
                     <FaSortAmountDown />
                   ))}
               </th>
-              <th onClick={() => handleSortChange("location")}>
-                Location
-                {sortField === "location" &&
+              <th onClick={() => handleSortChange("gymName")}>
+                Gym Name
+                {sortField === "gymName" &&
                   (sortDirection === "asc" ? (
                     <FaSortAmountUp />
                   ) : (
@@ -292,7 +303,17 @@ const EquipmentManagement = () => {
               filteredEquipment.map((item) => (
                 <tr key={item.id}>
                   <td>{item.name}</td>
-                  <td>{item.location}</td>
+                  <td>
+                    {item.gymName ? (
+                      <span className="gym-name">
+                        <FaWarehouse className="gym-icon" /> {item.gymName}
+                      </span>
+                    ) : (
+                      <span className="no-gym">
+                        <FaBoxOpen className="inventory-icon" /> Inventory
+                      </span>
+                    )}
+                  </td>
                   <td>
                     <span
                       className={`equip-condition equip-condition-${item.condition.toLowerCase()}`}
@@ -365,15 +386,40 @@ const EquipmentManagement = () => {
               </div>
 
               <div className="equip-form-group">
-                <label>Location *</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  placeholder="Enter equipment location"
-                  required
-                />
+                <div className="gym-name-group">
+                  <label>Gym Name</label>
+                  <div className="gym-name-input-wrapper">
+                    <input
+                      type="text"
+                      name="gymName"
+                      value={formData.gymName}
+                      onChange={handleInputChange}
+                      placeholder="Enter gym name"
+                      disabled={formData.noGymAssigned}
+                    />
+                    <div className="no-gym-checkbox">
+                      <input
+                        type="checkbox"
+                        id="noGymAssigned"
+                        checked={formData.noGymAssigned}
+                        onChange={(e) => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            noGymAssigned: e.target.checked,
+                            gymName: e.target.checked ? "" : prev.gymName,
+                          }));
+                        }}
+                      />
+                      <label htmlFor="noGymAssigned">
+                        Add to inventory without gym
+                      </label>
+                    </div>
+                    <p className="gym-name-hint">
+                      Click the checkbox if you want to add to the inventory
+                      without a gym
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div className="equip-form-group">
@@ -410,12 +456,89 @@ const EquipmentManagement = () => {
                 >
                   Cancel
                 </button>
-                <button type="submit" className="equip-btn-submit">
-                  <FaSave />{" "}
-                  {selectedEquipment ? "Update Equipment" : "Add Equipment"}
+                <button
+                  type="button"
+                  className="equip-btn-existing"
+                  onClick={() => {
+                    setTargetGymName(formData.gymName);
+                    setShowExistingEquipModal(true);
+                  }}
+                >
+                  <FaExchangeAlt /> Add Existing Equipment
+                </button>
+                <button type="submit" className="equip-btn-save">
+                  {selectedEquipment ? "Save Changes" : "Add Equipment"}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Existing Equipment Modal */}
+      {showExistingEquipModal && (
+        <div className="equip-modal-overlay">
+          <div className="equip-modal equip-existing-modal">
+            <div className="equip-modal-header">
+              <h3>
+                <FaBoxOpen /> Add Existing Equipment
+              </h3>
+              <button
+                className="equip-modal-close"
+                onClick={() => setShowExistingEquipModal(false)}
+              >
+                <FaTimes />
+              </button>
+            </div>
+
+            <div className="existing-equipment-list">
+              <p className="existing-equipment-info">
+                Select equipment from inventory to add to your gym
+              </p>
+
+              {equipmentList.filter((item) => !item.gymName).length === 0 ? (
+                <p className="no-inventory-message">
+                  No equipment available in inventory
+                </p>
+              ) : (
+                <table className="equip-table">
+                  <thead>
+                    <tr>
+                      <th>Equipment Name</th>
+                      <th>Condition</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {equipmentList
+                      .filter((item) => !item.gymName)
+                      .map((item) => (
+                        <tr key={item.id}>
+                          <td>{item.name}</td>
+                          <td>
+                            <span
+                              className={`equip-condition equip-condition-${item.condition.toLowerCase()}`}
+                            >
+                              {item.condition}
+                            </span>
+                          </td>
+                          <td>
+                            <button
+                              className="equip-btn-add-to-gym"
+                              onClick={() => {
+                                handleAddToGym(item.id, targetGymName);
+                                setShowExistingEquipModal(false);
+                              }}
+                            >
+                              Add to Gym
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -446,7 +569,7 @@ const EquipmentManagement = () => {
               <div className="equip-maintenance-item">
                 <span className="equip-maintenance-label">Location:</span>
                 <span className="equip-maintenance-value">
-                  {selectedEquipment.gymLocation}
+                  {selectedEquipment.gymName || "Inventory"}
                 </span>
               </div>
               <div className="equip-maintenance-item">

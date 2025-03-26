@@ -16,8 +16,8 @@ const AdminLayout = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('adminAuthenticated');
-    navigate('/admin/login');
+    localStorage.removeItem('user');
+    navigate('/login');
   };
 
   return (
@@ -37,19 +37,19 @@ const AdminLayout = () => {
             <FaTachometerAlt />
             <span>Dashboard</span>
           </Link>
-          <Link to="/admin/gyms" className={`nav-item ${isActive('/admin/gyms')}`}>
+          <Link to="/admin/gym-management" className={`nav-item ${isActive('/admin/gym-management')}`}>
             <FaDumbbell />
             <span>Gyms</span>
           </Link>
-          <Link to="/admin/trainers" className={`nav-item ${isActive('/admin/trainers')}`}>
+          <Link to="/admin/trainer-management" className={`nav-item ${isActive('/admin/trainer-management')}`}>
             <FaUserTie />
             <span>Trainers</span>
           </Link>
-          <Link to="/admin/clients" className={`nav-item ${isActive('/admin/clients')}`}>
+          <Link to="/admin/client-management" className={`nav-item ${isActive('/admin/client-management')}`}>
             <FaUsers />
             <span>Clients</span>
           </Link>
-          <Link to="/admin/messages" className={`nav-item ${isActive('/admin/messages')}`}>
+          <Link to="/admin/contact-management" className={`nav-item ${isActive('/admin/contact-management')}`}>
             <FaEnvelope />
             <span>Messages</span>
             {notifications.length > 0 && (
