@@ -225,36 +225,77 @@
   color: #000000;
 }
 
-/* Table Styles */
-.table-container {
-  background: #f8f9fa;
+/* Make statistics cards white like detail cards */
+.manage-gym-container .stat-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1.5rem;
   border-radius: 8px;
-  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  color: #333;
+}
+
+.manage-gym-container .stat-card h3 {
+  color: #ff0000;
+  font-size: 1.2rem;
   margin-bottom: 1rem;
 }
 
-table {
+.manage-gym-container .stat-card p {
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Table Styles - Updated to match statistics section */
+.manage-gym-container .table-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.manage-gym-container table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th,
-td {
+.manage-gym-container th,
+.manage-gym-container td {
   padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  color: #000000;
+  color: #333;
 }
 
-th {
-  background-color: #f1f1f1;
-  color: #f30808;
+.manage-gym-container th {
+  background-color: rgba(255, 255, 255, 0.98);
+  color: #ff0000;
   font-weight: 600;
 }
 
-.actions {
-  display: flex;
-  gap: 10px;
+.manage-gym-container tr:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Equipment and Client sections specific styles */
+.manage-gym-container .equipment-section,
+.manage-gym-container .clients-section {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.manage-gym-container .equipment-section h2,
+.manage-gym-container .clients-section h2 {
+  color: #ff0000;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  border-bottom: 2px solid #e74c3c;
+  padding-bottom: 0.5rem;
 }
 
 /* Button Styles */

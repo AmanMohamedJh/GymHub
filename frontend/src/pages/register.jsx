@@ -7,18 +7,21 @@ import {
   FaIdCard,
   FaShieldAlt,
   FaUserCircle,
+  FaLock,
 } from "react-icons/fa";
 import "../styles/register/register.css";
 import { useSignup } from "../hooks/useSignup";
 
 export default function Register() {
   const [role, setRole] = useState("client");
+  const [showAdminKey, setShowAdminKey] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     password: "",
     confirmPassword: "",
+    adminKey: "",
     agreeToTerms: false,
   });
   const { signup, error, isLoading } = useSignup();
@@ -39,10 +42,15 @@ export default function Register() {
       formData.email,
       formData.phone,
       formData.password,
-      role
+      role,
+      role === "admin" ? formData.adminKey : undefined
     );
     if (success) {
-      navigate("/");
+      if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
     }
   };
 
@@ -75,7 +83,10 @@ export default function Register() {
                       name="role"
                       value={r}
                       checked={role === r}
-                      onChange={() => setRole(r)}
+                      onChange={() => {
+                        setRole(r);
+                        setShowAdminKey(false);
+                      }}
                     />
                     <div className="role-content">
                       <div className="role-icon">
@@ -97,6 +108,23 @@ export default function Register() {
                     </div>
                   </label>
                 ))}
+                <div className="admin-toggle">
+                  <button
+                    type="button"
+                    className="admin-button"
+                    onClick={() => {
+                      if (!showAdminKey) {
+                        setShowAdminKey(true);
+                        setRole("admin");
+                      } else {
+                        setShowAdminKey(false);
+                        setRole("client");
+                      }
+                    }}
+                  >
+                    <FaLock /> Admin Access
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -168,6 +196,22 @@ export default function Register() {
                 />
               </div>
             </div>
+
+            {showAdminKey && (
+              <div className="form-group">
+                <label>
+                  <FaShieldAlt /> Admin Secret Key
+                </label>
+                <input
+                  type="password"
+                  name="adminKey"
+                  value={formData.adminKey}
+                  onChange={handleChange}
+                  placeholder="Enter admin secret key"
+                  required={role === "admin"}
+                />
+              </div>
+            )}
 
             {error && <div className="error-message">{error}</div>}
             <button type="submit">

@@ -13,10 +13,10 @@ const transporter = nodemailer.createTransport({
   secure: true,
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS, // This should be an App Password
+    pass: process.env.EMAIL_PASS, // This should be an App Password which i installed in App password in my own email to send code fro named as GYMHUB
   },
   tls: {
-    rejectUnauthorized: false, // Allow self-signed certificates
+    rejectUnauthorized: false, // Allow self-signed certificates // THIS IS MOSTLY PREDEFINED FUNCTIONALITES FROM NODEMAILER
   },
 });
 
@@ -33,7 +33,7 @@ const loginUser = async (req, res) => {
     const user = await User.login(email, password);
     const token = createToken(user._id);
 
-    // Return user data including isEmailVerified status
+    // Return user data including isEmailVerified status //if its verified true ,by default its false
     res.status(200).json({
       _id: user._id,
       name: user.name,
@@ -49,19 +49,26 @@ const loginUser = async (req, res) => {
 
 // signup user
 const signupUser = async (req, res) => {
-  const { name, email, phone, password, role } = req.body;
+  const { name, email, phone, password, role, adminKey } = req.body;
 
   try {
-    const user = await User.signup(name, email, phone, password, role);
+    const user = await User.signup(
+      name,
+      email,
+      phone,
+      password,
+      role,
+      adminKey
+    );
     const token = createToken(user._id);
 
-    // Return user data including isEmailVerified status
+    // Return user data including isEmailVerified status //AMAN
     res.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
-      isEmailVerified: false,
+      isEmailVerified: false, //by default its false so that email is not yet verified
       token,
     });
   } catch (error) {
@@ -190,15 +197,15 @@ const sendVerificationCode = async (req, res) => {
       return res.status(400).json({ error: "Email is already verified" });
     }
 
-    // Generate a random 6-digit code
+    // Generate a random 6-digit code //this is important from npmjs website //About expiiry time for code sent
     const verificationCode = Math.floor(
       100000 + Math.random() * 900000
     ).toString();
     const codeExpiry = new Date(Date.now() + 30 * 60000); // Code expires in 30 minutes
 
     // Save the code to user
-    user.verificationCode = verificationCode;
-    user.verificationCodeExpires = codeExpiry;
+    user.verificationCode = verificationCode; //NOW that user has the own code
+    user.verificationCodeExpires = codeExpiry; //NOW that user has the own code with expiry
     await user.save();
 
     // Create a transporter
@@ -215,7 +222,7 @@ const sendVerificationCode = async (req, res) => {
       },
     });
 
-    // Send email
+    // Send email   // THIS PART IS APPEARED IN USER's EMAIL with the HTML // SOURCE NPMJS website and youtube
     const mailOptions = {
       from: `"GYMHUB" <${process.env.EMAIL_USER}>`,
       to: user.email,
@@ -247,7 +254,7 @@ const sendVerificationCode = async (req, res) => {
       });
     });
 
-    // Send the email
+    // Send the email  //Now this happens in gymhub itself
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: "Verification code sent successfully" });
   } catch (error) {
@@ -279,19 +286,21 @@ const verifyEmail = async (req, res) => {
     }
 
     if (Date.now() > user.verificationCodeExpires) {
+      //THis is a msg sent after the code is expired which is 30 min
       return res.status(400).json({
         error: "Verification code has expired. Please request a new one.",
       });
     }
 
     if (verificationCode !== user.verificationCode) {
+      //for wrong code oops
       return res.status(400).json({ error: "Invalid verification code" });
     }
 
     user.isEmailVerified = true;
     user.verificationCode = null;
     user.verificationCodeExpires = null;
-    await user.save();
+    await user.save(); //after the success the state
 
     res.status(200).json({
       message: "Email verified successfully",

@@ -1,8 +1,8 @@
 .register-gym-container {
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - 80px);
   position: relative;
-  overflow: hidden;
   padding: 2rem;
+  margin-top: 80px; /* Space for navbar */
   z-index: 1;
 }
 
@@ -13,10 +13,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("./images/gym-background2.jpg.jpg") center/cover no-repeat;
-  filter: blur(5px);
-  z-index: -1;
-  transform: scale(1.1);
+  background: url("./images/gym-background2.jpg.jpg") center/cover no-repeat
+    fixed;
 }
 
 .register-gym-container::after {
@@ -26,122 +24,152 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8));
   z-index: -1;
 }
 
 .register-gym-form {
+  display: flex;
+  flex-wrap: wrap;
   position: relative;
-  z-index: 2;
-  background-color: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
-  padding: 2rem;
-  margin: 0 auto;
-  max-width: 800px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  margin: 1rem auto;
+  max-width: 1200px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
 }
 
 .form-header {
+  width: 100%;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(231, 76, 60, 0.1);
 }
 
 .form-header h2 {
-  color: #333;
+  color: #2c3e50;
   margin-bottom: 1rem;
-  font-size: 2rem;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.form-header p {
+  color: #495151;
+  font-size: 1.1rem;
 }
 
 .form-section {
+  flex: 1 1 calc(50% - 2rem);
+  margin: 0 1rem 2rem;
   background: #ffffff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(231, 76, 60, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.form-section:hover {
+  transform: translateY(-3px);
 }
 
 .form-section h3 {
-  color: #ff0000;
-  font-size: 1.3rem;
+  color: #e74c3c;
+  font-size: 1.4rem;
   margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.8rem;
   border-bottom: 2px solid #e74c3c;
+  font-weight: 600;
 }
 
 .form-group {
   margin-bottom: 1.5rem;
 }
 
+.form-group label[for="name"],
+.form-group label[for="location"],
+.form-group label[for="hours.weekdays"],
+.form-group label[for="hours.weekends"],
 .form-group label {
   display: block;
   font-weight: 600;
-  color: #555;
-  margin-bottom: 0.5rem;
+  color: #34495e !important;
+  margin-bottom: 0.8rem;
   font-size: 1.1rem;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  background-color: white;
+.register-gym-form input::placeholder,
+.register-gym-form textarea::placeholder,
+.form-section h3,
+.form-section label,
+.form-group > *,
+.register-gym-form .form-group input,
+.register-gym-form .form-group textarea,
+.register-gym-form .form-group select {
+  color: #2c3e50 !important;
 }
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
+.register-gym-container [style*="color: blue"],
+.register-gym-container [class*="blue"],
+.register-gym-form label[style*="color"],
+.form-group > span,
+.form-group > div {
+  color: #2c3e50 !important;
+}
+
+.register-gym-form .form-group input,
+.register-gym-form .form-group textarea,
+.register-gym-form .form-group select {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  color: #2c3e50;
+  transition: border-color 0.2s ease;
+}
+
+.register-gym-form .form-group input:focus,
+.register-gym-form .form-group textarea:focus,
+.register-gym-form .form-group select:focus {
   outline: none;
   border-color: #e74c3c;
-  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
 }
 
-.form-group textarea {
+.register-gym-form .form-group textarea {
   min-height: 120px;
   resize: vertical;
-  font-family: inherit;
-}
-
-.form-group textarea:focus {
-  outline: none;
-  border-color: #e74c3c;
-  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
-}
-
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group input[type="url"] {
-  font-family: inherit;
-}
-
-.form-group input[type="email"]::placeholder,
-.form-group input[type="tel"]::placeholder,
-.form-group input[type="url"]::placeholder,
-.form-group textarea::placeholder {
-  color: #95a5a6;
 }
 
 /* Image Upload Styles */
 .image-upload-container {
   border: 2px dashed #e74c3c;
-  padding: 1.5rem;
-  border-radius: 8px;
+  padding: 2rem;
+  border-radius: 15px;
   text-align: center;
+  background: rgba(231, 76, 60, 0.02);
 }
 
 .image-upload-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
   background: #e74c3c;
   color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  padding: 1rem 2rem;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
 }
 
 .image-upload-button:hover {
@@ -152,35 +180,48 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .image-previews img {
   width: 100%;
   height: 150px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
 }
 
-/* Amenity Input Styles */
+.image-previews img:hover {
+  transform: scale(1.03);
+}
+
 .amenity-input-group {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .amenity-input-group input {
   flex: 1;
+  padding: 1rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 10px;
+  font-size: 1rem;
+  color: #2c3e50;
 }
 
 .amenity-input-group button {
   background: #e74c3c;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  padding: 0 2rem;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .amenity-input-group button:hover {
@@ -190,18 +231,19 @@
 .amenities-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .amenity-tag {
   background: #f8f9fa;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #000000;
-  border: 1px solid #e74c3c;
+  gap: 0.8rem;
+  color: #2c3e50;
+  border: 2px solid rgba(231, 76, 60, 0.2);
+  transition: background-color 0.2s ease;
 }
 
 .amenity-tag button {
@@ -231,10 +273,10 @@
 .equipment-input-group input,
 .equipment-input-group select {
   padding: 0.75rem;
-  border: 1px solid #e74c3c;
-  border-radius: 4px;
+  border: 2px solid #ecf0f1;
+  border-radius: 10px;
   font-size: 1rem;
-  color: #000000;
+  color: #2c3e50;
 }
 
 .equipment-input-group button {
@@ -242,10 +284,11 @@
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
   white-space: nowrap;
+  font-weight: 600;
 }
 
 .equipment-input-group button:hover {
@@ -254,101 +297,264 @@
 
 .equipment-list {
   margin-top: 1.5rem;
-  overflow-x: auto;
-}
-
-.equipment-list table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.equipment-list th,
-.equipment-list td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #e74c3c;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .equipment-list th {
-  background-color: #f1f1f1;
-  color: #ff0000;
-  font-weight: 600;
+  background: #e74c3c;
+  color: white;
+  padding: 1rem;
+  text-align: left;
 }
 
-.equipment-list td button {
+.equipment-list td {
+  padding: 1rem;
+  border-bottom: 1px solid #ecf0f1;
+  color: #2c3e50;
+}
+
+/* Certificate Upload Styles */
+.certificate-info {
+  color: #495151;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #e74c3c;
+}
+
+.certificate-upload-container {
+  border: 2px dashed #e74c3c;
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: center;
+  background: rgba(231, 76, 60, 0.02);
+  margin-top: 1rem;
+}
+
+.certificate-upload-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: #e74c3c;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.certificate-upload-button:hover {
+  background: #c0392b;
+}
+
+.certificate-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ecf0f1;
+}
+
+.certificate-preview span {
+  color: #2c3e50;
+  font-size: 0.95rem;
+  word-break: break-all;
+}
+
+.certificate-preview button {
   background: none;
   border: none;
   color: #e74c3c;
-  cursor: pointer;
   font-size: 1.2rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.equipment-list td button:hover {
-  background-color: rgba(231, 76, 60, 0.1);
-  color: #c0392b;
-}
-
-/* Form Buttons */
-.form-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 2rem;
-}
-
-.cancel-button,
-.submit-button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 500;
   cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  margin-left: 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.certificate-preview button:hover {
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Location Search and Map Styles */
+.location-search-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.search-box-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #95a5a6;
+  font-size: 1rem;
+}
+
+.location-search-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 2.5rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  color: #2c3e50;
   transition: all 0.2s ease;
 }
 
-.cancel-button {
-  background: #95a5a6;
-  color: white;
-  border: none;
+.location-search-input:focus {
+  outline: none;
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
 }
 
-.cancel-button:hover {
-  background: #7f8c8d;
+.map-container {
+  width: 100%;
+  height: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #ecf0f1;
+  transition: all 0.2s ease;
 }
 
+.map-container:hover {
+  border-color: #e74c3c;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.location-details {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 1rem;
+  border-left: 4px solid #e74c3c;
+}
+
+.formatted-address {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.formatted-address svg {
+  color: #e74c3c;
+  margin-top: 0.2rem;
+}
+
+.view-on-maps {
+  display: inline-block;
+  color: #e74c3c;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.view-on-maps:hover {
+  color: #c0392b;
+  text-decoration: underline;
+}
+
+/* Make map controls match theme */
+.gm-style .gm-style-iw {
+  background-color: #ffffff !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.gm-style .gm-style-iw button {
+  background-color: #e74c3c !important;
+  color: white !important;
+}
+
+/* Submit Button */
 .submit-button {
   background: #e74c3c;
   color: white;
   border: none;
+  padding: 1.2rem 3rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.2s ease;
+  margin-top: 2rem;
 }
 
 .submit-button:hover {
   background: #c0392b;
 }
 
-.submit-btn {
-  background-color: #007bff;
+.cancel-button {
+  background: #95a5a6;
   color: white;
   border: none;
-  padding: 1rem 2rem;
-  border-radius: 5px;
+  padding: 1.2rem 3rem;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: 600;
-  width: 100%;
-  margin-top: 2rem;
-  transition: background-color 0.3s;
   font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.2s ease;
+  margin-top: 2rem;
+  margin-right: 1rem;
 }
 
-.submit-btn:hover {
-  background-color: #0056b3;
+.cancel-button:hover {
+  background: #7f8c8d;
 }
 
-/* Responsive Design */
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+@media (max-width: 1200px) {
+  .form-section {
+    flex: 1 1 calc(50% - 2rem);
+  }
+}
+
+@media (max-width: 992px) {
+  .form-section {
+    flex: 1 1 100%;
+    margin: 0 0 2rem;
+  }
+
+  .equipment-input-group {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .register-gym-container {
     padding: 1rem;
@@ -356,41 +562,64 @@
 
   .register-gym-form {
     padding: 1.5rem;
+    margin: 0.5rem;
+  }
+
+  .form-section {
+    padding: 1.5rem;
+  }
+
+  .form-header h2 {
+    font-size: 1.8rem;
   }
 
   .image-previews {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 
-  .form-buttons {
+  .image-previews img {
+    height: 120px;
+  }
+
+  .amenity-input-group {
     flex-direction: column;
+  }
+
+  .amenity-input-group button {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .equipment-input-group {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .form-buttons {
+    flex-direction: column-reverse;
   }
 
   .cancel-button,
   .submit-button {
     width: 100%;
+    margin: 0.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-gym-form {
+    padding: 1rem;
   }
 
-  .equipment-input-group {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-  }
-
-  .equipment-list {
-    margin-top: 1rem;
-  }
-
-  .equipment-list th,
-  .equipment-list td {
-    padding: 0.75rem;
-    font-size: 0.9rem;
-  }
-
-  .form-group textarea {
-    min-height: 100px;
+  .form-section {
+    padding: 1rem;
   }
 
   .form-header h2 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+  }
+
+  .image-previews {
+    grid-template-columns: 1fr;
   }
 }

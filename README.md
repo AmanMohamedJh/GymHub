@@ -12,3 +12,7 @@
 GYMHUB Management System is a web-based application designed for gyms, offering customer management, package customization, Easy scheduling . It features secure client data storage, easy package creation,  and member feedback collection. 
 
 #### Technologies used - MERN-Stack
+
+
+
+![git image](https://github.com/user-attachments/assets/0daeaedc-7500-4178-b65e-c4d519bc50e8)

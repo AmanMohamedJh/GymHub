@@ -96,6 +96,8 @@
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-size: 0.975rem;
+  color: #2d3748;
+  background-color: #ffffff;
 }
 
 .login-page .input-field:focus {
@@ -103,46 +105,12 @@
   border-color: rgb(227, 73, 50);
 }
 
-.login-page .input-field::placeholder {
-  color: #a0aec0;
-}
-
-.login-page .form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.login-page .checkbox-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.login-page .custom-checkbox {
-  width: 1rem;
-  height: 1rem;
-  accent-color: rgb(227, 73, 50);
-}
-
-.login-page .checkbox-label {
-  color: #4a5568;
-  font-size: 0.875rem;
-}
-
-.login-page .forgot-password {
-  color: rgb(227, 73, 50);
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-
 .login-page .btn-primary {
   width: 100%;
   background-color: rgb(227, 73, 50);
+  border: none;
   color: white;
   padding: 0.75rem;
-  border: none;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 500;
@@ -157,28 +125,35 @@
 .login-page .auth-footer {
   text-align: center;
   margin-top: 1.5rem;
-  color: #4a5568;
+}
+
+.login-page .auth-footer p {
+  color: #718096;
   font-size: 0.875rem;
 }
 
-.login-page .auth-link {
+.login-page .auth-footer a {
   color: rgb(227, 73, 50);
   text-decoration: none;
   font-weight: 500;
 }
 
-.error-message {
-  background-color: #fff2f2;
-  border: 1px solid #ffcdd2;
-  color: #d32f2f;
-  padding: 12px 16px;
-  border-radius: 8px;
-  margin: 16px 0;
-  font-size: 0.9rem;
+.login-page .auth-footer a:hover {
+  text-decoration: underline;
 }
 
-@media (max-width: 480px) {
+.login-page .error-message {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
   .login-page .auth-card {
-    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .login-page .auth-header h2 {
+    font-size: 1.5rem;
   }
 }

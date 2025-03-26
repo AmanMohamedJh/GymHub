@@ -18,7 +18,7 @@ const upload = require("../middleware/upload");
 router.post("/login", loginUser);
 router.post("/signup", signupUser);
 
-// Email verification routes
+// Email verification routes //we need the middleware to verify and send code the token which is requireAuth
 router.post("/send-verification", requireAuth, sendVerificationCode);
 router.post("/verify-email", requireAuth, verifyEmail);
 

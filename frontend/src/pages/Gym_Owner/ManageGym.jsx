@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   FaEdit,
   FaTrash,
@@ -10,6 +11,8 @@ import {
 import "./Styles/ManageGym.css";
 
 const ManageGym = () => {
+  const { gymId } = useParams();
+  const [loading, setLoading] = useState(true);
   // Mock data - replace with actual data from backend
   const [gymData, setGymData] = useState({
     name: "FitLife Gym",
@@ -37,10 +40,6 @@ const ManageGym = () => {
     },
   });
 
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isEditing, setIsEditing] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
   // Mock clients data
   const [clients] = useState([
     {
@@ -59,9 +58,47 @@ const ManageGym = () => {
 
   // Mock equipment data
   const [equipment] = useState([
-    { id: 1, name: "Treadmill", quantity: 5, condition: "Good" },
-    { id: 2, name: "Dumbbells Set", quantity: 10, condition: "Excellent" },
+    {
+      id: 1,
+      name: "Treadmill",
+      quantity: 5,
+      condition: "Good",
+    },
+    {
+      id: 2,
+      name: "Dumbbells Set",
+      quantity: 10,
+      condition: "Excellent",
+    },
   ]);
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // Fetch gym data based on gymId
+  useEffect(() => {
+    const fetchGymData = async () => {
+      try {
+        setLoading(true);
+        // In a real app, you would fetch data from your API here
+        // const response = await fetch(`/api/gyms/${gymId}`);
+        // const data = await response.json();
+        // setGymData(data);
+
+        // For now, just simulate loading
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching gym data:", error);
+        setLoading(false);
+      }
+    };
+
+    if (gymId) {
+      fetchGymData();
+    }
+  }, [gymId]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % gymData.images.length);
@@ -83,6 +120,15 @@ const ManageGym = () => {
       console.log("Gym deleted");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading gym data...</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -286,6 +332,7 @@ const ManageGym = () => {
           </button>
         </div>
       </div>
+
       {/* Delete Confirmation Modal - Moved outside main container */}
       {showDeleteConfirm && (
         <div className="modal-overlay">

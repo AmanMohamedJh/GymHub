@@ -110,7 +110,8 @@
   transform: translateY(-50%);
   cursor: pointer;
   opacity: 0.6;
-  filter: invert(40%) sepia(52%) saturate(2476%) hue-rotate(338deg) brightness(87%) contrast(96%);
+  filter: invert(40%) sepia(52%) saturate(2476%) hue-rotate(338deg)
+    brightness(87%) contrast(96%);
 }
 
 .date-input::-webkit-calendar-picker-indicator:hover {

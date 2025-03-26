@@ -176,7 +176,8 @@ const UserProfile = () => {
                   className="profile-picture"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSIjRjFGMUYxIi8+CjxwYXRoIGQ9Ik03NSA4NUM4Ny4wNzExIDg1IDk3IDE3NS4wNzEgOTcgNjNDOTcgNTAuOTI4OSA4Ny4wNzExIDQxIDc1IDQxQzYyLjkyODkgNDEgNTMgNTAuOTI4OSA1MyA2M0M1MyA3NS4wNzExIDYyLjkyODkgODUgNzUgODVaIiBmaWxsPSIjQzRDNEM0Ii8+CjxwYXRoIGQ9Ik0xMTYgMTI3QzExNiAxMTEuNTM2IDEwMy40NjQgOTkgODggOTlINjJDNDYuNTM2IDk5IDM0IDExMS41MzYgMzQgMTI3VjE1MEgxMTZWMTI3WiIgZmlsbD0iI0M0QzRDNCIvPgo8L3N2Zz4="
+                    e.target.src =
+                      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSIjRjFGMUYxIi8+CjxwYXRoIGQ9Ik03NSA4NUM4Ny4wNzExIDg1IDk3IDE3NS4wNzEgOTcgNjNDOTcgNTAuOTI4OSA4Ny4wNzExIDQxIDc1IDQxQzYyLjkyODkgNDEgNTMgNTAuOTI4OSA1MyA2M0M1MyA3NS4wNzExIDYyLjkyODkgODUgNzUgODVaIiBmaWxsPSIjQzRDNEM0Ii8+CjxwYXRoIGQ9Ik0xMTYgMTI3QzExNiAxMTEuNTM2IDEwMy40NjQgOTkgODggOTlINjJDNDYuNTM2IDk5IDM0IDExMS41MzYgMzQgMTI3VjE1MEgxMTZWMTI3WiIgZmlsbD0iI0M0QzRDNCIvPgo8L3N2Zz4=";
                   }}
                 />
                 {isEditing && (
@@ -366,10 +367,12 @@ const UserProfile = () => {
                     <div className="preview-item">
                       <div className="preview-label">Must Include</div>
                       <div className="preview-value">
-                        • Uppercase letter<br />
-                        • Lowercase letter<br />
-                        • Number<br />
-                        • Special character (@$!%*?&)
+                        • Uppercase letter
+                        <br />
+                        • Lowercase letter
+                        <br />
+                        • Number
+                        <br />• Special character (@$!%*?&)
                       </div>
                     </div>
                     <div className="preview-item">
@@ -403,7 +406,10 @@ const UserProfile = () => {
                 <div className="delete-confirm">
                   <div className="warning-icon">⚠️</div>
                   <h3>Are you sure you want to delete your account?</h3>
-                  <p>This action cannot be undone. All your data will be permanently deleted.</p>
+                  <p>
+                    This action cannot be undone. All your data will be
+                    permanently deleted.
+                  </p>
                   <div className="delete-confirmation-input">
                     <label>Type "DELETE MY ACCOUNT" to confirm:</label>
                     <input

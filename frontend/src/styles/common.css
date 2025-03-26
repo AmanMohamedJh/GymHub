@@ -55,3 +55,28 @@
 .verify-link:hover {
   text-decoration: underline;
 }
+
+.verification-banner,
+.subscription-banner {
+  background-color: #fef3c7;
+  color: #92400e;
+  padding: 0.75rem;
+  text-align: center;
+  width: 100%;
+}
+
+.verification-banner p,
+.subscription-banner p {
+  margin: 0;
+}
+
+.verify-link,
+.subscribe-link {
+  color: #92400e;
+  font-weight: 600;
+}
+
+.verify-link:hover,
+.subscribe-link:hover {
+  color: #78350f;
+}

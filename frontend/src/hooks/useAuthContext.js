@@ -10,3 +10,6 @@ export const useAuthContext = () => {
 
   return context;
 };
+
+//useAuthContext mainly helps simplifies access to the context data
+//  Instead of writing useContext(AuthContext) every time, you just call useAuthContext().
