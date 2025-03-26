@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSendContact } from "../hooks/useContactUs";
 import "./ContactUs.css";
 import {
   FaPhone,
@@ -19,7 +20,7 @@ const ContactUs = () => {
     subject: "",
     message: "",
   });
-
+  const { sendContact, error, isLoading } = useSendContact();
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -27,9 +28,15 @@ const ContactUs = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+    const success = await sendContact(formData.name, formData.email, formData.subject, formData.message);
+
+    if (success) {
+      console.log("Sent success");
+    }
+
     setFormData({
       name: "",
       email: "",

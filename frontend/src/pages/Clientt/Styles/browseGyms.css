@@ -1,0 +1,102 @@
+/* Browse Gyms Page Styles */
+.browse-gyms-container {
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 7%;
+    margin-bottom: 3%;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.filters-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 1rem;
+}
+
+.search-bar {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #e74c3c;
+    background: white;
+    color: #333;
+    width: 70%;
+}
+
+.filter-dropdown {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #e74c3c;
+    background: white;
+    color: #333;
+    width: 25%;
+}
+
+.filter-dropdown option:hover {
+    background-color: #e74c3c;
+
+}
+
+.gyms-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.gym-card {
+    background: white;
+    color: #333;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    width: 280px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gym-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.gym-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.gym-location,
+.gym-type {
+    font-size: 1.1rem;
+    color: rgba(62, 50, 50, 0.704);
+}
+
+.btn-view {
+    background: #e74c3c;
+    color: #f0f0f0;
+    border: none;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.btn-view:hover {
+    background: #c0392b;
+}

@@ -23,6 +23,15 @@ App.use("/uploads", express.static(path.join(__dirname, "uploads")));
 //Routes
 App.use("/api/user", userRoutes); //importing the route for user
 
+//contact us router and route
+const contactUsRouter = require("./src/routes/contactUs");
+App.use("/api/contactUs", contactUsRouter);
+
+//client router and route
+const clientRouter = require("./src/routes/client");
+App.use("/api/client", clientRouter);
+
+
 //listen for request
 mongoose
   .connect(process.env.MONGO_URI)

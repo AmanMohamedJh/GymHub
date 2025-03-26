@@ -1,0 +1,108 @@
+/* Browse Trainers Page Styles */
+.browse-trainers-container {
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 7%;
+    margin-bottom: 3%;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    color: #333;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333
+}
+
+.search-filter-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    gap: 1rem;
+}
+
+.search-input {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #e74c3c;
+    background: white;
+    color: #333;
+    width: 70%;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #c0392b
+}
+
+.filter-rating {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #e74c3c;
+    background: white;
+    color: #333;
+    width: 25%;
+}
+
+.filter-dropdown option:hover {
+    background-color: #e74c3c;
+
+}
+
+.trainers-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.trainer-card {
+    background: white;
+    color: #333;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    width: 280px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.trainer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.trainer-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.trainer-card p {
+    font-size: 1.1rem;
+    color: rgba(62, 50, 50, 0.704);
+}
+
+.btn-primary {
+    background: #e74c3c;
+    color: #f0f0f0;
+    border: none;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background: #c0392b;
+}

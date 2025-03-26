@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { href, Link, useLocation, useNavigate } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon as MenuIcon,
@@ -30,6 +30,8 @@ const getDashboardRoute = (role) => {
   }
 };
 
+
+
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,6 +42,30 @@ export default function Navbar() {
     dispatch({ type: "LOGOUT" });
     navigate("/");
   };
+
+  const roleLinks = () => {
+    if (user) {
+      switch (user.role) {
+        case "gym_owner":
+          return [
+            //extra pages
+          ];
+        case "trainer":
+          return [
+            //trainer extra pages
+          ];
+        case "client":
+          return [
+            { name: "Gyms", href: "/client-browse-gym" },
+            { name: "Trainers", href: "/client-browse-trainer" },
+            { name: "Progress", href: "/client-progress-tracking" }
+
+          ];
+        default:
+          return [];
+      }
+    }
+  }
 
   return (
     <Disclosure as="nav" className="navbar">
@@ -58,9 +84,18 @@ export default function Navbar() {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={`nav-link ${
-                      location.pathname === item.href ? "active" : ""
-                    }`}
+                    className={`nav-link ${location.pathname === item.href ? "active" : ""
+                      }`}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+                {roleLinks()?.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`nav-link ${location.pathname === item.href ? "active" : ""
+                      }`}
                   >
                     {item.name}
                   </Link>
@@ -91,9 +126,8 @@ export default function Navbar() {
                           {({ active }) => (
                             <Link
                               to={getDashboardRoute(user.role)}
-                              className={`dropdown-item ${
-                                active ? "active" : ""
-                              }`}
+                              className={`dropdown-item ${active ? "active" : ""
+                                }`}
                             >
                               Dashboard
                             </Link>
@@ -103,9 +137,8 @@ export default function Navbar() {
                           {({ active }) => (
                             <Link
                               to="/user-profile"
-                              className={`dropdown-item ${
-                                active ? "active" : ""
-                              }`}
+                              className={`dropdown-item ${active ? "active" : ""
+                                }`}
                             >
                               Profile Settings
                             </Link>
@@ -115,9 +148,8 @@ export default function Navbar() {
                           {({ active }) => (
                             <button
                               onClick={handleLogout}
-                              className={`dropdown-item ${
-                                active ? "active" : ""
-                              }`}
+                              className={`dropdown-item ${active ? "active" : ""
+                                }`}
                             >
                               Logout
                             </button>
@@ -156,9 +188,8 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`mobile-nav-link ${
-                  location.pathname === item.href ? "active" : ""
-                }`}
+                className={`mobile-nav-link ${location.pathname === item.href ? "active" : ""
+                  }`}
               >
                 {item.name}
               </Link>

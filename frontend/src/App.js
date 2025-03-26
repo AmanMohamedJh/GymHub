@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useAuthContext } from "./hooks/useAuthContext";
 import Navbar from "./Components/Common/Navbar";
 import VerificationBanner from "./Components/Layout/VerificationBanner";
 import Footer from "./Components/Common/footer.jsx";
@@ -13,8 +12,6 @@ import UserProfile from "./pages/userProfile/UserProfile.jsx";
 import OwnerReviewsDashboard from "./pages/Gym_Owner/OwnerReviewsDashboard.jsx";
 import TrainerDashboard from "./pages/Trainer/TrainerDashboard.jsx";
 import TrainerRegistration from "./pages/Trainer/TrainerRegistration.jsx";
-import ClientDashboard from "./pages/Clientt/ClientDashboard.jsx";
-import GymList from "./pages/Clientt/GymList.jsx";
 import TrainerList from "./pages/Trainer/TrainerList.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import ContactUs from "./pages/ContactUs.jsx";
@@ -23,10 +20,16 @@ import TrainerSession from "./pages/Trainer/TrainerDashboard.jsx";
 import TrainerWorkoutPlans from "./pages/Trainer/TrainerWorkoutPlans.jsx";
 import ClientProgress from "./pages/Trainer/ClientProgress.jsx";
 import EmailVerification from "./pages/EmailVerification/EmailVerification";
+import ClientDashboard from "./pages/Clientt/Dashboard.jsx";
+import ClientBrowseGym from "./pages/Clientt/BrowseGym.jsx";
+import ClientBrowseTrainer from "./pages/Clientt/BrowseTrainers.jsx";
+import ClientProgressTracking from "./pages/Clientt/ProgressTracking.jsx";
+import ClientWorkoutlogForm from "./pages/Clientt/workoutLogForm.jsx";
+import ClientFitnessGoalForm from "./pages/Clientt/FitnessGoalForm.jsx";
+import ClientBMIUpdateForm from "./pages/Clientt/BMIUpdateForm.jsx";
 import "./App.css";
 
 function App() {
-  const { user } = useAuthContext();
 
   return (
     <div className="App">
@@ -84,6 +87,30 @@ function App() {
               }
             />
             <Route
+              path="/client-dashboard"
+              element={
+                <ProtectedRoute allowedRole="client">
+                  <ClientDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/client-browse-gym"
+              element={
+                <ProtectedRoute allowedRole="client">
+                  <ClientBrowseGym />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/client-browse-trainer"
+              element={
+                <ProtectedRoute allowedRole="client">
+                  <ClientBrowseTrainer />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/trainer-dashboard"
               element={
                 <ProtectedRoute allowedRole="trainer">
@@ -103,7 +130,7 @@ function App() {
               path="/client-dashboard"
               element={
                 <ProtectedRoute allowedRole="client">
-                  <ClientDashboard />
+
                 </ProtectedRoute>
               }
             />
@@ -113,7 +140,6 @@ function App() {
                 <ProtectedRoute
                   allowedRole={["client", "trainer", "gym_owner"]}
                 >
-                  <GymList />
                 </ProtectedRoute>
               }
             />
@@ -124,6 +150,46 @@ function App() {
                   allowedRole={["client", "trainer", "gym_owner"]}
                 >
                   <TrainerList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/client-progress-tracking"
+              element={
+                <ProtectedRoute
+                  allowedRole="client"
+                >
+                  <ClientProgressTracking />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/client-fitness-goal"
+              element={
+                <ProtectedRoute
+                  allowedRole="client"
+                >
+                  < ClientFitnessGoalForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/client-update-BMI"
+              element={
+                <ProtectedRoute
+                  allowedRole="client"
+                >
+                  <ClientBMIUpdateForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/client-log-workout"
+              element={
+                <ProtectedRoute
+                  allowedRole="client"
+                >
+                  <ClientWorkoutlogForm />
                 </ProtectedRoute>
               }
             />
