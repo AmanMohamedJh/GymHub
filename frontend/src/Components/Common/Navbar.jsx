@@ -12,11 +12,23 @@ import "../Common/Navbar.css";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Gyms", href: "/gyms" },
-  { name: "Trainers", href: "/trainers" },
+  { name: "Gyms", href: "/client-browse-gym" },
+  { name: "Trainers", href: "/client-browse-trainer" },
   { name: "Contact Us", href: "/contact" },
   { name: "About Us", href: "/about" },
 ];
+
+const getNavigation = (user) => {
+  if (!user) return navigation;
+  if (user.role === "admin") return [];
+
+  const items = [...navigation];
+  if (user.role === "client") {
+    // Insert Progress link before Contact Us
+    items.splice(3, 0, { name: "Progress", href: "/client-progress-tracking" });
+  }
+  return items;
+};
 
 const getDashboardRoute = (role) => {
   switch (role) {
@@ -55,7 +67,7 @@ export default function Navbar() {
               </div>
 
               <div className="navbar-links">
-                {navigation.map((item) => (
+                {getNavigation(user).map((item) => (
                   <Link
                     key={item.name}
                     to={item.href}
@@ -100,8 +112,9 @@ export default function Navbar() {
                             </Link>
                           )}
                         </Menu.Item>
-                        {/* Show MySubscription for gym owners and trainers */}
+                        {/* Show MySubscription for gym owners, clients and trainers */}
                         {(user.role === "gym_owner" ||
+                          user.role === "client" ||
                           user.role === "trainer") && (
                           <Menu.Item>
                             {({ active }) => (
@@ -185,7 +198,7 @@ export default function Navbar() {
           </div>
 
           <Disclosure.Panel className="mobile-menu">
-            {navigation.map((item) => (
+            {getNavigation(user).map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
@@ -204,7 +217,9 @@ export default function Navbar() {
                 >
                   Dashboard
                 </Link>
-                {(user.role === "gym_owner" || user.role === "trainer") && (
+                {(user.role === "gym_owner" ||
+                  user.role === "client" ||
+                  user.role === "trainer") && (
                   <Link to="/my-subscription" className="mobile-nav-link">
                     My Subscription
                   </Link>

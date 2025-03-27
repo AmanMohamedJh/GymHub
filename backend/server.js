@@ -12,8 +12,13 @@ const subscriptionController = require("./src/controller/Subscription/subscripti
 const app = express();
 const PORT = process.env.PORT || 4070;
 
-// Configure CORS before any routes
-app.use(cors());
+// Configure CORS with specific origin
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: false,
+  })
+);
 
 // Webhook endpoint must be before express.json() middleware
 app.post(
@@ -29,6 +34,10 @@ app.use(express.urlencoded({ extended: true }));
 //routes
 app.use("/api/user", userRoutes);
 app.use("/api/subscription", subscriptionRoutes);
+
+//contact us router and route
+const contactUsRouter = require("./src/routes/Contactus/contactUs");
+app.use("/api/contactUs", contactUsRouter);
 
 // Serve static files from the uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

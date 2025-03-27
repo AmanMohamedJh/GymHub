@@ -38,7 +38,12 @@ import ClientProgress from "./pages/Trainer/ClientProgress.jsx";
 
 // Client Components
 import ClientDashboard from "./pages/Clientt/ClientDashboard.jsx";
-import GymList from "./pages/Clientt/GymList.jsx";
+import ClientBrowseGym from "./pages/Clientt/BrowseGym.jsx";
+import ClientBrowseTrainer from "./pages/Clientt/BrowseTrainers.jsx";
+import ClientProgressTracking from "./pages/Clientt/ProgressTracking.jsx";
+import ClientWorkoutlogForm from "./pages/Clientt/workoutLogForm.jsx";
+import ClientFitnessGoalForm from "./pages/Clientt/FitnessGoalForm.jsx";
+import ClientBMIUpdateForm from "./pages/Clientt/BMIUpdateForm.jsx";
 
 // Admin Components
 import AdminLayout from "./pages/Admin/AdminLayout.jsx";
@@ -72,7 +77,9 @@ function App() {
           {/* Only show Navbar if user is not admin */}
           {(!user || user.role !== "admin") && <Navbar />}
           {user && user.role !== "admin" && <VerificationBanner />}
-          {user && user.role === "gym_owner" && <SubscriptionBanner />}
+          {user && (user.role === "gym_owner" || user.role === "client") && (
+            <SubscriptionBanner />
+          )}
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
@@ -88,7 +95,7 @@ function App() {
               path="/my-subscription"
               element={
                 <NonAdminRoute>
-                  <ProtectedRoute allowedRole="gym_owner">
+                  <ProtectedRoute allowedRole={["gym_owner", "client"]}>
                     <MySubscription />
                   </ProtectedRoute>
                 </NonAdminRoute>
@@ -227,19 +234,81 @@ function App() {
               element={
                 <NonAdminRoute>
                   <ProtectedRoute allowedRole="client">
-                    <ClientDashboard />
+                    <RequireSubscription>
+                      <ClientDashboard />
+                    </RequireSubscription>
                   </ProtectedRoute>
                 </NonAdminRoute>
               }
             />
             <Route
-              path="/gym-list"
+              path="/client-progress-tracking"
+              element={
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="client">
+                    <RequireSubscription>
+                      <ClientProgressTracking />
+                    </RequireSubscription>
+                  </ProtectedRoute>
+                </NonAdminRoute>
+              }
+            />
+            <Route
+              path="/client-fitness-goal"
+              element={
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="client">
+                    <RequireSubscription>
+                      <ClientFitnessGoalForm />
+                    </RequireSubscription>
+                  </ProtectedRoute>
+                </NonAdminRoute>
+              }
+            />
+            <Route
+              path="/client-update-BMI"
+              element={
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="client">
+                    <RequireSubscription>
+                      <ClientBMIUpdateForm />
+                    </RequireSubscription>
+                  </ProtectedRoute>
+                </NonAdminRoute>
+              }
+            />
+            <Route
+              path="/client-log-workout"
+              element={
+                <NonAdminRoute>
+                  <ProtectedRoute allowedRole="client">
+                    <RequireSubscription>
+                      <ClientWorkoutlogForm />
+                    </RequireSubscription>
+                  </ProtectedRoute>
+                </NonAdminRoute>
+              }
+            />
+            <Route
+              path="/client-browse-gym"
               element={
                 <NonAdminRoute>
                   <ProtectedRoute
                     allowedRole={["client", "trainer", "gym_owner"]}
                   >
-                    <GymList />
+                    <ClientBrowseGym />
+                  </ProtectedRoute>
+                </NonAdminRoute>
+              }
+            />
+            <Route
+              path="/client-browse-trainer"
+              element={
+                <NonAdminRoute>
+                  <ProtectedRoute
+                    allowedRole={["client", "trainer", "gym_owner"]}
+                  >
+                    <ClientBrowseTrainer />
                   </ProtectedRoute>
                 </NonAdminRoute>
               }
@@ -264,10 +333,6 @@ function App() {
               <Route
                 path="client-management"
                 element={<AdminClientManagement />}
-              />
-              <Route
-                path="contact-management"
-                element={<ContactUsManagement />}
               />
               <Route
                 path="contact-management"
