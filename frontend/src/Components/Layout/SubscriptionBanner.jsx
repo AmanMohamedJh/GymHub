@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useSubscription } from '../../context/Subscription/SubscriptionContext';
+import { useSubscription } from "../../context/Subscription/SubscriptionContext";
 import "../../styles/common.css";
+import "./SubscriptionBanner.css";
 
 const SubscriptionBanner = () => {
   const { user } = useAuthContext();

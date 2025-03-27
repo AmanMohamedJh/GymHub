@@ -8,6 +8,10 @@ import "./context/Subscription/SubscriptionContext.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Styles
+import "./styles/common.css";
+import "./App.css";
+
 // Layout Components
 import Navbar from "./Components/Common/Navbar";
 import VerificationBanner from "./Components/Layout/VerificationBanner";
@@ -64,8 +68,6 @@ import SubscriptionPage from "./pages/Subscription/SubscriptionPage";
 import SuccessPage from "./pages/Subscription/SuccessPage";
 import FailurePage from "./pages/Subscription/FailurePage";
 import MySubscription from "./pages/Subscription/MySubscription";
-
-import "./App.css";
 
 function App() {
   const { user } = useAuthContext();

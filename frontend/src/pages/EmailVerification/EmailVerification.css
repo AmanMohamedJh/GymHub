@@ -16,7 +16,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("../Gym_Owner/Styles/images/gym-background2.jpg.jpg") center/cover no-repeat;
+  background: url("../Gym_Owner/Styles/images/gym-background2.jpg.jpg")
+    center/cover no-repeat;
   filter: blur(5px);
   z-index: -1;
   transform: scale(1.1);
@@ -104,4 +105,32 @@
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
+}
+
+.email-verification-banner {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  color: #856404;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.email-verification-banner p {
+  margin: 0;
+}
+
+.verify-link {
+  color: #0056b3;
+  text-decoration: none;
+  margin-left: 8px;
+  font-weight: 500;
+}
+
+.verify-link:hover {
+  text-decoration: underline;
 }

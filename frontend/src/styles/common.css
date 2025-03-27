@@ -1,82 +1,36 @@
-.email-verification-banner {
-  background-color: #fff3cd;
-  border: 1px solid #ffeeba;
-  color: #856404;
-  padding: 12px 20px;
-  margin-bottom: 20px;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+/* Common Styles */
+
+/* Button Styles */
+.btn-primary,
+.btn-secondary {
+  padding: 12px 24px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border-radius: 5px !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  transition: background-color 0.3s ease !important;
+  border: none !important;
 }
 
-.email-verification-banner p {
-  margin: 0;
+.btn-primary {
+  background-color: rgb(227, 73, 50) !important;
+  color: black !important;
 }
 
-.verify-link {
-  color: #0056b3;
-  text-decoration: none;
-  margin-left: 8px;
-  font-weight: 500;
+.btn-primary:hover {
+  background-color: rgb(200, 60, 40) !important;
 }
 
-.verify-link:hover {
-  text-decoration: underline;
+.btn-secondary {
+  background-color: transparent !important;
+  border: 2px solid white !important;
+  color: white !important;
 }
 
-.verification-banner {
-  background-color: #fff3cd;
-  border: 1px solid #ffeeba;
-  color: #856404;
-  padding: 12px 20px;
-  margin-bottom: 20px;
-  border-radius: 4px;
-  text-align: center;
-  position: relative;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-.verification-banner p {
-  margin: 0;
-  font-size: 14px;
-}
-
-.verify-link {
-  color: #0056b3;
-  text-decoration: none;
-  font-weight: 500;
-  margin: 0 5px;
-}
-
-.verify-link:hover {
-  text-decoration: underline;
-}
-
-.verification-banner,
-.subscription-banner {
-  background-color: #fef3c7;
-  color: #92400e;
-  padding: 0.75rem;
-  text-align: center;
-  width: 100%;
-}
-
-.verification-banner p,
-.subscription-banner p {
-  margin: 0;
-}
-
-.verify-link,
-.subscribe-link {
-  color: #92400e;
-  font-weight: 600;
-}
-
-.verify-link:hover,
-.subscribe-link:hover {
-  color: #78350f;
-}
+/*These button css are used in all the pages through 
+/* will help not to duplicate the css in all the pages and will maintain consistency*/

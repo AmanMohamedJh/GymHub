@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import "./VerificationBanner.css";
 import "../../styles/common.css";
 
 const VerificationBanner = () => {

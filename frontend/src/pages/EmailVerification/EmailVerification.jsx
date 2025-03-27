@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthContext } from '../../hooks/useAuthContext';
-import './EmailVerification.css';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import "./EmailVerification.css";
 
 const EmailVerification = () => {
-  const [verificationCode, setVerificationCode] = useState('');
-  const [message, setMessage] = useState('');
+  const [verificationCode, setVerificationCode] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { user, dispatch } = useAuthContext();
   const navigate = useNavigate();
@@ -13,22 +13,22 @@ const EmailVerification = () => {
   const handleSendCode = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/user/send-verification', {
-        method: 'POST',
+      const response = await fetch("/api/user/send-verification", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
-        }
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
       });
       const data = await response.json();
-      
+
       if (response.ok) {
-        setMessage('Verification code sent! Check your email.');
+        setMessage("Verification code sent! Check your email.");
       } else {
-        setMessage(data.error || 'Failed to send verification code');
+        setMessage(data.error || "Failed to send verification code");
       }
     } catch (error) {
-      setMessage('Error sending verification code');
+      setMessage("Error sending verification code");
     }
     setLoading(false);
   };
@@ -37,39 +37,39 @@ const EmailVerification = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/api/user/verify-email', {
-        method: 'POST',
+      const response = await fetch("/api/user/verify-email", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ verificationCode })
+        body: JSON.stringify({ verificationCode }),
       });
       const data = await response.json();
-      
+
       if (response.ok) {
-        setMessage('Email verified successfully!');
-        
+        setMessage("Email verified successfully!");
+
         // Update local storage and auth context
         const updatedUser = { ...user, isEmailVerified: true };
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        dispatch({ type: 'UPDATE_USER', payload: { isEmailVerified: true } });
-        
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        dispatch({ type: "UPDATE_USER", payload: { isEmailVerified: true } });
+
         // Redirect after a short delay
         setTimeout(() => {
-          navigate('/');
+          navigate("/");
         }, 2000);
       } else {
-        setMessage(data.error || 'Invalid verification code');
+        setMessage(data.error || "Invalid verification code");
       }
     } catch (error) {
-      setMessage('Error verifying email');
+      setMessage("Error verifying email");
     }
     setLoading(false);
   };
 
   if (!user) {
-    navigate('/login');
+    navigate("/login");
     return null;
   }
 
@@ -77,14 +77,16 @@ const EmailVerification = () => {
     <div className="email-verification-container">
       <div className="email-verification-card">
         <h2>Email Verification</h2>
-        <p>A verification code will be sent to: <strong>{user.email}</strong></p>
-        
-        <button 
+        <p>
+          A verification code will be sent to: <strong>{user.email}</strong>
+        </p>
+
+        <button
           onClick={handleSendCode}
           disabled={loading}
           className="send-code-btn"
         >
-          {loading ? 'Sending...' : 'Send Verification Code'}
+          {loading ? "Sending..." : "Send Verification Code"}
         </button>
 
         <form onSubmit={handleVerify} className="verification-form">
@@ -96,10 +98,10 @@ const EmailVerification = () => {
             required
           />
           <button type="submit" disabled={loading} className="verify-btn">
-            {loading ? 'Verifying...' : 'Verify Email'}
+            {loading ? "Verifying..." : "Verify Email"}
           </button>
         </form>
-        
+
         {message && <div className="message">{message}</div>}
       </div>
     </div>

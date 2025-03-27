@@ -12,6 +12,7 @@ import {
 import gymImage1 from "../Images/gym1.jpg.jpg";
 import gymImage2 from "../Images/gym2.jpg.jpg";
 import gymImage3 from "../Images/gym3.jpg.jpg";
+import "../styles/Home/home.css";
 
 export default function Home() {
   const { user } = useAuthContext();
