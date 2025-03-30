@@ -358,69 +358,104 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 1rem;
 }
 
 .equip-modal {
   background: white;
-  border-radius: 12px;
-  width: 100%;
+  border-radius: 8px;
+  padding: 20px;
+  width: 90%;
   max-width: 800px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  animation: equip-modal-in 0.3s ease;
-}
-
-@keyframes equip-modal-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  position: relative;
 }
 
 .equip-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid #ecf0f1;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
 }
 
 .equip-modal-header h3 {
-  color: #2c3e50;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-}
-
-.equip-modal-header h3 svg {
-  color: #e74c3c;
+  gap: 10px;
+  margin: 0;
+  color: #333;
 }
 
 .equip-modal-close {
   background: none;
   border: none;
-  font-size: 1.2rem;
-  color: #7f8c8d;
+  font-size: 1.5rem;
   cursor: pointer;
-  transition: color 0.3s ease;
+  color: #666;
+  padding: 5px;
 }
 
 .equip-modal-close:hover {
   color: #e74c3c;
+}
+
+.equip-modal-content {
+  padding: 20px 0;
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.equipment-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.equipment-card h4 {
+  margin: 0;
+  color: #333;
+}
+
+.equipment-card p {
+  margin: 0;
+  color: #666;
+}
+
+.add-to-gym-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-to-gym-btn:hover {
+  background: #c0392b;
+}
+
+.no-equipment {
+  text-align: center;
+  color: #666;
+  padding: 40px 0;
+  font-style: italic;
 }
 
 /* Form styles */
@@ -841,6 +876,65 @@
   font-style: italic;
 }
 
+/* Inventory Checkbox Styles */
+.equip-inventory-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  transition: background-color 0.2s;
+}
+
+.equip-inventory-option:hover {
+  background-color: #e9ecef;
+}
+
+.equip-inventory-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  border: 2px solid #6c757d;
+  border-radius: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: white;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.equip-inventory-option input[type="checkbox"]:checked {
+  background-color: #4a90e2;
+  border-color: #4a90e2;
+}
+
+.equip-inventory-option input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  left: 2px;
+  top: -2px;
+}
+
+.equip-inventory-option label {
+  font-size: 0.95rem;
+  color: #495057;
+  font-style: italic;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Adjust the spacing between gym select and inventory checkbox */
+.equip-form-group + .equip-inventory-option {
+  margin-top: -5px;
+  margin-bottom: 20px;
+}
+
+/* Action buttons */
 .equip-action-buttons {
   display: flex;
   gap: 1rem;
@@ -1091,4 +1185,256 @@
 
 .equip-btn-add-to-gym:hover {
   background-color: #27ae60;
+}
+
+.loading-message {
+  text-align: center;
+  color: #666;
+  padding: 40px 0;
+  font-style: italic;
+}
+
+/* Maintenance History */
+.maintenance-history {
+  margin-top: 2rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.maintenance-history h4 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.maintenance-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.maintenance-item {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #4a90e2;
+}
+
+.maintenance-item p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.maintenance-item strong {
+  color: #555;
+}
+
+/* Equipment Info in Maintenance Modal */
+.equipment-info {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.equipment-info p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.equipment-info strong {
+  color: #555;
+  margin-right: 0.5rem;
+}
+
+/* Status Colors */
+.maintenance-item[data-status="Completed"] {
+  border-left-color: #28a745;
+}
+
+.maintenance-item[data-status="In Progress"] {
+  border-left-color: #ffc107;
+}
+
+.maintenance-item[data-status="Overdue"] {
+  border-left-color: #dc3545;
+}
+
+/* Maintenance Item Header */
+.maintenance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.maintenance-header > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Status Select */
+.status-select {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.status-select.status-scheduled {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-select.status-inprogress {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.status-select.status-completed {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.status-select.status-overdue {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+/* Delete Button */
+.delete-maintenance-btn {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.delete-maintenance-btn:hover {
+  color: #dc3545;
+}
+
+.delete-maintenance-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Maintenance Item Status Colors */
+.maintenance-item[data-status="Completed"] {
+  border-left-color: #388e3c;
+}
+
+.maintenance-item[data-status="In Progress"] {
+  border-left-color: #f57c00;
+}
+
+.maintenance-item[data-status="Overdue"] {
+  border-left-color: #d32f2f;
+}
+
+.maintenance-item[data-status="Scheduled"] {
+  border-left-color: #1976d2;
+}
+
+/* Delete Modal Styles */
+.delete-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #fff3f3;
+  border-radius: 8px;
+  border-left: 4px solid #dc3545;
+  color: #dc3545;
+}
+
+.delete-warning svg {
+  font-size: 1.2rem;
+}
+
+.equip-btn-delete {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.equip-btn-delete:hover {
+  background-color: #c82333;
+}
+
+.equip-btn-delete svg {
+  font-size: 0.9rem;
+}
+
+/* Equipment Info in Delete Modal */
+.equipment-info {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.equipment-info p {
+  margin: 8px 0;
+  font-size: 0.95rem;
+}
+
+.equipment-info strong {
+  color: #555;
+  margin-right: 8px;
+}
+
+/* Modal Header with Warning Icon */
+.equip-modal-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #dc3545;
+}
+
+.equip-modal-header svg {
+  font-size: 1.2rem;
+}
+
+.equipment-header {
+  position: relative;
+  padding: 60px 0;
+  margin-bottom: 40px;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+    url("../Styles/images/gym-background2.jpg.jpg");
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  color: white;
+  border-bottom: 3px solid #007bff;
+}
+
+.equipment-header h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.equipment-header p {
+  font-size: 1.1rem;
+  margin-top: 10px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }

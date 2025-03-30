@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaSave,
   FaTimes,
@@ -6,6 +6,7 @@ import {
   FaCalendarAlt,
   FaTrash,
   FaExclamationTriangle,
+  FaExclamationCircle,
   FaChartBar,
   FaFileAlt,
   FaPlus,
@@ -17,92 +18,43 @@ import {
   FaSortAmountUp,
   FaWarehouse,
   FaBoxOpen,
-  FaExchangeAlt,
 } from "react-icons/fa";
 import "./Styles/EquipmentManagement.css";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const EquipmentManagement = () => {
+  const { user } = useAuthContext();
   // State variables for modals
   const [showEditModal, setShowEditModal] = useState(false);
   const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showReportsModal, setShowReportsModal] = useState(false);
-  const [showExistingEquipModal, setShowExistingEquipModal] = useState(false);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
-  const [targetGymName, setTargetGymName] = useState("");
+  const [equipmentList, setEquipmentList] = useState([]);
+  const [userGyms, setUserGyms] = useState([]);
+  const [error, setError] = useState(null);
 
   // State for form data
   const [formData, setFormData] = useState({
     name: "",
-    gymName: "",
-    condition: "",
+    gymId: "",
+    condition: "Excellent",
     notes: "",
-    noGymAssigned: false,
+    inInventory: false,
   });
 
-  // State for maintenance data
-  const [maintenanceData, setMaintenanceData] = useState({
-    scheduledDate: new Date(),
+  // State for maintenance form
+  const [maintenanceForm, setMaintenanceForm] = useState({
+    scheduledDate: "",
+    type: "Routine",
     description: "",
     status: "Scheduled",
   });
 
-  // State for filter and search
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterCondition, setFilterCondition] = useState("all");
-  const [sortField, setSortField] = useState("name");
-  const [sortDirection, setSortDirection] = useState("asc");
-
-  // Sample equipment data
-  const [equipmentList, setEquipmentList] = useState([
-    {
-      id: 1,
-      name: "Treadmill",
-      gymName: "Fitness Plus",
-      condition: "Excellent",
-      lastMaintenance: "2023-10-15",
-      category: "Cardio",
-      notes: "Regular maintenance performed monthly",
-    },
-    {
-      id: 2,
-      name: "Bench Press",
-      gymName: "",
-      condition: "Good",
-      lastMaintenance: "2023-09-12",
-      category: "Strength",
-      notes: "Some wear on padding",
-    },
-    {
-      id: 3,
-      name: "Dumbbells (Set)",
-      gymName: "Fitness Plus",
-      condition: "Fair",
-      lastMaintenance: "2023-08-30",
-      category: "Weights",
-      notes: "Some rust on 15kg and 20kg weights",
-    },
-    {
-      id: 4,
-      name: "Elliptical Machine",
-      gymName: "Fitness Plus",
-      condition: "Poor",
-      lastMaintenance: "2023-07-22",
-      category: "Cardio",
-      notes: "Display needs replacement",
-    },
-    {
-      id: 5,
-      name: "Rowing Machine",
-      gymName: "Fitness Plus",
-      condition: "Excellent",
-      lastMaintenance: "2023-10-05",
-      category: "Cardio",
-      notes: "",
-    },
-  ]);
+  // State for maintenance history
+  const [maintenanceHistory, setMaintenanceHistory] = useState([]);
 
   // Event handlers
   const handleInputChange = (e) => {
@@ -110,29 +62,27 @@ const EquipmentManagement = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleMaintenanceDateChange = (date) => {
-    setMaintenanceData({ ...maintenanceData, scheduledDate: date });
-  };
-
-  const handleMaintenanceInputChange = (e) => {
-    const { name, value } = e.target;
-    setMaintenanceData({ ...maintenanceData, [name]: value });
-  };
-
   const handleEditClick = (equipment) => {
     setSelectedEquipment(equipment);
     setFormData({
       name: equipment.name,
-      gymName: equipment.gymName,
+      gymId: equipment.gymId || "",
       condition: equipment.condition,
       notes: equipment.notes || "",
-      noGymAssigned: !equipment.gymName,
+      inInventory: !equipment.gymId,
     });
     setShowEditModal(true);
   };
 
   const handleMaintenanceClick = (equipment) => {
     setSelectedEquipment(equipment);
+    setMaintenanceForm({
+      scheduledDate: "",
+      type: "Routine",
+      description: "",
+      status: "Scheduled",
+    });
+    fetchMaintenanceHistory(equipment._id);
     setShowMaintenanceModal(true);
   };
 
@@ -141,29 +91,83 @@ const EquipmentManagement = () => {
     setShowDeleteModal(true);
   };
 
-  const handleMaintenanceSubmit = (e) => {
+  const handleMaintenanceSubmit = async (e) => {
     e.preventDefault();
-    // Handle maintenance submission logic here
-    // After submission:
-    setShowMaintenanceModal(false);
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/equipment/${selectedEquipment._id}/maintenance`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(maintenanceForm),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json = await response.json();
+
+      // Update maintenance history
+      setMaintenanceHistory((prevHistory) => [...prevHistory, json]);
+
+      // Reset form and close modal
+      setMaintenanceForm({
+        scheduledDate: "",
+        type: "Routine",
+        description: "",
+        status: "Scheduled",
+      });
+      setShowMaintenanceModal(false);
+      setError(null);
+    } catch (error) {
+      console.error("Maintenance submission error:", error);
+      setError("Failed to schedule maintenance");
+    }
   };
 
-  const handleDelete = () => {
-    // Delete equipment logic here
-    setEquipmentList(
-      equipmentList.filter((item) => item.id !== selectedEquipment.id)
-    );
-    setShowDeleteModal(false);
+  const handleDelete = async () => {
+    if (!selectedEquipment) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/equipment/${selectedEquipment._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Remove the deleted equipment from the list
+      setEquipmentList((prev) =>
+        prev.filter((item) => item._id !== selectedEquipment._id)
+      );
+      setShowDeleteModal(false);
+      setSelectedEquipment(null);
+    } catch (error) {
+      console.error("Delete equipment error:", error);
+      setError("Failed to delete equipment");
+    }
   };
 
   const handleAddNewClick = () => {
     setSelectedEquipment(null);
     setFormData({
       name: "",
-      gymName: "",
-      condition: "Good",
+      gymId: "",
+      condition: "Excellent",
       notes: "",
-      noGymAssigned: false,
+      inInventory: false,
     });
     setShowEditModal(true);
   };
@@ -172,32 +176,282 @@ const EquipmentManagement = () => {
     setShowReportsModal(true);
   };
 
-  const handleAddToGym = (equipmentId, gymName) => {
-    setEquipmentList((prevList) =>
-      prevList.map((item) =>
-        item.id === equipmentId ? { ...item, gymName } : item
-      )
-    );
+  // Fetch user's gyms
+  const fetchUserGyms = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:4000/api/equipment/owner-gyms",
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setUserGyms(data);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      console.error("Failed to fetch gyms:", error);
+      setError("Failed to fetch gyms");
+    }
   };
+
+  // Fetch all equipment
+  const fetchEquipment = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:4000/api/equipment/owner",
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      setEquipmentList(json);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setError("Failed to fetch equipment");
+    }
+  };
+
+  // Fetch maintenance history
+  const fetchMaintenanceHistory = async (equipmentId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/equipment/${equipmentId}/maintenance`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      setMaintenanceHistory(json);
+    } catch (error) {
+      console.error("Failed to fetch maintenance history:", error);
+      setError("Failed to fetch maintenance history");
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const url = selectedEquipment
+        ? `http://localhost:4000/api/equipment/${selectedEquipment._id}`
+        : "http://localhost:4000/api/equipment";
+
+      const response = await fetch(url, {
+        method: selectedEquipment ? "PATCH" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to save equipment");
+      }
+
+      const data = await response.json();
+      if (selectedEquipment) {
+        setEquipmentList((prev) =>
+          prev.map((item) => (item._id === selectedEquipment._id ? data : item))
+        );
+      } else {
+        setEquipmentList((prev) => [...prev, data]);
+      }
+      setShowEditModal(false);
+      setFormData({
+        name: "",
+        gymId: "",
+        condition: "Excellent",
+        notes: "",
+        inInventory: false,
+      });
+      setError(null);
+    } catch (error) {
+      console.error("Failed to save equipment:", error);
+      setError(error.message);
+    }
+  };
+
+  const handleStatusUpdate = async (maintenanceId, newStatus) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/equipment/${selectedEquipment._id}/maintenance/${maintenanceId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json = await response.json();
+
+      // Update maintenance history with the updated record
+      setMaintenanceHistory((prevHistory) =>
+        prevHistory.map((record) =>
+          record._id === maintenanceId
+            ? { ...record, status: newStatus }
+            : record
+        )
+      );
+
+      // Refresh equipment data to get latest status
+      await fetchEquipment();
+    } catch (error) {
+      console.error("Status update error:", error);
+      setError("Failed to update maintenance status");
+    }
+  };
+
+  const handleMaintenanceDelete = async (maintenanceId) => {
+    if (!maintenanceId) {
+      setError("No maintenance record selected");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:4000/api/equipment/maintenance/${maintenanceId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Remove the deleted maintenance from history
+      setMaintenanceHistory((prevHistory) =>
+        prevHistory.filter((record) => record._id !== maintenanceId)
+      );
+
+      // Refresh equipment data
+      await fetchEquipment();
+    } catch (error) {
+      console.error("Failed to delete maintenance:", error);
+      setError("Failed to delete maintenance record");
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    if (user) {
+      fetchUserGyms();
+      fetchEquipment();
+    }
+  }, [user]);
+
+  // Check for due maintenance on component mount and every hour
+  useEffect(() => {
+    const checkDueMaintenance = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:4000/api/equipment/maintenance/due",
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+
+        // If response is not ok, throw error
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.length > 0) {
+          // Show notification for due maintenance
+          data.forEach((item) => {
+            if (!item.notificationSent) {
+              // You can replace this with a proper notification system
+              const message = `Maintenance due for ${item.equipmentName}: ${item.description}`;
+              console.log("Maintenance notification:", message);
+              // Only show alert if it's a new notification
+              alert(message);
+            }
+          });
+        }
+      } catch (error) {
+        // Log error but don't show to user unless it's a specific error we want them to see
+        console.error("Failed to check due maintenance:", error);
+      }
+    };
+
+    // Only run if user is authenticated
+    if (user) {
+      checkDueMaintenance();
+      const interval = setInterval(checkDueMaintenance, 3600000); // Check every hour
+      return () => clearInterval(interval);
+    }
+  }, [user]);
 
   // Filter and sort functions
   const getFilteredEquipment = () => {
     return equipmentList
-      .filter((item) => {
-        const matchesSearch =
-          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.gymName.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesCondition =
+      .filter((equipment) => {
+        // Search filter
+        const searchMatch =
+          !searchTerm ||
+          equipment.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          equipment.condition
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          equipment.gymName?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        // Condition filter
+        const conditionMatch =
           filterCondition === "all" ||
-          item.condition.toLowerCase() === filterCondition.toLowerCase();
-        return matchesSearch && matchesCondition;
+          equipment.condition?.toLowerCase() === filterCondition.toLowerCase();
+
+        return searchMatch && conditionMatch;
       })
       .sort((a, b) => {
-        if (sortDirection === "asc") {
-          return a[sortField].localeCompare(b[sortField]);
-        } else {
-          return b[sortField].localeCompare(a[sortField]);
-        }
+        // Handle undefined or null values
+        const aValue = a[sortField] || "";
+        const bValue = b[sortField] || "";
+
+        // Sort direction
+        const direction = sortDirection === "asc" ? 1 : -1;
+
+        // Case insensitive string comparison
+        return (
+          direction *
+          aValue
+            .toString()
+            .toLowerCase()
+            .localeCompare(bValue.toString().toLowerCase())
+        );
       });
   };
 
@@ -210,15 +464,19 @@ const EquipmentManagement = () => {
     }
   };
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCondition, setFilterCondition] = useState("all");
+  const [sortField, setSortField] = useState("name");
+  const [sortDirection, setSortDirection] = useState("asc");
+
   const filteredEquipment = getFilteredEquipment();
 
   return (
     <div className="equipment-management">
-      {/* Top Header Section */}
-      <div className="equip-header">
-        <h2>
+      <div className="equipment-header">
+        <h1>
           <FaTools /> Equipment Management
-        </h2>
+        </h1>
         <p>Track, maintain and manage all your gym equipment in one place</p>
       </div>
 
@@ -300,13 +558,14 @@ const EquipmentManagement = () => {
           </thead>
           <tbody>
             {filteredEquipment.length > 0 ? (
-              filteredEquipment.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.name}</td>
+              filteredEquipment.map((equipment) => (
+                <tr key={equipment._id}>
+                  <td>{equipment.name}</td>
                   <td>
-                    {item.gymName ? (
+                    {!equipment.inInventory ? (
                       <span className="gym-name">
-                        <FaWarehouse className="gym-icon" /> {item.gymName}
+                        <FaWarehouse className="gym-icon" />{" "}
+                        {equipment.gymId?.name}
                       </span>
                     ) : (
                       <span className="no-gym">
@@ -316,28 +575,34 @@ const EquipmentManagement = () => {
                   </td>
                   <td>
                     <span
-                      className={`equip-condition equip-condition-${item.condition.toLowerCase()}`}
+                      className={`equip-condition equip-condition-${equipment.condition.toLowerCase()}`}
                     >
-                      {item.condition}
+                      {equipment.condition}
                     </span>
                   </td>
-                  <td>{item.lastMaintenance || "Not recorded"}</td>
+                  <td>
+                    {equipment.lastMaintenanceDate
+                      ? new Date(
+                          equipment.lastMaintenanceDate
+                        ).toLocaleDateString()
+                      : "Not recorded"}
+                  </td>
                   <td className="equip-actions">
                     <button
                       className="equip-btn-icon equip-btn-edit"
-                      onClick={() => handleEditClick(item)}
+                      onClick={() => handleEditClick(equipment)}
                     >
                       <FaEdit />
                     </button>
                     <button
                       className="equip-btn-icon equip-btn-maintenance"
-                      onClick={() => handleMaintenanceClick(item)}
+                      onClick={() => handleMaintenanceClick(equipment)}
                     >
                       <FaTools />
                     </button>
                     <button
                       className="equip-btn-icon equip-btn-delete"
-                      onClick={() => handleDeleteClick(item)}
+                      onClick={() => handleDeleteClick(equipment)}
                     >
                       <FaTrash />
                     </button>
@@ -355,10 +620,10 @@ const EquipmentManagement = () => {
         </table>
       </div>
 
-      {/* Edit/Add Modal */}
+      {/* Add/Edit Equipment Modal */}
       {showEditModal && (
         <div className="equip-modal-overlay">
-          <div className="equip-modal equip-edit-modal">
+          <div className="equip-modal equip-form-modal">
             <div className="equip-modal-header">
               <h3>
                 <FaSave />{" "}
@@ -371,173 +636,95 @@ const EquipmentManagement = () => {
                 <FaTimes />
               </button>
             </div>
-
-            <form onSubmit={(e) => e.preventDefault()} className="equip-form">
-              <div className="equip-form-group">
-                <label>Name *</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="Enter equipment name"
-                  required
-                />
-              </div>
-
-              <div className="equip-form-group">
-                <div className="gym-name-group">
-                  <label>Gym Name</label>
-                  <div className="gym-name-input-wrapper">
-                    <input
-                      type="text"
-                      name="gymName"
-                      value={formData.gymName}
-                      onChange={handleInputChange}
-                      placeholder="Enter gym name"
-                      disabled={formData.noGymAssigned}
-                    />
-                    <div className="no-gym-checkbox">
-                      <input
-                        type="checkbox"
-                        id="noGymAssigned"
-                        checked={formData.noGymAssigned}
-                        onChange={(e) => {
-                          setFormData((prev) => ({
-                            ...prev,
-                            noGymAssigned: e.target.checked,
-                            gymName: e.target.checked ? "" : prev.gymName,
-                          }));
-                        }}
-                      />
-                      <label htmlFor="noGymAssigned">
-                        Add to inventory without gym
-                      </label>
-                    </div>
-                    <p className="gym-name-hint">
-                      Click the checkbox if you want to add to the inventory
-                      without a gym
-                    </p>
-                  </div>
+            <div className="equip-modal-content">
+              <form onSubmit={handleSubmit}>
+                <div className="equip-form-group">
+                  <label>Equipment Name *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="Enter equipment name"
+                  />
                 </div>
-              </div>
 
-              <div className="equip-form-group">
-                <label>Condition *</label>
-                <select
-                  name="condition"
-                  value={formData.condition}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="Excellent">Excellent</option>
-                  <option value="Good">Good</option>
-                  <option value="Fair">Fair</option>
-                  <option value="Poor">Poor</option>
-                </select>
-              </div>
+                <div className="equip-form-group">
+                  <label>Assign to Gym</label>
+                  <select
+                    name="gymId"
+                    value={formData.gymId}
+                    onChange={handleInputChange}
+                    disabled={formData.inInventory}
+                  >
+                    <option value="">Select a gym</option>
+                    {userGyms.map((gym) => (
+                      <option key={gym._id} value={gym._id}>
+                        {gym.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div className="equip-form-group">
-                <label>Notes</label>
-                <textarea
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleInputChange}
-                  placeholder="Add any additional information about the equipment..."
-                  rows="3"
-                ></textarea>
-              </div>
+                <div className="equip-inventory-option">
+                  <input
+                    type="checkbox"
+                    id="inInventory"
+                    name="inInventory"
+                    checked={formData.inInventory}
+                    onChange={(e) => {
+                      setFormData({
+                        ...formData,
+                        inInventory: e.target.checked,
+                        gymId: e.target.checked ? "" : formData.gymId,
+                      });
+                    }}
+                  />
+                  <label htmlFor="inInventory">
+                    Add to inventory without gym
+                  </label>
+                </div>
 
-              <div className="equip-form-actions">
-                <button
-                  type="button"
-                  className="equip-btn-cancel"
-                  onClick={() => setShowEditModal(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="equip-btn-existing"
-                  onClick={() => {
-                    setTargetGymName(formData.gymName);
-                    setShowExistingEquipModal(true);
-                  }}
-                >
-                  <FaExchangeAlt /> Add Existing Equipment
-                </button>
-                <button type="submit" className="equip-btn-save">
-                  {selectedEquipment ? "Save Changes" : "Add Equipment"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+                <div className="equip-form-group">
+                  <label>Condition *</label>
+                  <select
+                    name="condition"
+                    value={formData.condition}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="Excellent">Excellent</option>
+                    <option value="Good">Good</option>
+                    <option value="Fair">Fair</option>
+                    <option value="Poor">Poor</option>
+                  </select>
+                </div>
 
-      {/* Existing Equipment Modal */}
-      {showExistingEquipModal && (
-        <div className="equip-modal-overlay">
-          <div className="equip-modal equip-existing-modal">
-            <div className="equip-modal-header">
-              <h3>
-                <FaBoxOpen /> Add Existing Equipment
-              </h3>
-              <button
-                className="equip-modal-close"
-                onClick={() => setShowExistingEquipModal(false)}
-              >
-                <FaTimes />
-              </button>
-            </div>
+                <div className="equip-form-group">
+                  <label>Notes</label>
+                  <textarea
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleInputChange}
+                    placeholder="Add any additional information about the equipment..."
+                    rows="3"
+                  ></textarea>
+                </div>
 
-            <div className="existing-equipment-list">
-              <p className="existing-equipment-info">
-                Select equipment from inventory to add to your gym
-              </p>
-
-              {equipmentList.filter((item) => !item.gymName).length === 0 ? (
-                <p className="no-inventory-message">
-                  No equipment available in inventory
-                </p>
-              ) : (
-                <table className="equip-table">
-                  <thead>
-                    <tr>
-                      <th>Equipment Name</th>
-                      <th>Condition</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {equipmentList
-                      .filter((item) => !item.gymName)
-                      .map((item) => (
-                        <tr key={item.id}>
-                          <td>{item.name}</td>
-                          <td>
-                            <span
-                              className={`equip-condition equip-condition-${item.condition.toLowerCase()}`}
-                            >
-                              {item.condition}
-                            </span>
-                          </td>
-                          <td>
-                            <button
-                              className="equip-btn-add-to-gym"
-                              onClick={() => {
-                                handleAddToGym(item.id, targetGymName);
-                                setShowExistingEquipModal(false);
-                              }}
-                            >
-                              Add to Gym
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              )}
+                <div className="equip-form-actions">
+                  <button
+                    type="button"
+                    className="equip-btn-cancel"
+                    onClick={() => setShowEditModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="equip-btn-save">
+                    {selectedEquipment ? "Save Changes" : "Add Equipment"}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -546,7 +733,7 @@ const EquipmentManagement = () => {
       {/* Maintenance Modal */}
       {showMaintenanceModal && selectedEquipment && (
         <div className="equip-modal-overlay">
-          <div className="equip-modal equip-maintenance-modal">
+          <div className="equip-modal">
             <div className="equip-modal-header">
               <h3>
                 <FaTools /> Schedule Maintenance
@@ -558,99 +745,181 @@ const EquipmentManagement = () => {
                 <FaTimes />
               </button>
             </div>
-
-            <div className="equip-maintenance-details">
-              <div className="equip-maintenance-item">
-                <span className="equip-maintenance-label">Equipment:</span>
-                <span className="equip-maintenance-value">
-                  {selectedEquipment.name}
-                </span>
-              </div>
-              <div className="equip-maintenance-item">
-                <span className="equip-maintenance-label">Location:</span>
-                <span className="equip-maintenance-value">
-                  {selectedEquipment.gymName || "Inventory"}
-                </span>
-              </div>
-              <div className="equip-maintenance-item">
-                <span className="equip-maintenance-label">
-                  Current Condition:
-                </span>
-                <span
-                  className={`equip-condition equip-condition-${selectedEquipment.condition
-                    .toLowerCase()
-                    .replace(/\s+/g, "")}`}
-                >
+            <div className="equip-modal-content">
+              <div className="equipment-info">
+                <p>
+                  <strong>Equipment:</strong> {selectedEquipment.name}
+                </p>
+                <p>
+                  <strong>Location:</strong>{" "}
+                  {selectedEquipment.inInventory ? "Inventory" : "Gym"}
+                </p>
+                <p>
+                  <strong>Current Condition:</strong>{" "}
                   {selectedEquipment.condition}
-                </span>
+                </p>
+                <p>
+                  <strong>Last Maintenance:</strong>{" "}
+                  {selectedEquipment.lastMaintenanceDate
+                    ? new Date(
+                        selectedEquipment.lastMaintenanceDate
+                      ).toLocaleDateString()
+                    : "No previous maintenance recorded"}
+                </p>
               </div>
-              <div className="equip-maintenance-item">
-                <span className="equip-maintenance-label">
-                  Last Maintenance:
-                </span>
-                <span className="equip-maintenance-value">
-                  {selectedEquipment.lastMaintenance ||
-                    "No previous maintenance recorded"}
-                </span>
-              </div>
+
+              <form onSubmit={handleMaintenanceSubmit}>
+                <div className="equip-form-group">
+                  <label>Scheduled Date *</label>
+                  <input
+                    type="date"
+                    value={maintenanceForm.scheduledDate}
+                    onChange={(e) =>
+                      setMaintenanceForm((prev) => ({
+                        ...prev,
+                        scheduledDate: e.target.value,
+                      }))
+                    }
+                    min={new Date().toISOString().split("T")[0]}
+                    required
+                  />
+                </div>
+
+                <div className="equip-form-group">
+                  <label>Type</label>
+                  <select
+                    value={maintenanceForm.type}
+                    onChange={(e) =>
+                      setMaintenanceForm((prev) => ({
+                        ...prev,
+                        type: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value="Routine">Routine</option>
+                    <option value="Repair">Repair</option>
+                    <option value="Inspection">Inspection</option>
+                  </select>
+                </div>
+
+                <div className="equip-form-group">
+                  <label>Description *</label>
+                  <textarea
+                    value={maintenanceForm.description}
+                    onChange={(e) =>
+                      setMaintenanceForm((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
+                    placeholder="Describe the maintenance to be performed..."
+                    rows="3"
+                    required
+                  />
+                </div>
+
+                <div className="equip-form-group">
+                  <label>Status</label>
+                  <select
+                    value={maintenanceForm.status}
+                    onChange={(e) =>
+                      setMaintenanceForm((prev) => ({
+                        ...prev,
+                        status: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                </div>
+
+                <div className="equip-form-actions">
+                  <button
+                    type="button"
+                    className="equip-btn-cancel"
+                    onClick={() => setShowMaintenanceModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="equip-btn-save">
+                    Schedule
+                  </button>
+                </div>
+              </form>
+
+              {maintenanceHistory.length > 0 && (
+                <div className="maintenance-history">
+                  <h4>Maintenance History</h4>
+                  <div className="maintenance-list">
+                    {maintenanceHistory.map((maintenance, index) => (
+                      <div
+                        key={maintenance._id || index}
+                        className="maintenance-item"
+                        data-status={maintenance.status || "Scheduled"}
+                      >
+                        <div className="maintenance-header">
+                          <div>
+                            <p>
+                              <strong>Date:</strong>{" "}
+                              {new Date(
+                                maintenance.scheduledDate
+                              ).toLocaleDateString()}
+                            </p>
+                            <select
+                              value={maintenance.status || "Scheduled"}
+                              onChange={(e) =>
+                                handleStatusUpdate(
+                                  maintenance._id,
+                                  e.target.value
+                                )
+                              }
+                              className={`status-select status-${(
+                                maintenance.status || "Scheduled"
+                              )
+                                .toLowerCase()
+                                .replace(/\s+/g, "")}`}
+                            >
+                              <option value="Scheduled">Scheduled</option>
+                              <option value="In Progress">In Progress</option>
+                              <option value="Completed">Completed</option>
+                              <option value="Overdue">Overdue</option>
+                            </select>
+                          </div>
+                          <button
+                            onClick={() =>
+                              handleMaintenanceDelete(maintenance._id)
+                            }
+                            className="delete-maintenance-btn"
+                            title="Delete maintenance record"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                        <p>
+                          <strong>Description:</strong>{" "}
+                          {maintenance.description}
+                        </p>
+                        {maintenance.completedDate && (
+                          <p>
+                            <strong>Completed:</strong>{" "}
+                            {new Date(
+                              maintenance.completedDate
+                            ).toLocaleDateString()}
+                          </p>
+                        )}
+                        {maintenance.notes && (
+                          <p>
+                            <strong>Notes:</strong> {maintenance.notes}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-
-            <form onSubmit={handleMaintenanceSubmit} className="equip-form">
-              <div className="equip-form-group">
-                <label>Scheduled Date *</label>
-                <input
-                  type="date"
-                  name="scheduledDate"
-                  onChange={(e) =>
-                    setMaintenanceData({
-                      ...maintenanceData,
-                      scheduledDate: new Date(e.target.value),
-                    })
-                  }
-                  className="equip-date-input"
-                  min={new Date().toISOString().split("T")[0]}
-                />
-              </div>
-
-              <div className="equip-form-group">
-                <label>Description *</label>
-                <textarea
-                  name="description"
-                  value={maintenanceData.description}
-                  onChange={handleMaintenanceInputChange}
-                  placeholder="Describe the maintenance to be performed..."
-                  rows="3"
-                  required
-                ></textarea>
-              </div>
-
-              <div className="equip-form-group">
-                <label>Status</label>
-                <select
-                  name="status"
-                  value={maintenanceData.status}
-                  onChange={handleMaintenanceInputChange}
-                >
-                  <option value="Scheduled">Scheduled</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </div>
-
-              <div className="equip-form-actions">
-                <button
-                  type="button"
-                  className="equip-btn-cancel"
-                  onClick={() => setShowMaintenanceModal(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="equip-btn-submit">
-                  <FaCalendarAlt /> Schedule
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}
@@ -658,10 +927,10 @@ const EquipmentManagement = () => {
       {/* Delete Confirmation Modal */}
       {showDeleteModal && selectedEquipment && (
         <div className="equip-modal-overlay">
-          <div className="equip-modal equip-delete-modal">
+          <div className="equip-modal">
             <div className="equip-modal-header">
               <h3>
-                <FaTrash /> Retire Equipment
+                <FaExclamationTriangle /> Confirm Delete
               </h3>
               <button
                 className="equip-modal-close"
@@ -670,37 +939,42 @@ const EquipmentManagement = () => {
                 <FaTimes />
               </button>
             </div>
-
-            <div className="equip-delete-content">
-              <div className="equip-delete-warning">
-                <FaExclamationTriangle />
+            <div className="equip-modal-content">
+              <p>Are you sure you want to delete this equipment?</p>
+              <div className="equipment-info">
                 <p>
-                  Are you sure you want to retire{" "}
-                  <strong>{selectedEquipment.name}</strong>?
+                  <strong>Name:</strong> {selectedEquipment.name}
+                </p>
+                <p>
+                  <strong>Location:</strong>{" "}
+                  {selectedEquipment.inInventory
+                    ? "Inventory"
+                    : selectedEquipment.gymName}
+                </p>
+                <p>
+                  <strong>Condition:</strong> {selectedEquipment.condition}
                 </p>
               </div>
-              <p className="equip-delete-note">
-                This will mark the equipment as inactive. The equipment record
-                will be maintained for historical purposes but will no longer
-                appear in active inventory.
-              </p>
-            </div>
-
-            <div className="equip-form-actions">
-              <button
-                type="button"
-                className="equip-btn-cancel"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="equip-btn-delete"
-                onClick={handleDelete}
-              >
-                <FaTrash /> Retire Equipment
-              </button>
+              <div className="delete-warning">
+                <FaExclamationCircle />
+                <span>This action cannot be undone.</span>
+              </div>
+              <div className="equip-form-actions">
+                <button
+                  type="button"
+                  className="equip-btn-cancel"
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="equip-btn-delete"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -764,6 +1038,7 @@ const EquipmentManagement = () => {
           </div>
         </div>
       )}
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };
