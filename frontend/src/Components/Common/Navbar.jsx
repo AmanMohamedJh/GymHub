@@ -12,7 +12,7 @@ import "../Common/Navbar.css";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Gyms", href: "/gyms" },
+  { name: "Gyms", href: "/browse" },
   { name: "Trainers", href: "/trainers" },
   { name: "Contact Us", href: "/contact" },
   { name: "About Us", href: "/about" },
@@ -44,29 +44,16 @@ export default function Navbar() {
     navigate("/");
   };
 
-  const roleLinks = () => {
-    if (user) {
-      switch (user.role) {
-        case "gym_owner":
-          return [
-            //extra pages
-          ];
-        case "trainer":
-          return [
-            //trainer extra pages
-          ];
-        case "client":
-          return [
-            { name: "Gyms", href: "/client-browse-gym" },
-            { name: "Trainers", href: "/client-browse-trainer" },
-            { name: "Progress", href: "/client-progress-tracking" }
+  const getNavigation = (user) => {
+    if (!user) return navigation;
+    if (user.role === "admin") return [];
 
-          ];
-        default:
-          return [];
-      }
+    const items = [...navigation];
+    if (user.role === "client") {
+      items.splice(3, 0, { name: "Progress", href: "/client-progress-tracking" });
     }
-  }
+    return items;
+  };
 
   return (
     <Disclosure as="nav" className="navbar">
@@ -81,7 +68,7 @@ export default function Navbar() {
               </div>
 
               <div className="navbar-links">
-                {navigation.map((item) => (
+                {getNavigation(user).map((item) => (
                   <Link
                     key={item.name}
                     to={item.href}
@@ -91,16 +78,7 @@ export default function Navbar() {
                     {item.name}
                   </Link>
                 ))}
-                {roleLinks()?.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={`nav-link ${location.pathname === item.href ? "active" : ""
-                      }`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+
               </div>
 
               <div className="navbar-auth">
@@ -137,28 +115,26 @@ export default function Navbar() {
                         {/* Show MySubscription for gym owners and trainers */}
                         {(user.role === "gym_owner" ||
                           user.role === "trainer") && (
-                          <Menu.Item>
-                            {({ active }) => (
-                              <Link
-                                to="/my-subscription"
-                                className={`dropdown-item ${
-                                  active ? "active" : ""
-                                }`}
-                              >
-                                My Subscription
-                              </Link>
-                            )}
-                          </Menu.Item>
-                        )}
+                            <Menu.Item>
+                              {({ active }) => (
+                                <Link
+                                  to="/my-subscription"
+                                  className={`dropdown-item ${active ? "active" : ""
+                                    }`}
+                                >
+                                  My Subscription
+                                </Link>
+                              )}
+                            </Menu.Item>
+                          )}
                         {/* Equipment Management for gym owners */}
                         {user.role === "gym_owner" && (
                           <Menu.Item>
                             {({ active }) => (
                               <Link
                                 to="/equipment-management"
-                                className={`dropdown-item ${
-                                  active ? "active" : ""
-                                }`}
+                                className={`dropdown-item ${active ? "active" : ""
+                                  }`}
                               >
                                 <FaTools className="menu-icon" />
                                 Equipment Management
@@ -217,7 +193,7 @@ export default function Navbar() {
           </div>
 
           <Disclosure.Panel className="mobile-menu">
-            {navigation.map((item) => (
+            {getNavigation(user).map((item) => (
               <Link
                 key={item.name}
                 to={item.href}

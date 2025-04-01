@@ -79,6 +79,7 @@ function App() {
           {(!user || user.role !== "admin") && <Navbar />}
           {user && user.role !== "admin" && <VerificationBanner />}
           {user && user.role === "gym_owner" && <SubscriptionBanner />}
+          {user && user.role === "client" && <SubscriptionBanner />}
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
@@ -230,7 +231,7 @@ function App() {
               path="/user-profile"
               element={
                 <ProtectedRoute allowedRole="client">
-
+                  <UserProfile />
                 </ProtectedRoute>
               }
             />
@@ -241,7 +242,7 @@ function App() {
                   <ProtectedRoute
                     allowedRole={["client", "trainer", "gym_owner"]}
                   >
-                    <UserProfile />
+
                   </ProtectedRoute>
                 </NonAdminRoute>
               }
@@ -363,12 +364,13 @@ function App() {
               }
             />
             <Route
-              path="/gym-list"
+              path="/user-profile"
               element={
                 <NonAdminRoute>
                   <ProtectedRoute
                     allowedRole={["client", "trainer", "gym_owner"]}
                   >
+                    <UserProfile />
                   </ProtectedRoute>
                 </NonAdminRoute>
               }

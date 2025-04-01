@@ -1,19 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaTimes, FaSave, FaBullseye, FaCalendarAlt } from 'react-icons/fa';
 import './Styles/Forms.css';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import { Client } from '../../hooks/useClientDetails';
 
 const FitnessGoalForm = ({ onClose, onSubmit, editGoal }) => {
     const [formData, setFormData] = useState({
+        goalId: editGoal?._id || '',
         goal: editGoal?.goal || '',
         deadline: editGoal?.deadline || '',
         progress: editGoal?.progress || 0,
         status: editGoal?.status || 'In Progress',
         description: editGoal?.description || '',
     });
+    const { user } = useAuthContext();
+    const { addFitnessGoal, isLoading, error } = Client();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit(formData);
+
+        console.log("form dattta", formData);
+
+        const success = await addFitnessGoal(user._id, formData);
+        if (success) {
+            console.log("fitness goal added");
+
+            if (onSubmit) {
+                onSubmit();
+            }
+        } else {
+            console.log("err handle submit in client details");
+        }
+    };
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     return (
@@ -32,10 +53,11 @@ const FitnessGoalForm = ({ onClose, onSubmit, editGoal }) => {
                         <div className="input-with-icon">
                             <FaBullseye />
                             <input
+                                name="goal"
                                 type="text"
                                 className="form-control"
                                 value={formData.goal}
-                                onChange={(e) => setFormData({ ...formData, goal: e.target.value })}
+                                onChange={handleChange}
                                 placeholder="e.g., Lose 5kg, Run 10km"
                             />
                         </div>
@@ -44,9 +66,10 @@ const FitnessGoalForm = ({ onClose, onSubmit, editGoal }) => {
                     <div className="form-group">
                         <label>Description</label>
                         <textarea
+                            name="description"
                             className="form-control"
                             value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            onChange={handleChange}
                             placeholder="Describe your goal and strategy"
                             rows="3"
                         />
@@ -58,10 +81,11 @@ const FitnessGoalForm = ({ onClose, onSubmit, editGoal }) => {
                             <div className="input-with-icon">
                                 <FaCalendarAlt />
                                 <input
+                                    name="deadline"
                                     type="date"
                                     className="form-control"
                                     value={formData.deadline}
-                                    onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+                                    onChange={handleChange}
                                 />
                             </div>
                         </div>
@@ -69,9 +93,10 @@ const FitnessGoalForm = ({ onClose, onSubmit, editGoal }) => {
                         <div className="form-group">
                             <label>Status</label>
                             <select
+                                name="status"
                                 className="form-control"
                                 value={formData.status}
-                                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                                onChange={handleChange}
                             >
                                 <option value="In Progress">In Progress</option>
                                 <option value="Completed">Completed</option>
@@ -100,7 +125,7 @@ const FitnessGoalForm = ({ onClose, onSubmit, editGoal }) => {
                         <button type="button" className="btn btn-secondary" onClick={onClose}>
                             Cancel
                         </button>
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-primary" >
                             <FaSave /> {editGoal ? 'Update Goal' : 'Add Goal'}
                         </button>
                     </div>

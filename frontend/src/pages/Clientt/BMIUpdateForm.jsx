@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Client } from '../../hooks/useClientDetails';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { FaTimes, FaSave, FaWeight, FaRuler } from 'react-icons/fa';
 import './Styles/Forms.css';
 
-const BMIUpdateForm = () => {
+const BMIUpdateForm = ({ onClose, onSubmit }) => {
     const [formData, setFormData] = useState({
         weight: '',
         height: '',
@@ -13,7 +12,6 @@ const BMIUpdateForm = () => {
         date: new Date().toISOString().split('T')[0],
     });
     const { user } = useAuthContext();
-    const navigate = useNavigate();
     const { updateBMI, isLoading, error } = Client();
 
     const calculateBMI = (weight, height) => {
@@ -44,13 +42,10 @@ const BMIUpdateForm = () => {
         const success = await updateBMI(user._id, formData);
         if (success) {
             console.log("BMI update Success");
-            setFormData({
-                weight: '',
-                height: '',
-                bmi: '',
-                date: new Date().toISOString().split('T')[0],
-            });
-            navigate('/client-progress-tracking');
+            if (onSubmit) {
+                onSubmit();
+            }
+
         } else {
             console.log("err handle submit after UpdateBMI func");
         }
@@ -59,17 +54,6 @@ const BMIUpdateForm = () => {
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
-    const handleClose = () => {
-        setFormData({
-            weight: '',
-            height: '',
-            bmi: '',
-            date: new Date().toISOString().split('T')[0],
-        });
-
-        navigate("/client-progress-tracking");
-
-    };
 
 
     return (
@@ -77,7 +61,7 @@ const BMIUpdateForm = () => {
             <div className="form-container">
                 <div className="form-header">
                     <h2>Update BMI</h2>
-                    <button className="close-button" onClick={handleClose}>
+                    <button className="close-button" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
@@ -151,7 +135,7 @@ const BMIUpdateForm = () => {
                     )}
 
                     <div className="form-actions">
-                        <button type="button" className="btn btn-secondary" onClick={handleClose}>
+                        <button type="button" className="btn btn-secondary" onClick={onClose}>
                             Cancel
                         </button>
                         <button type="submit" className="btn btn-primary">

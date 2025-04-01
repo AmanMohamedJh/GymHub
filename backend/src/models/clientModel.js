@@ -13,7 +13,10 @@ const clientSchema = new Schema({
     fitness: {
         weight: { type: String },
         height: { type: String },
-        bmi: { type: Number },
+        bmi: [{
+            bmi: { type: Number },
+            date: { type: Date },
+        }],
         workoutLogs: [{
             date: { type: Date },
             workout: { type: String },
@@ -26,9 +29,10 @@ const clientSchema = new Schema({
 
         }],
         fitnessGoals: [{
-            title: { type: String },
+            goal: { type: String },
             description: { type: String },
-            targetDate: { type: Date },
+            deadline: { type: Date },
+            progress: { type: Number },
             status: { type: String },
         }
         ],
