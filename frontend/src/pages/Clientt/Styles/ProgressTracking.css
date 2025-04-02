@@ -1,271 +1,277 @@
 .progress-navigation {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.5rem;
 }
 
 .tab-button {
-    background: none;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    color: #666;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 5px;
-    transition: all 0.2s;
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 5px;
+  transition: all 0.2s;
 }
 
 .tab-button:hover {
-    background: #f5f5f5;
-    color: #007bff;
+  background: #f5f5f5;
+  color: #007bff;
 }
 
 .tab-button.active {
-    background: #007bff;
-    color: white;
+  background: #007bff;
+  color: white;
 }
 
 .progress-section {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 /* Workout Logs Styles */
 .workout-logs {
-    display: grid;
-    gap: 1.5rem;
+  display: grid;
+  gap: 1.5rem;
 }
 
 .workout-log-card {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 8px;
-    border-left: 4px solid #007bff;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+  color: #000000;
 }
 
 .workout-log-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .workout-date {
-    color: #666;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .workout-exercises {
-    margin: 1rem 0;
+  margin: 1rem 0;
 }
 
 .exercise-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .exercise-name {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 .exercise-details {
-    color: #666;
+  color: #000000;
 }
 
 .workout-summary {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-    color: #666;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  color: #000000;
 }
 
 /* BMI Tracking Styles */
 .bmi-container {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 2rem;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  color: #000000;
 }
 
 .current-bmi {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 8px;
-    text-align: center;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  color: #000000;
 }
 
 .bmi-value {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 1rem 0;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 1rem 0;
 }
 
 .bmi-status {
-    font-size: 1rem;
-    margin-left: 0.5rem;
+  font-size: 1rem;
+  margin-left: 0.5rem;
 }
 
 .bmi-details {
-    display: flex;
-    justify-content: space-around;
-    color: #666;
+  display: flex;
+  justify-content: space-around;
+  color: #000000;
 }
 
 .bmi-history {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 8px;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  color: #000000;
 }
 
 .bmi-chart {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    height: 200px;
-    margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 200px;
+  margin-top: 1.5rem;
 }
 
 .bmi-record {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
 }
 
 .bmi-bar-container {
-    width: 30px;
-    height: 150px;
-    background: #e0e0e0;
-    margin: 0.5rem 0;
-    border-radius: 15px;
-    overflow: hidden;
+  width: 30px;
+  height: 150px;
+  background: #e0e0e0;
+  margin: 0.5rem 0;
+  border-radius: 15px;
+  overflow: hidden;
 }
 
 .bmi-bar {
-    width: 100%;
-    background: #007bff;
-    transition: height 0.3s;
-    border-radius: 15px;
+  width: 100%;
+  background: #007bff;
+  transition: height 0.3s;
+  border-radius: 15px;
 }
 
 /* Fitness Goals Styles */
 .goals-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  color: #000000;
 }
 
 .goal-card {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 8px;
-    border-top: 4px solid #28a745;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-top: 4px solid #28a745;
+  color: #000000;
 }
 
 .goal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .icon-button {
-    background: none;
-    border: none;
-    color: #666;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: background-color 0.2s;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
 }
 
 .icon-button:hover {
-    background: #e0e0e0;
-    color: #007bff;
+  background: #e0e0e0;
+  color: #007bff;
 }
 
 .goal-progress {
-    margin: 1rem 0;
+  margin: 1rem 0;
 }
 
 .progress-bar {
-    height: 8px;
-    background: #e0e0e0;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
 }
 
 .progress-fill {
-    height: 100%;
-    background: #28a745;
-    transition: width 0.3s;
+  height: 100%;
+  background: #28a745;
+  transition: width 0.3s;
 }
 
 .progress-text {
-    color: #666;
-    font-size: 0.9rem;
+  color: #666;
+  font-size: 0.9rem;
 }
 
 .goal-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #666;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #666;
 }
 
 .goal-deadline {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .goal-status {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
 }
 
 .goal-status.completed {
-    background: #28a745;
-    color: white;
+  background: #28a745;
+  color: white;
 }
 
 .goal-status.in-progress {
-    background: #ffc107;
-    color: #000;
+  background: #ffc107;
+  color: #000;
 }
 
 @media (max-width: 768px) {
-    .bmi-container {
-        grid-template-columns: 1fr;
-    }
+  .bmi-container {
+    grid-template-columns: 1fr;
+  }
 
-    .progress-navigation {
-        flex-direction: column;
-    }
+  .progress-navigation {
+    flex-direction: column;
+  }
 
-    .goals-grid {
-        grid-template-columns: 1fr;
-    }
+  .goals-grid {
+    grid-template-columns: 1fr;
+  }
 }
