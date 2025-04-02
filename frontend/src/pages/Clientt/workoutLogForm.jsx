@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaTimes, FaPlus, FaSave } from 'react-icons/fa';
 import { Client } from '../../hooks/Client/useClientDetails';
 import { useAuthContext } from '../../hooks/useAuthContext';
@@ -18,20 +18,20 @@ const WorkoutLogForm = ({ onClose, onSubmit }) => {
     const { addWorkoutLog, isLoading, error } = Client();
 
     const [newExercise, setNewExercise] = useState({
-        name: '',
+        exercise: '',
         sets: '',
         reps: '',
         weight: '',
     });
 
     const handleAddExercise = () => {
-        if (newExercise.name) {
+        if (newExercise.exercise) {
             setWorkoutData({
                 ...workoutData,
                 exercises: [...workoutData.exercises, { ...newExercise }],
             });
             setNewExercise({
-                name: '',
+                exercise: '',
                 sets: '',
                 reps: '',
                 weight: '',
@@ -47,36 +47,20 @@ const WorkoutLogForm = ({ onClose, onSubmit }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        console.log("dataaaaa :", workoutData);
         //rest of the code for crud
         const success = await addWorkoutLog(user._id, user.name, workoutData);
-
-        console.log("data :", workoutData);
-
         if (success) {
             console.log("sent successfully");
-            setWorkoutData({
-                date: new Date().toISOString().split('T')[0],
-                workout: '',
-                exercises: [],
+            if (onSubmit) {
+                onSubmit();
+            }
 
-            });
-            navigate("/client-progress-tracking");
 
         } else {
             console.log("error");
         }
-
-    };
-
-    const handleClose = () => {
-        setWorkoutData({
-            date: new Date().toISOString().split('T')[0],
-            workout: '',
-            exercises: [],
-
-        });
-
-        navigate("/client-progress-tracking");
 
     };
 
@@ -125,7 +109,7 @@ const WorkoutLogForm = ({ onClose, onSubmit }) => {
                         {workoutData.exercises.map((exercise, index) => (
                             <div key={index} className="exercise-item">
                                 <div>
-                                    <strong>{exercise.name}</strong>
+                                    <strong>{exercise.exercise}</strong>
                                     <div>
                                         {exercise.sets && exercise.reps
                                             ? `${exercise.sets} sets × ${exercise.reps} reps @ ${exercise.weight}`
@@ -145,10 +129,10 @@ const WorkoutLogForm = ({ onClose, onSubmit }) => {
                         <div className="form-group">
                             <input
                                 type="text"
-                                name="name"
+                                name="exercise"
                                 className="form-control"
                                 placeholder="Exercise name"
-                                value={newExercise.name}
+                                value={newExercise.exercise}
                                 onChange={(e) => handleChange(e, 'newExercise')}
                             />
                             <div className="form-row" style={{ marginTop: '0.5rem' }}>
@@ -188,7 +172,7 @@ const WorkoutLogForm = ({ onClose, onSubmit }) => {
                     </div>
 
                     <div className="form-actions">
-                        <button type="button" className="btn btn-secondary" onClick={handleClose}>
+                        <button type="button" className="btn btn-secondary" onClick={onClose}>
                             Cancel
                         </button>
                         <button type="submit" className="btn btn-primary" >

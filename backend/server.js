@@ -10,6 +10,7 @@ const subscriptionRoutes = require("./src/routes/Subscription/subscriptionRoutes
 const subscriptionController = require("./src/controller/Subscription/subscriptionController");
 const equipmentRoutes = require("./src/routes/Gym_Owner/equipment");
 const gymRoutes = require("./src/routes/Gym_Owner/gym");
+const clientRoutes = require("./src/routes/Client/client");
 
 const app = express();
 const PORT = process.env.PORT || 4070;
@@ -38,6 +39,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/subscription", subscriptionRoutes);
 app.use("/api/equipment", equipmentRoutes);
 app.use("/api/gym", gymRoutes);
+app.use("/api/client", clientRoutes);
 
 //contact us router and route
 const contactUsRouter = require("./src/routes/Contactus/contactUs");

@@ -131,6 +131,7 @@ const getOwnerGyms = async (req, res) => {
   }
 };
 
+
 // Get nearby gyms
 const getNearbyGyms = async (req, res) => {
   try {
@@ -252,6 +253,17 @@ const getPendingGyms = async (req, res) => {
   }
 };
 
+// Get all gyms for a gym owner
+const getAllGyms = async (req, res) => {
+  try {
+    const allDetails = await Gym.find().sort({ createdAt: -1 });
+    res.status(200).json(allDetails);
+
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   registerGym,
   getOwnerGyms,
@@ -260,4 +272,5 @@ module.exports = {
   deleteGym,
   updateGymStatus,
   getPendingGyms,
+  getAllGyms,
 };

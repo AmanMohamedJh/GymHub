@@ -8,6 +8,7 @@ const {
   deleteGym,
   updateGymStatus,
   getPendingGyms,
+  getAllGyms,
 } = require("../../controller/Gym_Owner/gymController");
 const requireAuth = require("../../middleware/requireAuth");
 const upload = require("../../middleware/upload");
@@ -25,6 +26,8 @@ const uploadFields = upload.fields([
 router.post("/register", uploadFields, registerGym);
 router.get("/owner-gyms", getOwnerGyms);
 router.get("/nearby", getNearbyGyms);
+
+router.get("/getALlgym", getAllGyms);
 router.patch("/:id", uploadFields, updateGym);
 router.delete("/:id", deleteGym);
 
