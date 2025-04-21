@@ -19,6 +19,8 @@ import {
   FaTools,
 } from "react-icons/fa";
 import "./Styles/OwnerDashboard.css";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 import gymImage from "./Styles/images/gym-background2.jpg.jpg";
 
@@ -76,6 +78,11 @@ const OwnerDashboard = () => {
   const [deleteGymId, setDeleteGymId] = React.useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
   const [deleting, setDeleting] = React.useState(false);
+
+  const [reportModal, setReportModal] = React.useState({
+    open: false,
+    status: null,
+  });
 
   useEffect(() => {
     const fetchGyms = async () => {
@@ -167,6 +174,94 @@ const OwnerDashboard = () => {
       alert(err.message || "Failed to delete gym.");
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const handleDownloadReport = (status, format) => async () => {
+    try {
+      const res = await fetch(`/api/gym/owner-gyms?status=${status}`, {
+        headers: { Authorization: `Bearer ${user?.token}` },
+      });
+      if (!res.ok) throw new Error("Failed to fetch gyms for report.");
+      const gyms = await res.json();
+      if (!gyms.length) {
+        alert("No gyms found for this status.");
+        return;
+      }
+      if (format === "csv") {
+        const headers = Object.keys(gyms[0]);
+        const csvRows = [headers.join(",")];
+        gyms.forEach((gym) => {
+          csvRows.push(
+            headers.map((h) => JSON.stringify(gym[h] ?? "")).join(",")
+          );
+        });
+        const csv = csvRows.join("\n");
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${status}_gyms_report.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else if (format === "pdf") {
+        const doc = new jsPDF();
+        // Branding/Header
+        doc.setFontSize(20);
+        doc.setTextColor(231, 76, 60);
+        doc.text(
+          `${status.charAt(0).toUpperCase() + status.slice(1)} Gyms Report`,
+          14,
+          18
+        );
+        // Statistics Section
+        doc.setFontSize(12);
+        doc.setTextColor(44, 62, 80);
+        doc.text(`Total Gyms: ${gyms.length}`, 14, 28);
+        doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 34);
+        // Define and format columns
+        const columns = [
+          { header: "Name", field: "name" },
+          { header: "District", field: "location.district" },
+          { header: "Status", field: "status" },
+          { header: "Owner", field: "ownerId" },
+          { header: "Created", field: "createdAt" },
+        ];
+        const headers = columns.map((col) => col.header);
+        const body = gyms.map((gym) =>
+          columns.map((col) => {
+            // Support nested fields
+            if (col.field.includes(".")) {
+              const [parent, child] = col.field.split(".");
+              return gym[parent]?.[child] ?? "";
+            }
+            // Format dates
+            if (
+              col.field.toLowerCase().includes("date") ||
+              col.field.toLowerCase().includes("created")
+            ) {
+              return gym[col.field]
+                ? new Date(gym[col.field]).toLocaleDateString()
+                : "";
+            }
+            // Default
+            return gym[col.field] ?? "";
+          })
+        );
+        autoTable(doc, {
+          startY: 40,
+          head: [headers],
+          body,
+          styles: { fontSize: 11 },
+          headStyles: { fillColor: [231, 76, 60] },
+          alternateRowStyles: { fillColor: [253, 246, 227] },
+        });
+        doc.save(`${status}_gyms_report.pdf`);
+      }
+      setReportModal({ open: false, status: null });
+    } catch (err) {
+      alert("Error generating report: " + err.message);
+      setReportModal({ open: false, status: null });
     }
   };
 
@@ -360,6 +455,80 @@ const OwnerDashboard = () => {
           </Link>
         </div>
       </div>
+
+      {/* Report Generation Section */}
+      <div className="dashboard-content-box dashboard-report-section">
+        <h3 className="dashboard-report-title">
+          <span role="img" aria-label="report">
+            📊
+          </span>{" "}
+          Report Generation
+        </h3>
+        <p className="dashboard-report-desc">
+          Download beautiful, detailed reports of your gyms by status. Export
+          all fields, including images and locations!
+        </p>
+        <div className="dashboard-report-btn-row">
+          <button
+            className="dashboard-report-btn dashboard-report-registered"
+            onClick={() => setReportModal({ open: true, status: "approved" })}
+          >
+            {" "}
+            <FaUserCheck /> Registered Gyms Report{" "}
+          </button>
+          <button
+            className="dashboard-report-btn dashboard-report-pending"
+            onClick={() => setReportModal({ open: true, status: "pending" })}
+          >
+            {" "}
+            <FaUserClock /> Pending Gyms Report{" "}
+          </button>
+          <button
+            className="dashboard-report-btn dashboard-report-rejected"
+            onClick={() => setReportModal({ open: true, status: "rejected" })}
+          >
+            {" "}
+            <FaTimes /> Rejected Gyms Report{" "}
+          </button>
+        </div>
+      </div>
+
+      {/* Report Download Modal */}
+      {reportModal.open && (
+        <div className="report-modal-overlay">
+          <div className="report-modal-window">
+            <h3 className="report-modal-title">Download Report</h3>
+            <p className="report-modal-desc">
+              Choose your preferred format for the{" "}
+              <b>
+                {reportModal.status.charAt(0).toUpperCase() +
+                  reportModal.status.slice(1)}
+              </b>{" "}
+              gyms report:
+            </p>
+            <div className="report-modal-btn-row">
+              <button
+                className="report-modal-btn report-modal-btn-excel"
+                onClick={handleDownloadReport(reportModal.status, "csv")}
+              >
+                Excel (.csv)
+              </button>
+              <button
+                className="report-modal-btn report-modal-btn-pdf"
+                onClick={handleDownloadReport(reportModal.status, "pdf")}
+              >
+                PDF (.pdf)
+              </button>
+            </div>
+            <button
+              className="modal-close-btn"
+              onClick={() => setReportModal({ open: false, status: null })}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Track Progress Modal */}
       {showTrackModal && trackGym && (
