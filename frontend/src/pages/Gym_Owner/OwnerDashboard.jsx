@@ -84,6 +84,11 @@ const OwnerDashboard = () => {
     status: null,
   });
 
+  // Equipment data for analytics
+  const [ownerEquipment, setOwnerEquipment] = React.useState([]);
+  const [loadingEquipment, setLoadingEquipment] = React.useState(false);
+  const [equipmentError, setEquipmentError] = React.useState(null);
+
   useEffect(() => {
     const fetchGyms = async () => {
       try {
@@ -137,6 +142,36 @@ const OwnerDashboard = () => {
     };
     if (user?.token) fetchPendingGyms();
   }, [user?.token]);
+
+  // Fetch all equipment for owner
+  useEffect(() => {
+    const fetchOwnerEquipment = async () => {
+      if (!user?.token) return;
+      setLoadingEquipment(true);
+      setEquipmentError(null);
+      try {
+        const res = await fetch("/api/equipment/owner", {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch equipment.");
+        const data = await res.json();
+        setOwnerEquipment(data);
+      } catch (err) {
+        setEquipmentError(err.message || "Failed to fetch equipment.");
+      } finally {
+        setLoadingEquipment(false);
+      }
+    };
+    fetchOwnerEquipment();
+  }, [user?.token]);
+
+  // Debug: Log sample gym data to inspect structure
+  useEffect(() => {
+    if (registeredGymsData.length > 0) {
+      // eslint-disable-next-line
+      console.log("Sample gym data:", registeredGymsData[0]);
+    }
+  }, [registeredGymsData]);
 
   const handleTrackProgress = (gym) => {
     setTrackGym(gym);
@@ -265,6 +300,29 @@ const OwnerDashboard = () => {
     }
   };
 
+  // --- Equipment Analytics (calculated from ownerEquipment) ---
+  const totalEquipmentOwned = ownerEquipment.length;
+  const equipmentByCondition = ownerEquipment.reduce((acc, eq) => {
+    acc[eq.condition] = (acc[eq.condition] || 0) + 1;
+    return acc;
+  }, {});
+  const mostCommonEquipment = (() => {
+    if (!ownerEquipment.length) return "-";
+    const freq = {};
+    ownerEquipment.forEach((eq) => {
+      freq[eq.name] = (freq[eq.name] || 0) + 1;
+    });
+    let max = 0,
+      name = "-";
+    Object.entries(freq).forEach(([k, v]) => {
+      if (v > max) {
+        max = v;
+        name = k;
+      }
+    });
+    return name;
+  })();
+
   return (
     <div className="owner_dashboard_container">
       <div className="owner_dashboard_header">
@@ -303,6 +361,194 @@ const OwnerDashboard = () => {
             <div className="owner_stat_trend negative">
               <FaArrowDown /> 3% this month
             </div>
+          </div>
+        </div>
+
+        {/* New: Rejected Gyms */}
+        <div className="owner_stat_card">
+          <span className="owner_stat_icon" style={{ background: "#e74c3c" }}>
+            ❌
+          </span>
+          <div className="owner_stat_content">
+            <h3>REJECTED GYMS</h3>
+            <div className="owner_stat_number">
+              {pendingGyms.filter((g) => g.status === "rejected").length}
+            </div>
+          </div>
+        </div>
+        {/* New: Approval Rate */}
+        <div className="owner_stat_card">
+          <span className="owner_stat_icon" style={{ background: "#27ae60" }}>
+            ✅
+          </span>
+          <div className="owner_stat_content">
+            <h3>APPROVAL RATE</h3>
+            <div className="owner_stat_number">
+              {Math.round(
+                (registeredGymsData.length /
+                  (registeredGymsData.length + pendingGyms.length)) *
+                  100
+              )}
+              %
+            </div>
+          </div>
+        </div>
+        {/* New: Avg Registration Time */}
+        <div className="owner_stat_card">
+          <span className="owner_stat_icon" style={{ background: "#f1c40f" }}>
+            ⏱️
+          </span>
+          <div className="owner_stat_content">
+            <h3>AVG REG TIME</h3>
+            <div className="owner_stat_number">
+              {registeredGymsData.length > 0
+                ? Math.round(
+                    registeredGymsData
+                      .map((g) => {
+                        if (
+                          g.createdAt &&
+                          g.updatedAt &&
+                          g.status === "approved"
+                        ) {
+                          const created = new Date(g.createdAt);
+                          const approved = new Date(g.updatedAt);
+                          return (approved - created) / (1000 * 60 * 60 * 24); // days
+                        }
+                        return null;
+                      })
+                      .filter(Boolean)
+                      .reduce((a, b) => a + b, 0) / registeredGymsData.length
+                  )
+                : 0}{" "}
+              days
+            </div>
+          </div>
+        </div>
+        {/* New: Latest Registered Gym */}
+        <div className="owner_stat_card">
+          <span className="owner_stat_icon" style={{ background: "#2980b9" }}>
+            🏆
+          </span>
+          <div className="owner_stat_content">
+            <h3>LATEST GYM</h3>
+            <div className="owner_stat_number" style={{ fontSize: "1.08rem" }}>
+              {registeredGymsData.length > 0
+                ? registeredGymsData.reduce(
+                    (latest, g) =>
+                      !latest ||
+                      new Date(g.createdAt) > new Date(latest.createdAt)
+                        ? g
+                        : latest,
+                    null
+                  ).name
+                : "-"}
+            </div>
+            <div style={{ fontSize: "0.9rem", color: "#888" }}>
+              {registeredGymsData.length > 0
+                ? new Date(
+                    registeredGymsData.reduce(
+                      (latest, g) =>
+                        !latest ||
+                        new Date(g.createdAt) > new Date(latest.createdAt)
+                          ? g
+                          : latest,
+                      null
+                    ).createdAt
+                  ).toLocaleDateString()
+                : ""}
+            </div>
+          </div>
+        </div>
+        {/* New: Oldest Active Gym */}
+        <div className="owner_stat_card">
+          <span className="owner_stat_icon" style={{ background: "#8e44ad" }}>
+            🏅
+          </span>
+          <div className="owner_stat_content">
+            <h3>OLDEST GYM</h3>
+            <div className="owner_stat_number" style={{ fontSize: "1.08rem" }}>
+              {registeredGymsData.length > 0
+                ? registeredGymsData.reduce(
+                    (oldest, g) =>
+                      !oldest ||
+                      new Date(g.createdAt) < new Date(oldest.createdAt)
+                        ? g
+                        : oldest,
+                    null
+                  ).name
+                : "-"}
+            </div>
+            <div style={{ fontSize: "0.9rem", color: "#888" }}>
+              {registeredGymsData.length > 0
+                ? new Date(
+                    registeredGymsData.reduce(
+                      (oldest, g) =>
+                        !oldest ||
+                        new Date(g.createdAt) < new Date(oldest.createdAt)
+                          ? g
+                          : oldest,
+                      null
+                    ).createdAt
+                  ).toLocaleDateString()
+                : ""}
+            </div>
+          </div>
+        </div>
+        {/* New: Districts Covered */}
+        <div className="owner_stat_card">
+          <span className="owner_stat_icon" style={{ background: "#16a085" }}>
+            🗺️
+          </span>
+          <div className="owner_stat_content">
+            <h3>DISTRICTS COVERED</h3>
+            <div className="owner_stat_number">
+              {
+                new Set(
+                  registeredGymsData
+                    .map((g) => g.location?.district)
+                    .filter(Boolean)
+                ).size
+              }
+            </div>
+          </div>
+        </div>
+
+        {/* Equipment Analytics: Total Equipment (from ownerEquipment) */}
+        <div className="owner_stat_card">
+          <span className="owner_stat_icon" style={{ background: "#c0392b" }}>
+            🏋️‍♂️
+          </span>
+          <div className="owner_stat_content">
+            <h3>TOTAL EQUIPMENT</h3>
+            <div className="owner_stat_number">{totalEquipmentOwned}</div>
+          </div>
+        </div>
+        {/* Equipment Analytics: Equipment by Condition */}
+        <div className="owner_stat_card">
+          <span className="owner_stat_icon" style={{ background: "#2980b9" }}>
+            🛠️
+          </span>
+          <div className="owner_stat_content">
+            <h3>BY CONDITION</h3>
+            <div className="owner_stat_number" style={{ fontSize: "1.08rem" }}>
+              {Object.entries(equipmentByCondition).length === 0
+                ? "-"
+                : Object.entries(equipmentByCondition).map(([cond, count]) => (
+                    <span key={cond} style={{ marginRight: 8 }}>
+                      {cond}: {count}
+                    </span>
+                  ))}
+            </div>
+          </div>
+        </div>
+        {/* Equipment Analytics: Most Common Equipment */}
+        <div className="owner_stat_card">
+          <span className="owner_stat_icon" style={{ background: "#16a085" }}>
+            📦
+          </span>
+          <div className="owner_stat_content">
+            <h3>MOST COMMON</h3>
+            <div className="owner_stat_number">{mostCommonEquipment}</div>
           </div>
         </div>
       </div>
