@@ -10,7 +10,8 @@
   top: 0;
   width: 100%;
   z-index: 1000;
-  margin-top: -20px;
+  margin-top: 10px;
+  height: 25px;
 }
 
 .subscription-banner p {
