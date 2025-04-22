@@ -21,16 +21,23 @@ const SeeGymDetails = () => {
   ]);
 
   const [slideIndex, setSlideIndex] = useState(0);
-  const nextSlide = () =>
-    setSlideIndex((prev) =>
-      gym.images && gym.images.length > 0 ? (prev + 1) % gym.images.length : 0
-    );
-  const prevSlide = () =>
-    setSlideIndex((prev) =>
-      gym.images && gym.images.length > 0
-        ? (prev - 1 + gym.images.length) % gym.images.length
-        : 0
-    );
+  // Reset slideIndex when images array changes
+  useEffect(() => {
+    setSlideIndex(0);
+  }, [gym?.images?.length]);
+
+  const nextSlide = () => {
+    if (Array.isArray(gym.images) && gym.images.length > 1) {
+      setSlideIndex((prev) => (prev + 1) % gym.images.length);
+    }
+  };
+  const prevSlide = () => {
+    if (Array.isArray(gym.images) && gym.images.length > 1) {
+      setSlideIndex(
+        (prev) => (prev - 1 + gym.images.length) % gym.images.length
+      );
+    }
+  };
 
   useEffect(() => {
     const fetchGym = async () => {
@@ -77,7 +84,7 @@ const SeeGymDetails = () => {
       <div className="seegymdetails-main">
         <div className="seegymdetails-imagebox">
           {/* Slideshow for images */}
-          {Array.isArray(gym.images) && gym.images.length > 1 ? (
+          {Array.isArray(gym.images) && gym.images.length > 0 ? (
             <div
               className="seegymdetails-slideshow"
               style={{
@@ -157,17 +164,7 @@ const SeeGymDetails = () => {
             </div>
           ) : (
             <img
-              src={
-                gym.images && gym.images.length > 0
-                  ? gym.images[0].startsWith("http")
-                    ? gym.images[0]
-                    : `${
-                        process.env.REACT_APP_API_URL
-                          ? process.env.REACT_APP_API_URL.replace(/\/$/, "")
-                          : ""
-                      }/${gym.images[0].replace(/^\//, "")}`
-                  : "/placeholder.jpg"
-              }
+              src={"/placeholder.jpg"}
               alt={gym.name}
               className="seegymdetails-image"
               style={{
@@ -242,38 +239,39 @@ const SeeGymDetails = () => {
         </div>
       </div>
       {/* Map Section */}
-      {gym.location &&
-      Array.isArray(gym.location.coordinates) &&
-      gym.location.coordinates.length === 2 &&
-      typeof gym.location.coordinates[0] === "number" &&
-      typeof gym.location.coordinates[1] === "number" &&
-      !isNaN(gym.location.coordinates[0]) &&
-      !isNaN(gym.location.coordinates[1]) ? (
-        <div className="seegymdetails-map-section">
-          <h3 style={{ color: "#222" }}>Location Map</h3>
-          <MapContainer
-            center={[gym.location.coordinates[1], gym.location.coordinates[0]]}
-            zoom={15}
-            scrollWheelZoom={false}
-            style={{
-              height: "250px",
-              width: "100%",
-              borderRadius: "12px",
-              marginBottom: "1rem",
-            }}
-          >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker
-              position={[
-                gym.location.coordinates[1],
-                gym.location.coordinates[0],
-              ]}
-            >
-              <Popup>{gym.name}</Popup>
-            </Marker>
-          </MapContainer>
-        </div>
-      ) : null}
+      {(() => {
+        const lat = gym.location?.coordinates?.lat;
+        const lng = gym.location?.coordinates?.lng;
+        if (
+          typeof lat === "number" &&
+          typeof lng === "number" &&
+          !isNaN(lat) &&
+          !isNaN(lng)
+        ) {
+          return (
+            <div className="seegymdetails-map-section">
+              <h3 style={{ color: "#222" }}>Location Map</h3>
+              <MapContainer
+                center={[lat, lng]}
+                zoom={15}
+                scrollWheelZoom={false}
+                style={{
+                  height: "250px",
+                  width: "100%",
+                  borderRadius: "12px",
+                  marginBottom: "1rem",
+                }}
+              >
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <Marker position={[lat, lng]}>
+                  <Popup>{gym.name}</Popup>
+                </Marker>
+              </MapContainer>
+            </div>
+          );
+        }
+        return null;
+      })()}
       {/* Announcements */}
       <div className="seegymdetails-announcements-section">
         <h3 style={{ color: "#222" }}>Announcements</h3>
