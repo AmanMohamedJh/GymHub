@@ -28,44 +28,6 @@ const OwnerDashboard = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
-  const analytics = {
-    totalGyms: 5,
-    registeredGyms: 3,
-    pendingGyms: 2,
-  };
-
-  const registeredGyms = [
-    {
-      _id: 1,
-      name: "FitZone",
-      location: "New York",
-      images: [gymImage],
-    },
-    {
-      _id: 2,
-      name: "PowerHouse",
-      location: "Los Angeles",
-      images: [gymImage],
-    },
-  ];
-
-  const feedback = [
-    {
-      _id: 1,
-      clientName: "John Doe",
-      message: "Great facilities and trainers!",
-      rating: 5,
-    },
-    {
-      _id: 2,
-      clientName: "Jane Doe",
-      message: "Excellent equipment and atmosphere",
-      rating: 4,
-    },
-  ];
-
-  const defaultGymImage = gymImage;
-
   const [registeredGymsData, setRegisteredGyms] = React.useState([]);
   const [gymsError, setGymsError] = React.useState(null);
   const [loadingGyms, setLoadingGyms] = React.useState(false);
@@ -300,6 +262,19 @@ const OwnerDashboard = () => {
     }
   };
 
+  // --- Corrected Dashboard Statistics (from fetched data) ---
+  // Only use actual fetched data, not mock or hardcoded analytics
+  const totalGyms =
+    registeredGymsData.length +
+    pendingGyms.filter((g) => g.status === "pending").length;
+  const registeredGymsCount = registeredGymsData.length;
+  const pendingGymsCount = pendingGyms.filter(
+    (g) => g.status === "pending"
+  ).length;
+  const rejectedGymsCount = pendingGyms.filter(
+    (g) => g.status === "rejected"
+  ).length;
+
   // --- Equipment Analytics (calculated from ownerEquipment) ---
   const totalEquipmentOwned = ownerEquipment.length;
   const equipmentByCondition = ownerEquipment.reduce((acc, eq) => {
@@ -323,6 +298,8 @@ const OwnerDashboard = () => {
     return name;
   })();
 
+  const defaultGymImage = gymImage;
+
   return (
     <div className="owner_dashboard_container">
       <div className="owner_dashboard_header">
@@ -331,49 +308,47 @@ const OwnerDashboard = () => {
 
       {/* Analytics Section */}
       <div className="owner_dashboard_stats">
+        {/* Total Gyms */}
         <div className="owner_stat_card">
-          <FaDumbbell className="owner_stat_icon" />
+          <span className="owner_stat_icon" style={{ background: "#e74c3c" }}>
+            🏋️‍♂️
+          </span>
           <div className="owner_stat_content">
-            <h3>Total Gyms</h3>
-            <div className="owner_stat_number">{analytics.totalGyms}</div>
-            <div className="owner_stat_trend positive">
-              <FaArrowUp /> 12% this month
-            </div>
+            <h3>TOTAL GYMS</h3>
+            <div className="owner_stat_number">{totalGyms}</div>
+            {/* Example: <span className="stat_growth positive">↑ 12% this month</span> */}
           </div>
         </div>
-
+        {/* Registered Gyms */}
         <div className="owner_stat_card">
-          <FaUserCheck className="owner_stat_icon" />
+          <span className="owner_stat_icon" style={{ background: "#e74c3c" }}>
+            ✅
+          </span>
           <div className="owner_stat_content">
-            <h3>Registered Gyms</h3>
-            <div className="owner_stat_number">{analytics.registeredGyms}</div>
-            <div className="owner_stat_trend positive">
-              <FaArrowUp /> 8% this month
-            </div>
+            <h3>REGISTERED GYMS</h3>
+            <div className="owner_stat_number">{registeredGymsCount}</div>
+            {/* Example: <span className="stat_growth positive">↑ 8% this month</span> */}
           </div>
         </div>
-
+        {/* Pending Gyms */}
         <div className="owner_stat_card">
-          <FaUserClock className="owner_stat_icon" />
+          <span className="owner_stat_icon" style={{ background: "#e74c3c" }}>
+            ⏳
+          </span>
           <div className="owner_stat_content">
-            <h3>Pending Gyms</h3>
-            <div className="owner_stat_number">{analytics.pendingGyms}</div>
-            <div className="owner_stat_trend negative">
-              <FaArrowDown /> 3% this month
-            </div>
+            <h3>PENDING GYMS</h3>
+            <div className="owner_stat_number">{pendingGymsCount}</div>
+            {/* Example: <span className="stat_growth negative">↓ 3% this month</span> */}
           </div>
         </div>
-
-        {/* New: Rejected Gyms */}
+        {/* Rejected Gyms */}
         <div className="owner_stat_card">
           <span className="owner_stat_icon" style={{ background: "#e74c3c" }}>
             ❌
           </span>
           <div className="owner_stat_content">
             <h3>REJECTED GYMS</h3>
-            <div className="owner_stat_number">
-              {pendingGyms.filter((g) => g.status === "rejected").length}
-            </div>
+            <div className="owner_stat_number">{rejectedGymsCount}</div>
           </div>
         </div>
         {/* New: Approval Rate */}
@@ -659,19 +634,7 @@ const OwnerDashboard = () => {
           </Link>
         </div>
         <div className="dashboard-feedback-grid">
-          {feedback.map((item) => (
-            <div key={item._id} className="dashboard-feedback-item">
-              <div className="dashboard-feedback-header">
-                <FaUser />
-                <h4>{item.clientName}</h4>
-              </div>
-              <div className="dashboard-feedback-message">{item.message}</div>
-              <div className="dashboard-feedback-rating">
-                <FaStar />
-                {item.rating}/5
-              </div>
-            </div>
-          ))}
+          {/* Removed: feedback (no longer needed, was mock data) */}
         </div>
       </div>
 
