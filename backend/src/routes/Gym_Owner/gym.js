@@ -9,6 +9,7 @@ const {
   updateGymStatus,
   getPendingGyms,
   getAllGyms,
+  getGymById,
 } = require("../../controller/Gym_Owner/gymController");
 const requireAuth = require("../../middleware/requireAuth");
 const upload = require("../../middleware/upload");
@@ -30,6 +31,9 @@ router.get("/nearby", getNearbyGyms);
 router.get("/getALlgym", getAllGyms);
 router.patch("/:id", uploadFields, updateGym);
 router.delete("/:id", deleteGym);
+
+// Get a gym by ID (for ManageGym page)
+router.get("/:gymId", requireAuth, getGymById);
 
 // Admin routes
 router.get("/pending", getPendingGyms);

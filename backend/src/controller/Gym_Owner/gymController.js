@@ -131,7 +131,6 @@ const getOwnerGyms = async (req, res) => {
   }
 };
 
-
 // Get nearby gyms
 const getNearbyGyms = async (req, res) => {
   try {
@@ -258,7 +257,22 @@ const getAllGyms = async (req, res) => {
   try {
     const allDetails = await Gym.find().sort({ createdAt: -1 });
     res.status(200).json(allDetails);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
+// Get a gym by ID (for ManageGym page)
+const getGymById = async (req, res) => {
+  try {
+    const gym = await Gym.findOne({
+      _id: req.params.gymId,
+      ownerId: req.user._id,
+    }).populate("equipment");
+    if (!gym) {
+      return res.status(404).json({ error: "Gym not found" });
+    }
+    res.status(200).json(gym);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -273,4 +287,5 @@ module.exports = {
   updateGymStatus,
   getPendingGyms,
   getAllGyms,
+  getGymById,
 };

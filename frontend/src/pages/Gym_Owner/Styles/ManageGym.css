@@ -496,3 +496,140 @@ h2 {
   padding-bottom: 10px;
   border-bottom: 2px solid #e74c3c;
 }
+
+/* Modal Overlay for ManageGym */
+.managegym-modal-overlay {
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.managegym-modal-content {
+  max-width: 480px;
+  width: 96%;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.18);
+  position: relative;
+  text-align: center;
+}
+
+.managegym-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s;
+}
+.managegym-modal-close:hover {
+  color: #ff4444;
+}
+
+.managegym-modal-title {
+  margin-bottom: 20px;
+  color: #ff5733;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.managegym-modal-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 22px;
+  justify-content: center;
+}
+.managegym-modal-noimages {
+  color: #888;
+  font-style: italic;
+  padding: 16px 0;
+}
+.managegym-modal-imgbox {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.11);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f8f8f8;
+}
+.managegym-modal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.managegym-modal-remove {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background: #ff4444;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.13);
+  transition: background 0.2s;
+}
+.managegym-modal-remove:hover {
+  background: #cc0000;
+}
+
+.managegym-modal-uploadlabel {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.managegym-modal-uploadbtn {
+  display: inline-block;
+  background: #eee;
+  color: #333;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.managegym-modal-uploadbtn:hover {
+  background: #f2f2f2;
+}
+.managegym-modal-filestatus {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+.managegym-modal-save {
+  width: 100%;
+  background: #222;
+  color: #fff;
+  padding: 12px 0;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+  margin-top: 18px;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+.managegym-modal-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

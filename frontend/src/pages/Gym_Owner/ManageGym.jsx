@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import {
   FaEdit,
   FaTrash,
@@ -12,35 +13,9 @@ import "./Styles/ManageGym.css";
 
 const ManageGym = () => {
   const { gymId } = useParams();
+  const { user } = useAuthContext();
   const [loading, setLoading] = useState(true);
-  // Mock data - replace with actual data from backend
-  const [gymData, setGymData] = useState({
-    name: "FitLife Gym",
-    location: "123 Fitness Street, City",
-    images: [
-      "./images/gym-background2.jpg.jpg",
-      "./images/gym-background2.jpg.jpg",
-      "./images/gym-background2.jpg.jpg",
-    ],
-    amenities: ["Swimming Pool", "Free WiFi", "Parking", "Locker Room"],
-    hours: {
-      weekdays: "6:00 AM - 11:00 PM",
-      weekends: "7:00 AM - 9:00 PM",
-    },
-    allowedGenders: "Both",
-    statistics: {
-      totalClients: 250,
-      monthlyRevenue: "Rs150,000",
-      popularPlan: "Yearly",
-      peakHours: "6:00 PM - 8:00 PM",
-    },
-    pricing: {
-      monthly: 2000,
-      yearly: 20000,
-    },
-  });
-
-  // Mock clients data
+  const [gymData, setGymData] = useState(null);
   const [clients] = useState([
     {
       id: 1,
@@ -56,7 +31,6 @@ const ManageGym = () => {
     },
   ]);
 
-  // Mock equipment data
   const [equipment] = useState([
     {
       id: 1,
@@ -75,38 +49,68 @@ const ManageGym = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showImageEditModal, setShowImageEditModal] = useState(false);
+  const [imageFiles, setImageFiles] = useState([]);
 
-  // Fetch gym data based on gymId
   useEffect(() => {
     const fetchGymData = async () => {
       try {
         setLoading(true);
-        // In a real app, you would fetch data from your API here
-        // const response = await fetch(`/api/gyms/${gymId}`);
-        // const data = await response.json();
-        // setGymData(data);
-
-        // For now, just simulate loading
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const response = await fetch(`/api/gym/${gymId}`, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) throw new Error("Failed to fetch gym data");
+        const data = await response.json();
+        // Transform backend data to UI shape
+        const transformed = {
+          name: data.name || "",
+          location: data.location
+            ? [data.location.street, data.location.city, data.location.district]
+                .filter(Boolean)
+                .join(", ")
+            : "",
+          images: (data.images || []).map((img) =>
+            img.startsWith("http")
+              ? img
+              : `${
+                  process.env.REACT_APP_API_URL
+                    ? process.env.REACT_APP_API_URL.replace(/\/$/, "")
+                    : ""
+                }/${img.replace(/^\//, "")}`
+          ),
+          hours: data.operatingHours || { weekdays: "", weekends: "" },
+          allowedGenders: data.genderAccess || "",
+          amenities: data.amenities || [],
+          statistics: data.statistics || {
+            totalClients: 0,
+            monthlyRevenue: "",
+            popularPlan: "",
+            peakHours: "",
+          },
+          pricing: data.pricing || { monthly: 0, yearly: 0 },
+        };
+        setGymData(transformed);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching gym data:", error);
         setLoading(false);
       }
     };
-
-    if (gymId) {
-      fetchGymData();
-    }
-  }, [gymId]);
+    if (gymId) fetchGymData();
+  }, [gymId, user]);
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % gymData.images.length);
+    setCurrentSlide((prev) => (prev + 1) % (gymData?.images?.length || 0));
   };
 
   const prevSlide = () => {
     setCurrentSlide(
-      (prev) => (prev - 1 + gymData.images.length) % gymData.images.length
+      (prev) =>
+        (prev - 1 + (gymData?.images?.length || 0)) %
+        (gymData?.images?.length || 0)
     );
   };
 
@@ -121,11 +125,50 @@ const ManageGym = () => {
     }
   };
 
+  const openImageEditModal = () => setShowImageEditModal(true);
+  const closeImageEditModal = () => {
+    setShowImageEditModal(false);
+    setImageFiles([]);
+  };
+
+  const handleRemoveImage = (index) => {
+    setGymData((prev) => ({
+      ...prev,
+      images: (prev.images || []).filter((_, i) => i !== index),
+    }));
+    // TODO: Remove from backend if needed
+  };
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setImageFiles((prev) => [...prev, ...files]);
+  };
+
+  const handleSaveImages = () => {
+    if (imageFiles.length === 0) return closeImageEditModal();
+    // Simulate upload and add to gymData
+    const newImageURLs = imageFiles.map((file) => URL.createObjectURL(file));
+    setGymData((prev) => ({
+      ...prev,
+      images: [...(prev.images || []), ...newImageURLs],
+    }));
+    closeImageEditModal();
+  };
+
   if (loading) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
         <p>Loading gym data...</p>
+      </div>
+    );
+  }
+
+  if (!gymData) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>No gym data found.</p>
       </div>
     );
   }
@@ -144,17 +187,46 @@ const ManageGym = () => {
           <button className="slide-btn prev" onClick={prevSlide}>
             <FaChevronLeft />
           </button>
-          <div className="slideshow-image">
+          <div className="slideshow-image" style={{ position: "relative" }}>
             <img
-              src={gymData.images[currentSlide]}
+              src={
+                gymData.images && gymData.images.length > 0
+                  ? gymData.images[currentSlide]
+                  : ""
+              }
               alt={`Gym view ${currentSlide + 1}`}
+              style={{
+                objectFit: "cover",
+                width: "100%",
+                height: "260px",
+                borderRadius: "8px",
+                background: "#eee",
+              }}
             />
+            {/* Pencil icon for editing images */}
+            <button
+              className="edit-image-btn"
+              style={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+                background: "rgba(255,255,255,0.8)",
+                border: "none",
+                borderRadius: "50%",
+                padding: 7,
+                cursor: "pointer",
+              }}
+              onClick={openImageEditModal}
+              aria-label="Edit Images"
+            >
+              <FaEdit size={18} color="#222" />
+            </button>
           </div>
           <button className="slide-btn next" onClick={nextSlide}>
             <FaChevronRight />
           </button>
           <div className="slide-dots">
-            {gymData.images.map((_, index) => (
+            {(gymData.images || []).map((_, index) => (
               <span
                 key={index}
                 className={`dot ${index === currentSlide ? "active" : ""}`}
@@ -163,6 +235,85 @@ const ManageGym = () => {
             ))}
           </div>
         </div>
+
+        {/* Image Edit Modal */}
+        {showImageEditModal && (
+          <div
+            className="modal-overlay managegym-modal-overlay"
+            tabIndex={-1}
+            aria-modal="true"
+            role="dialog"
+          >
+            <div className="modal-content managegym-modal-content">
+              <button
+                onClick={closeImageEditModal}
+                className="managegym-modal-close"
+                aria-label="Close"
+              >
+                ×
+              </button>
+              <h2 className="managegym-modal-title">Manage Gym Images</h2>
+              <div className="managegym-modal-images">
+                {(gymData.images || []).length === 0 ? (
+                  <div className="managegym-modal-noimages">No images yet.</div>
+                ) : (
+                  (gymData.images || []).map((img, idx) => (
+                    <div className="managegym-modal-imgbox" key={idx}>
+                      <img
+                        src={img}
+                        alt={`gym-img-${idx}`}
+                        className="managegym-modal-img"
+                      />
+                      <button
+                        onClick={() => handleRemoveImage(idx)}
+                        className="managegym-modal-remove"
+                        aria-label="Remove"
+                        title="Remove image"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+              <label
+                htmlFor="gym-image-upload"
+                className="managegym-modal-uploadlabel"
+              >
+                <input
+                  id="gym-image-upload"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageUpload}
+                  style={{ display: "none" }}
+                />
+                <span
+                  className="managegym-modal-uploadbtn"
+                  tabIndex={0}
+                  onKeyPress={(e) =>
+                    e.key === "Enter" &&
+                    document.getElementById("gym-image-upload").click()
+                  }
+                >
+                  Choose Files
+                </span>
+              </label>
+              {imageFiles.length > 0 && (
+                <div className="managegym-modal-filestatus">
+                  {imageFiles.length} new image(s) selected
+                </div>
+              )}
+              <button
+                className="save-btn managegym-modal-save"
+                onClick={handleSaveImages}
+                disabled={imageFiles.length === 0}
+              >
+                Save Images
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Gym Details Section */}
         <div className="details-section">
@@ -180,7 +331,7 @@ const ManageGym = () => {
             <div className="detail-card">
               <h3>Amenities</h3>
               <ul>
-                {gymData.amenities.map((amenity, index) => (
+                {(gymData.amenities || []).map((amenity, index) => (
                   <li key={index}>{amenity}</li>
                 ))}
               </ul>
