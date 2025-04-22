@@ -14,8 +14,7 @@ const {
 const requireAuth = require("../../middleware/requireAuth");
 const upload = require("../../middleware/upload");
 
-// Apply authentication middleware to all routes
-router.use(requireAuth);
+// Only apply authentication middleware to protected routes, not public ones
 
 // Configure multer for different file types
 const uploadFields = upload.fields([
@@ -24,19 +23,20 @@ const uploadFields = upload.fields([
 ]);
 
 // Routes
-router.post("/register", uploadFields, registerGym);
-router.get("/owner-gyms", getOwnerGyms);
-router.get("/nearby", getNearbyGyms);
+router.post("/register", requireAuth, uploadFields, registerGym);
+router.get("/owner-gyms", requireAuth, getOwnerGyms);
+router.get("/nearby", requireAuth, getNearbyGyms);
 
+// Public route for all gyms (for BrowseGym)
 router.get("/getALlgym", getAllGyms);
-router.patch("/:id", uploadFields, updateGym);
-router.delete("/:id", deleteGym);
+router.patch("/:id", requireAuth, uploadFields, updateGym);
+router.delete("/:id", requireAuth, deleteGym);
 
 // Get a gym by ID (for ManageGym page)
 router.get("/:gymId", requireAuth, getGymById);
 
 // Admin routes
-router.get("/pending", getPendingGyms);
-router.patch("/:gymId/status", updateGymStatus);
+router.get("/pending", requireAuth, getPendingGyms);
+router.patch("/:gymId/status", requireAuth, updateGymStatus);
 
 module.exports = router;

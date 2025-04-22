@@ -114,6 +114,18 @@ const registerGym = async (req, res) => {
   }
 };
 
+// Get all approved gyms only (for public browse)
+const getAllGyms = async (req, res) => {
+  try {
+    const approvedGyms = await Gym.find({ status: "approved" }).sort({
+      createdAt: -1,
+    });
+    res.status(200).json(approvedGyms);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // Get all gyms for a gym owner
 const getOwnerGyms = async (req, res) => {
   try {
@@ -247,16 +259,6 @@ const getPendingGyms = async (req, res) => {
   try {
     const gyms = await Gym.find({ status: "pending" });
     res.status(200).json(gyms);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-// Get all gyms for a gym owner
-const getAllGyms = async (req, res) => {
-  try {
-    const allDetails = await Gym.find().sort({ createdAt: -1 });
-    res.status(200).json(allDetails);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
