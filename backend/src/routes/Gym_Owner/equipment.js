@@ -13,8 +13,12 @@ const {
   updateMaintenanceStatus,
   getMaintenanceHistory,
   checkDueMaintenance,
+  getPublicGymEquipment,
 } = require("../../controller/Gym_Owner/equipmentController");
 const requireAuth = require("../../middleware/requireAuth");
+
+// Public: Get equipment for a specific gym (no auth)
+router.get("/public/gym/:gymId", getPublicGymEquipment);
 
 // Apply authentication middleware
 router.use(requireAuth);

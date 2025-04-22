@@ -51,6 +51,7 @@ import ClientProgressTracking from "./pages/Clientt/ProgressTracking.jsx";
 import ClientWorkoutlogForm from "./pages/Clientt/workoutLogForm.jsx";
 import ClientFitnessGoalForm from "./pages/Clientt/FitnessGoalForm.jsx";
 import ClientBMIUpdateForm from "./pages/Clientt/BMIUpdateForm.jsx";
+import SeeGymDetails from "./pages/Clientt/SeeGymDetails";
 
 // Admin Components
 import AdminLayout from "./pages/Admin/AdminLayout.jsx";
@@ -334,6 +335,14 @@ function App() {
                         <ClientBrowseTrainer />
                       </ProtectedRoute>
                     </NonAdminRoute>
+                  }
+                />
+                <Route
+                  path="/gyms/:gymId"
+                  element={
+                    <RequireSubscription>
+                      <SeeGymDetails />
+                    </RequireSubscription>
                   }
                 />
 

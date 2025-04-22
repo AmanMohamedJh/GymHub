@@ -280,6 +280,23 @@ const getGymById = async (req, res) => {
   }
 };
 
+// Public gym details for advertising mainly used in the SeeGymDetails.jsx
+const getPublicGymById = async (req, res) => {
+  try {
+    const gym = await Gym.findOne({
+      _id: req.params.gymId,
+      status: "approved",
+    });
+    if (!gym) {
+      return res.status(404).json({ error: "Gym not found or not approved" });
+    }
+    // Optionally, remove sensitive fields here
+    res.status(200).json(gym);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   registerGym,
   getOwnerGyms,
@@ -290,4 +307,5 @@ module.exports = {
   getPendingGyms,
   getAllGyms,
   getGymById,
+  getPublicGymById,
 };

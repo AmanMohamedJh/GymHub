@@ -1,0 +1,237 @@
+.seegymdetails-container {
+  max-width: 950px;
+  margin: 3.5rem auto 2.5rem auto;
+  padding: 2.2rem 2.5rem 2.5rem 2.5rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px 0 rgba(31, 38, 135, 0.07);
+  border: 1.5px solid rgba(255, 255, 255, 0.13);
+  color: #fff;
+}
+
+.seegymdetails-header-glass {
+  background: #fff;
+  box-shadow: 0 2px 12px 0 rgba(31, 38, 135, 0.07);
+  border-radius: 16px;
+  padding: 2rem 2.5rem 1.2rem 2.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  position: relative;
+}
+
+.seegymdetails-title {
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.2rem;
+  color: #2d2d2d;
+}
+
+.seegymdetails-city {
+  font-size: 1.1rem;
+  color: #4e4e4e;
+  margin-left: 0.6rem;
+}
+
+.seegymdetails-description-blurb {
+  font-size: 1.15rem;
+  color: #333;
+  margin-top: 0.4rem;
+  margin-bottom: 0.2rem;
+  font-style: italic;
+}
+
+.seegymdetails-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px 0 rgba(31, 38, 135, 0.07);
+  padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+}
+
+.seegymdetails-imagebox {
+  flex: 1 1 340px;
+  min-width: 320px;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px 0 rgba(31, 38, 135, 0.07);
+  padding: 1.2rem;
+}
+
+.seegymdetails-image {
+  width: 100%;
+  max-width: 370px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.seegymdetails-slideshow {
+  width: 100%;
+  max-width: 370px;
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f8f8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seegymdetails-slide-img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 12px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: opacity 0.4s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.seegymdetails-info {
+  flex: 2 1 420px;
+  min-width: 340px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px 0 rgba(31, 38, 135, 0.07);
+  padding: 1.5rem 2rem;
+}
+
+.seegymdetails-section {
+  margin-bottom: 1.2rem;
+}
+
+.seegymdetails-section h3 {
+  margin-bottom: 0.5rem;
+  color: #1a1a1a;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.seegymdetails-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.seegymdetails-amenity-item {
+  background: #e3f3ff;
+  color: #1976d2;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.98rem;
+  font-weight: 400;
+}
+
+.seegymdetails-hours {
+  list-style: none;
+  padding-left: 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+.seegymdetails-equipment-list {
+  padding-left: 1.1rem;
+  margin: 0;
+}
+
+.seegymdetails-equipment-item {
+  margin-bottom: 0.3rem;
+  font-size: 1.04rem;
+  color: #3a3a3a;
+}
+
+.seegymdetails-map-section {
+  margin: 2.5rem 0 1.5rem 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px 0 rgba(31, 38, 135, 0.07);
+  padding: 1rem;
+}
+
+.seegymdetails-announcements-section,
+.seegymdetails-reviews-section {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07);
+}
+
+.seegymdetails-announcement {
+  color: #ad8700;
+  font-size: 1.02rem;
+  margin-bottom: 0.3rem;
+}
+
+.seegymdetails-review {
+  font-size: 1.01rem;
+  color: #234;
+  margin-bottom: 0.3rem;
+}
+
+.seegymdetails-review-rating {
+  color: #ffa726;
+  margin-left: 0.3rem;
+}
+
+.seegymdetails-actions {
+  text-align: center;
+  margin-top: 2.2rem;
+}
+
+.seegymdetails-register-btn {
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+  color: #fff;
+  font-size: 1.18rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 24px;
+  padding: 0.8rem 2.2rem;
+  cursor: pointer;
+  box-shadow: 0 2px 10px 0 rgba(25, 118, 210, 0.1);
+  transition: background 0.2s;
+}
+
+.seegymdetails-register-btn:hover {
+  background: linear-gradient(90deg, #1565c0 0%, #1976d2 100%);
+}
+
+/* Responsive design improvements */
+@media (max-width: 900px) {
+  .seegymdetails-main {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem 0.5rem 1rem 0.5rem;
+  }
+  .seegymdetails-imagebox,
+  .seegymdetails-info {
+    min-width: 0;
+    max-width: 100%;
+    padding: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .seegymdetails-header-glass {
+    padding: 1.2rem 0.7rem 0.8rem 0.7rem;
+  }
+  .seegymdetails-title {
+    font-size: 2rem;
+  }
+  .seegymdetails-main {
+    gap: 0.7rem;
+    padding: 0.5rem 0.2rem 0.5rem 0.2rem;
+  }
+  .seegymdetails-info {
+    padding: 1rem 0.6rem;
+  }
+}

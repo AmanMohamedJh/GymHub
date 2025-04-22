@@ -10,6 +10,7 @@ const {
   getPendingGyms,
   getAllGyms,
   getGymById,
+  getPublicGymById,
 } = require("../../controller/Gym_Owner/gymController");
 const requireAuth = require("../../middleware/requireAuth");
 const upload = require("../../middleware/upload");
@@ -34,6 +35,9 @@ router.delete("/:id", requireAuth, deleteGym);
 
 // Get a gym by ID (for ManageGym page)
 router.get("/:gymId", requireAuth, getGymById);
+
+// Public gym details for advertising mainly used in the SeeGymDetails.jsx so that everyone can see the gym details
+router.get("/public/:gymId", getPublicGymById);
 
 // Admin routes
 router.get("/pending", requireAuth, getPendingGyms);
