@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./Styles/seeGymDetails.css";
 import "./Styles/seeGymDetailsModal.css";
+import "./Styles/successPopup.css";
+import { useProfile } from "../../hooks/useProfile";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const SeeGymDetails = () => {
   const { gymId } = useParams();
+  const navigate = useNavigate();
   const [gym, setGym] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -66,6 +70,8 @@ const SeeGymDetails = () => {
     fetchGym();
   }, [gymId]);
 
+  const { user } = useAuthContext();
+  const { getProfile } = useProfile();
   const [showModal, setShowModal] = useState(false);
   const [registerForm, setRegisterForm] = useState({
     fullName: "",
@@ -83,6 +89,28 @@ const SeeGymDetails = () => {
     emergencyPhone: "",
     emergencyRelation: "",
   });
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
+  useEffect(() => {
+    // Fetch real user data for registration modal
+    const fetchUser = async () => {
+      try {
+        const data = await getProfile();
+        if (data) {
+          setRegisterForm((f) => ({
+            ...f,
+            fullName: data.name || "",
+            email: data.email || "",
+            phone: data.phone || "",
+          }));
+        }
+      } catch (e) {
+        // fallback to mock or do nothing
+      }
+    };
+    fetchUser();
+  }, []);
 
   //this will lock the behind body when modal is open and when scrolling
   useEffect(() => {
@@ -93,21 +121,6 @@ const SeeGymDetails = () => {
     }
     return () => document.body.classList.remove("seegymdetails-modal-open");
   }, [showModal]);
-
-  useEffect(() => {
-    // Mock user data
-    const user = {
-      fullName: "John Wick",
-      email: "johnwick@email.com",
-      phone: "0123456789",
-    };
-    setRegisterForm((f) => ({
-      ...f,
-      fullName: user.fullName,
-      email: user.email,
-      phone: user.phone,
-    }));
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -120,6 +133,31 @@ const SeeGymDetails = () => {
       const m = now.getMonth() - birth.getMonth();
       if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age--;
       setRegisterForm((f) => ({ ...f, age: age > 0 ? age : "" }));
+    }
+  };
+
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitStatus(null);
+    try {
+      const res = await fetch(`/api/gymOwner/gyms/${gymId}/Clientregister`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: user?.token ? `Bearer ${user.token}` : "",
+        },
+        body: JSON.stringify(registerForm),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSubmitStatus("Registration successful!");
+        setShowModal(false); // Close the registration modal
+        setShowSuccessPopup(true); // Show the success popup on the main page
+      } else {
+        setSubmitStatus(data.error || "Registration failed.");
+      }
+    } catch (err) {
+      setSubmitStatus("Network error. Please try again.");
     }
   };
 
@@ -363,7 +401,11 @@ const SeeGymDetails = () => {
             <div className="seegymdetails-modal-title">
               Register for this Gym
             </div>
-            <form className="seegymdetails-modal-form" autoComplete="off">
+            <form
+              onSubmit={handleRegisterSubmit}
+              className="seegymdetails-modal-form"
+              autoComplete="off"
+            >
               <div className="seegymdetails-modal-section">
                 <div className="seegymdetails-modal-row">
                   <div>
@@ -548,10 +590,35 @@ const SeeGymDetails = () => {
                   </div>
                 </div>
               </div>
-              <button type="button" className="seegymdetails-modal-submit">
+              {submitStatus && (
+                <div className="submit-status">{submitStatus}</div>
+              )}
+              <button type="submit" className="seegymdetails-modal-submit">
                 Submit Registration
               </button>
             </form>
+          </div>
+        </div>
+      )}
+      {showSuccessPopup && (
+        <div className="success-popup-overlay">
+          <div className="success-popup">
+            <h2>Registration Successful!</h2>
+            <p>Your registration was submitted successfully.</p>
+            <div className="success-popup-buttons">
+              <button
+                className="success-btn"
+                onClick={() => navigate("/dashboard")}
+              >
+                Go to Dashboard
+              </button>
+              <button
+                className="success-btn secondary"
+                onClick={() => navigate("/")}
+              >
+                Go to Homepage
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -11,6 +11,8 @@ const subscriptionController = require("./src/controller/Subscription/subscripti
 const equipmentRoutes = require("./src/routes/Gym_Owner/equipment");
 const gymRoutes = require("./src/routes/Gym_Owner/gym");
 const clientRoutes = require("./src/routes/Client/client");
+const contactUsRouter = require("./src/routes/Contactus/contactUs");
+const clientGymRegistrationRoutes = require("./src/routes/Gym_Owner/clientGymRegistration");
 
 const app = express();
 const PORT = process.env.PORT || 4070;
@@ -42,8 +44,9 @@ app.use("/api/gym", gymRoutes);
 app.use("/api/client", clientRoutes);
 
 //contact us router and route
-const contactUsRouter = require("./src/routes/Contactus/contactUs");
 app.use("/api/contactUs", contactUsRouter);
+
+app.use("/api/gymOwner", clientGymRegistrationRoutes);
 
 // Serve static files from the uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
