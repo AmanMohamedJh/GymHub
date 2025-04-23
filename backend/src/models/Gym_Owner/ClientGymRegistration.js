@@ -28,6 +28,12 @@ const ClientGymRegistrationSchema = new mongoose.Schema({
   startDate: { type: Date },
   promoCode: { type: String },
   emergencyContact: EmergencyContactSchema,
+  status: {
+    type: String,
+    enum: ["active", "paused", "inactive", "completed", "suspended"],
+    default: "active",
+    required: true,
+  },
   createdAt: { type: Date, default: Date.now },
 });
 

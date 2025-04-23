@@ -91,6 +91,11 @@ const SeeGymDetails = () => {
   });
   const [submitStatus, setSubmitStatus] = useState(null);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [clientStatus, setClientStatus] = useState({
+    loading: true,
+    registered: false,
+    status: null,
+  });
 
   useEffect(() => {
     // Fetch real user data for registration modal
@@ -111,6 +116,25 @@ const SeeGymDetails = () => {
     };
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    // Fetch client registration status for this gym
+    const fetchStatus = async () => {
+      if (!user || !gymId) return;
+      try {
+        const res = await fetch(`/api/gymOwner/gyms/${gymId}/client-status`, {
+          headers: {
+            Authorization: user.token ? `Bearer ${user.token}` : "",
+          },
+        });
+        const data = await res.json();
+        setClientStatus({ loading: false, ...data });
+      } catch (e) {
+        setClientStatus({ loading: false, registered: false, status: null });
+      }
+    };
+    fetchStatus();
+  }, [user, gymId]);
 
   //this will lock the behind body when modal is open and when scrolling
   useEffect(() => {
@@ -382,12 +406,74 @@ const SeeGymDetails = () => {
         </ul>
       </div>
       <div className="seegymdetails-actions">
-        <button
-          className="seegymdetails-register-btn"
-          onClick={() => setShowModal(true)}
-        >
-          Join the Gym
-        </button>
+        {!clientStatus.loading &&
+          user &&
+          (clientStatus.registered ? (
+            <div className="client-gym-status">
+              {clientStatus.status === "active" && (
+                <span
+                  style={{
+                    color: "#219653",
+                    fontWeight: 600,
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  ✅ You are currently an active member of this gym.
+                </span>
+              )}
+              {clientStatus.status === "paused" && (
+                <span
+                  style={{
+                    color: "#f2c94c",
+                    fontWeight: 600,
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  ⏸️ Your membership is paused. Contact the gym to reactivate.
+                </span>
+              )}
+              {clientStatus.status === "inactive" && (
+                <span
+                  style={{
+                    color: "#bdbdbd",
+                    fontWeight: 600,
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  ⚠️ Your membership is inactive. Contact the gym to renew.
+                </span>
+              )}
+              {clientStatus.status === "completed" && (
+                <span
+                  style={{
+                    color: "#1976d2",
+                    fontWeight: 600,
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  🏁 You have completed your program at this gym.
+                </span>
+              )}
+              {clientStatus.status === "suspended" && (
+                <span
+                  style={{
+                    color: "#eb5757",
+                    fontWeight: 600,
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  🚫 Your membership is suspended. Contact the gym for details.
+                </span>
+              )}
+            </div>
+          ) : (
+            <button
+              className="seegymdetails-register-btn"
+              onClick={() => setShowModal(true)}
+            >
+              Join the Gym
+            </button>
+          ))}
       </div>
       {showModal && (
         <div className="seegymdetails-modal-overlay">

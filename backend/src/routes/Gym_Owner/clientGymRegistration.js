@@ -24,4 +24,11 @@ router.get(
   clientGymRegistrationController.getUserClientRegistrations
 );
 
+// Check client registration status for a gym
+router.get(
+  "/gyms/:gymId/client-status",
+  requireAuth,
+  clientGymRegistrationController.getClientGymStatus
+);
+
 module.exports = router;
