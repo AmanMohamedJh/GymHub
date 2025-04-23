@@ -30,6 +30,13 @@ function GymClients() {
   const [showDrawer, setShowDrawer] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // --- Contact Modal State ---
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [contactMessage, setContactMessage] = useState("");
+  const [contactSubject, setContactSubject] = useState("");
+  const [contactSending, setContactSending] = useState(false);
+  const [contactError, setContactError] = useState("");
+  const [contactSuccess, setContactSuccess] = useState("");
 
   // Fetch real data
   useEffect(() => {
@@ -146,8 +153,41 @@ function GymClients() {
     }
     setSelectedRows([]);
   };
+  // --- Contact Button Handler ---
   const handleContact = (client) => {
-    alert(`Contacting ${client.fullName}...`);
+    setSelectedClient(client);
+    setContactSubject("");
+    setContactMessage("");
+    setContactError("");
+    setContactSuccess("");
+    setShowContactModal(true);
+  };
+
+  // --- Send Email to Client ---
+  const handleSendContact = async () => {
+    setContactSending(true);
+    setContactError("");
+    setContactSuccess("");
+    try {
+      const res = await fetch("/api/client/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: selectedClient.email,
+          subject: contactSubject || "Message from Gym Owner",
+          message: contactMessage,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to send email");
+      setContactSuccess("Message sent successfully!");
+      setContactMessage("");
+      setContactSubject("");
+      setTimeout(() => setShowContactModal(false), 1500);
+    } catch (err) {
+      setContactError(err.message || "Failed to send email");
+    } finally {
+      setContactSending(false);
+    }
   };
 
   return (
@@ -464,6 +504,68 @@ function GymClients() {
                   onClick={() => handleContact(selectedClient)}
                 >
                   <FaEnvelope />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Contact Client Modal */}
+        {showContactModal && selectedClient && (
+          <div
+            className="modal-overlay"
+            onClick={() => setShowContactModal(false)}
+          >
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <h3>Contact {selectedClient.fullName}</h3>
+              <label>To:</label>
+              <input
+                type="email"
+                value={selectedClient.email}
+                disabled
+                style={{ width: "100%" }}
+              />
+              <label>Subject:</label>
+              <input
+                type="text"
+                value={contactSubject}
+                onChange={(e) => setContactSubject(e.target.value)}
+                placeholder="Subject"
+                style={{ width: "100%" }}
+              />
+              <label>Message:</label>
+              <textarea
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
+                rows={5}
+                placeholder="Type your message here..."
+                style={{ width: "100%" }}
+              />
+              {contactError && (
+                <div className="error-message">{contactError}</div>
+              )}
+              {contactSuccess && (
+                <div className="success-message">{contactSuccess}</div>
+              )}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: 8,
+                  marginTop: 12,
+                }}
+              >
+                <button
+                  onClick={() => setShowContactModal(false)}
+                  disabled={contactSending}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSendContact}
+                  disabled={contactSending || !contactMessage.trim()}
+                  style={{ background: "#d32f2f", color: "white" }}
+                >
+                  {contactSending ? "Sending..." : "Send"}
                 </button>
               </div>
             </div>

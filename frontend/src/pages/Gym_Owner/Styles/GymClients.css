@@ -272,6 +272,132 @@
   padding: 24px 0;
 }
 
+/* --- Contact Modal Styles --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(44, 62, 80, 0.28);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInModalBg 0.18s;
+}
+
+@keyframes fadeInModalBg {
+  from {
+    background: rgba(44, 62, 80, 0.01);
+  }
+  to {
+    background: rgba(44, 62, 80, 0.28);
+  }
+}
+
+.modal {
+  background: #fff !important;
+  border-radius: 18px;
+  box-shadow: 0 8px 36px rgba(44, 62, 80, 0.18);
+  padding: 32px 32px 20px 32px;
+  min-width: 340px;
+  max-width: 96vw;
+  width: 400px;
+  animation: popInModal 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+@keyframes popInModal {
+  from {
+    transform: scale(0.93);
+    opacity: 0.3;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal h3 {
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: #b80000;
+  margin-bottom: 8px;
+}
+.modal label {
+  font-size: 1.01rem;
+  font-weight: 600;
+  color: #3b3b4f;
+  margin-bottom: 2px;
+}
+.modal input[type="email"],
+.modal input[type="text"],
+.modal textarea {
+  width: 100%;
+  border: 1.2px solid #e0e3eb;
+  border-radius: 7px;
+  padding: 9px 12px;
+  font-size: 1.04rem;
+  margin-bottom: 8px;
+  background: #f6f7fb;
+  color: #2d2d3a;
+  resize: none;
+  transition: border 0.17s;
+}
+.modal input:focus,
+.modal textarea:focus {
+  outline: none;
+  border-color: #635bff;
+  background: #fff;
+}
+.modal .error-message {
+  color: #d32f2f;
+  font-size: 0.98rem;
+  margin-bottom: 2px;
+}
+.modal .success-message {
+  color: #2e7d32;
+  font-size: 0.98rem;
+  margin-bottom: 2px;
+}
+.modal button {
+  padding: 8px 22px;
+  border-radius: 7px;
+  border: none;
+  font-size: 1.06rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #f6f7fb;
+  color: #3b3b4f;
+  margin-left: 4px;
+  transition: background 0.17s, color 0.17s;
+}
+.modal button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.modal button:last-child {
+  background: #b80000;
+  color: #fff;
+}
+.modal button:last-child:hover:not([disabled]) {
+  background: #a60000;
+}
+@media (max-width: 600px) {
+  .modal {
+    min-width: 0;
+    width: 96vw;
+    padding: 18px 6vw 12px 6vw;
+  }
+}
+
 /* Drawer/Modal Modern */
 .profile-drawer-overlay-modern {
   position: fixed;
