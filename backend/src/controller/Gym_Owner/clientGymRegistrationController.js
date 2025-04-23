@@ -107,3 +107,51 @@ exports.getUserClientRegistrations = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// PATCH /api/gyms/:gymId/Clientregistrations/:registrationId
+exports.updateClientRegistrationStatus = async (req, res) => {
+  try {
+    const { gymId, registrationId } = req.params;
+    const { status } = req.body;
+    // Validate status value
+    const allowedStatuses = [
+      "active",
+      "paused",
+      "inactive",
+      "completed",
+      "suspended",
+    ];
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({ error: "Invalid status value" });
+    }
+    // Find and update registration
+    const registration = await ClientGymRegistration.findOneAndUpdate(
+      { _id: registrationId, gymId },
+      { status },
+      { new: true }
+    );
+    if (!registration) {
+      return res.status(404).json({ error: "Registration not found" });
+    }
+    res.json({ message: "Status updated", registration });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// DELETE /api/gyms/:gymId/Clientregistrations/:registrationId
+exports.deleteClientRegistration = async (req, res) => {
+  try {
+    const { gymId, registrationId } = req.params;
+    const registration = await ClientGymRegistration.findOneAndDelete({
+      _id: registrationId,
+      gymId,
+    });
+    if (!registration) {
+      return res.status(404).json({ error: "Registration not found" });
+    }
+    res.json({ message: "Registration deleted" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

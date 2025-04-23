@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
 import {
   FaEdit,
   FaTrash,
@@ -14,6 +15,7 @@ import "./Styles/ManageGym.css";
 const ManageGym = () => {
   const { gymId } = useParams();
   const { user } = useAuthContext();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [gymData, setGymData] = useState(null);
   const [clients] = useState([
@@ -51,6 +53,7 @@ const ManageGym = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showImageEditModal, setShowImageEditModal] = useState(false);
   const [imageFiles, setImageFiles] = useState([]);
+  const [showClientReportModal, setShowClientReportModal] = useState(false);
 
   useEffect(() => {
     const fetchGymData = async () => {
@@ -389,40 +392,179 @@ const ManageGym = () => {
 
         {/* Clients Management Section */}
         <div className="clients-section">
-          <h2>Clients Management</h2>
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Join Date</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {clients.map((client) => (
-                  <tr key={client.id}>
-                    <td>{client.name}</td>
-                    <td>{client.email}</td>
-                    <td>{client.joinDate}</td>
-                    <td className="actions">
-                      <button className="icon-btn">
-                        <FaEnvelope />
-                      </button>
-                      <button className="icon-btn">
-                        <FaInfoCircle />
-                      </button>
-                      <button className="icon-btn delete">
-                        <FaTrash />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <h2>Clients Management</h2>
+            <button
+              className="see-all-clients-btn"
+              onClick={() => navigate(`/owner/gym/clients/${gymId}`)}
+              style={{
+                marginLeft: "auto",
+                fontWeight: 600,
+                background: "#fff",
+                border: "2px solid #eb5757",
+                color: "#eb5757",
+                borderRadius: "8px",
+                padding: "8px 18px",
+                cursor: "pointer",
+                transition: "background 0.2s",
+              }}
+            >
+              See All Clients
+            </button>
+          </div>
+          <div style={{ marginTop: "2.2rem", textAlign: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "1.2rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.7rem",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  className="client-report-btn"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #27ae60 0%, #6fcf97 100%)",
+                    color: "#fff",
+                    fontWeight: 600,
+                    fontSize: "1.08rem",
+                    border: "none",
+                    borderRadius: "999px",
+                    padding: "12px 32px",
+                    boxShadow: "0 2px 12px rgba(39,174,96,0.12)",
+                    cursor: "pointer",
+                    transition: "background 0.2s",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.55rem",
+                  }}
+                  onClick={() => setShowClientReportModal(true)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="#fff"
+                      d="M12 2a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L11 11.586V3a1 1 0 0 1 1-1Zm7 14a1 1 0 0 1 1 1v2a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2a1 1 0 1 1 2 0v2a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2a1 1 0 0 1 1-1Z"
+                    />
+                  </svg>
+                  Client Report
+                </button>
+              </div>
+              <div className="client-report-desc">
+                Here you can generate detailed reports on your clients'
+                involvement, attendance, and membership history in this gym.
+                Download reports to analyze trends, track engagement, and keep
+                records for your business needs. Click "Client Report" to get
+                started.
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Client Report Modal */}
+        {showClientReportModal && (
+          <div className="modal-overlay" style={{ zIndex: 10000 }}>
+            <div
+              className="modal-content"
+              style={{
+                maxWidth: 400,
+                textAlign: "center",
+                padding: "2.5rem 2rem",
+              }}
+            >
+              <h2
+                style={{
+                  color: "#eb5757",
+                  fontWeight: 700,
+                  marginBottom: "1.2rem",
+                }}
+              >
+                Download Report
+              </h2>
+              <p style={{ color: "#222", marginBottom: "2rem" }}>
+                Choose your preferred format for the <b>Client</b> report:
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "1.2rem",
+                  justifyContent: "center",
+                  marginBottom: "2rem",
+                }}
+              >
+                <button
+                  style={{
+                    flex: 1,
+                    background:
+                      "linear-gradient(90deg, #27ae60 0%, #6fcf97 100%)",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "999px",
+                    padding: "13px 0",
+                    fontWeight: 600,
+                    fontSize: "1.07rem",
+                    cursor: "not-allowed",
+                    opacity: 0.7,
+                  }}
+                >
+                  Excel (.csv)
+                </button>
+                <button
+                  style={{
+                    flex: 1,
+                    background:
+                      "linear-gradient(90deg, #f2c94c 0%, #f2994a 100%)",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "999px",
+                    padding: "13px 0",
+                    fontWeight: 600,
+                    fontSize: "1.07rem",
+                    cursor: "not-allowed",
+                    opacity: 0.7,
+                  }}
+                >
+                  PDF (.pdf)
+                </button>
+              </div>
+              <button
+                className="cancel-btn"
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#eb5757",
+                  fontWeight: 600,
+                  fontSize: "1.05rem",
+                  cursor: "pointer",
+                  marginTop: "0.5rem",
+                }}
+                onClick={() => setShowClientReportModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Equipment Management Section */}
         <div className="equipment-section">

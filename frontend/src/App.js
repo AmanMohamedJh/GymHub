@@ -35,6 +35,7 @@ import ManageGym from "./pages/Gym_Owner/ManageGym.jsx";
 import OwnerReviewsDashboard from "./pages/Gym_Owner/OwnerReviewsDashboard.jsx";
 import EquipmentManagement from "./pages/Gym_Owner/EquipmentManagement.jsx";
 import ConfirmationGym from "./pages/Gym_Owner/ConfirmationGym.jsx";
+import GymClients from "./pages/Gym_Owner/GymClients.jsx";
 // Trainer Components
 import TrainerDashboard from "./pages/Trainer/TrainerDashboard.jsx";
 import TrainerRegistration from "./pages/Trainer/TrainerRegistration.jsx";
@@ -209,6 +210,26 @@ function App() {
                         <RequireSubscription>
                           <EquipmentManagement />
                         </RequireSubscription>
+                      </ProtectedRoute>
+                    </NonAdminRoute>
+                  }
+                />
+                <Route
+                  path="/owner/gym/clients/:gymId"
+                  element={
+                    <NonAdminRoute>
+                      <ProtectedRoute allowedRole="gym_owner">
+                        <GymClients />
+                      </ProtectedRoute>
+                    </NonAdminRoute>
+                  }
+                />
+                <Route
+                  path="/gym-owner/clients"
+                  element={
+                    <NonAdminRoute>
+                      <ProtectedRoute allowedRole="gym_owner">
+                        <GymClients />
                       </ProtectedRoute>
                     </NonAdminRoute>
                   }

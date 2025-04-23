@@ -31,4 +31,18 @@ router.get(
   clientGymRegistrationController.getClientGymStatus
 );
 
+// PATCH: Update client registration status
+router.patch(
+  "/gyms/:gymId/Clientregistrations/:registrationId",
+  requireAuth,
+  clientGymRegistrationController.updateClientRegistrationStatus
+);
+
+// DELETE: Remove client registration
+router.delete(
+  "/gyms/:gymId/Clientregistrations/:registrationId",
+  requireAuth,
+  clientGymRegistrationController.deleteClientRegistration
+);
+
 module.exports = router;

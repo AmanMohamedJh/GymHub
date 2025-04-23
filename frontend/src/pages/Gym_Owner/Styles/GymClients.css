@@ -1,0 +1,379 @@
+/* GymClients.css - Custom styles for GymClients.jsx */
+
+/* Modern UI background and spacing */
+.gym-clients-modern-bg {
+  background: url("./images/gym-background2.jpg.jpg") center top repeat #f6f7fb;
+  min-height: 100vh;
+  padding-top: 40px;
+}
+
+.gym-clients-modern-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(44, 62, 80, 0.07);
+  padding: 38px 32px 32px 32px;
+}
+
+.clients-header-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.clients-header-modern h2 {
+  font-size: 2.1rem;
+  color: #3b3b4f;
+  font-weight: 700;
+  margin: 0;
+}
+
+.clients-actions-modern {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.bulk-actions-modern {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(245, 248, 255, 0.95);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(99, 91, 255, 0.08);
+  padding: 7px 20px 7px 14px;
+  margin-left: 20px;
+  margin-right: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+  min-height: 44px;
+}
+
+.bulk-actions-modern span {
+  font-size: 1.04rem;
+  font-weight: 600;
+  color: #635bff;
+  margin-right: 6px;
+}
+
+.bulk-actions-modern .action-btn-modern {
+  margin-right: 0;
+  margin-left: 2px;
+  min-width: 90px;
+  font-size: 1.01rem;
+  font-weight: 600;
+  border-radius: 7px;
+  border-width: 1.5px;
+  box-shadow: none;
+  background: #fff;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+}
+
+.bulk-actions-modern .action-btn-modern.view {
+  color: #635bff;
+  border-color: #635bff;
+}
+
+.bulk-actions-modern .action-btn-modern.edit {
+  color: #2e7d32;
+  border-color: #2e7d32;
+}
+
+.bulk-actions-modern .action-btn-modern.remove {
+  color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+.bulk-actions-modern .action-btn-modern:hover {
+  background: #f6f7fb;
+  opacity: 0.97;
+  border-width: 2px;
+}
+
+@media (max-width: 900px) {
+  .bulk-actions-modern {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 4vw 8px 4vw;
+    min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.search-bar-modern,
+.status-filter-modern {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #e0e3eb;
+  font-size: 1.04rem;
+  background: #f6f7fb;
+}
+
+.add-client-btn-modern {
+  display: none !important;
+}
+
+.clients-table-wrapper-modern {
+  overflow-x: auto;
+  background: #f6f7fb;
+  border-radius: 12px;
+  margin-top: 12px;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+}
+
+.clients-table-modern {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 800px;
+}
+
+.clients-table-modern th,
+.clients-table-modern td {
+  padding: 15px 12px;
+  text-align: left;
+  font-size: 1.05rem;
+  background: #fff;
+  color: #2d2d3a;
+  font-weight: 500;
+}
+
+.clients-table-modern th {
+  color: #b80000;
+  font-weight: 700;
+  border-bottom: 2px solid #e0e3eb;
+}
+
+.clients-table-modern tr {
+  background: #fff;
+  transition: background 0.18s;
+}
+
+.row-attention-modern {
+  background: #fff9e5 !important;
+}
+
+.client-cell-modern {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.client-profile-modern {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dummy-profile-icon-modern {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f1f3f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.client-info-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.client-name-modern {
+  font-weight: 600;
+  color: #2d2d3a;
+  font-size: 1.07rem;
+}
+
+.client-email-modern {
+  color: #7b7b8b;
+  font-size: 0.99rem;
+}
+
+.client-phone-modern {
+  color: #b0b0b8;
+  font-size: 0.97rem;
+}
+
+.status-badge-modern {
+  display: inline-block;
+  min-width: 74px;
+  padding: 4px 14px;
+  border-radius: 16px;
+  font-size: 1.01rem;
+  font-weight: 600;
+  text-align: center;
+  margin-right: 6px;
+}
+
+.status-active {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #2e7d32;
+}
+
+.status-paused {
+  background: #fffde7;
+  color: #fbc02d;
+  border: 1px solid #fbc02d;
+}
+
+.status-suspended {
+  background: #ffebee;
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+}
+
+.action-btn-modern {
+  background: #fff;
+  border-radius: 7px;
+  padding: 7px 13px;
+  margin-right: 6px;
+  font-size: 1.13rem;
+  border: 1.5px solid #e0e3eb;
+  color: #635bff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+}
+
+.action-btn-modern.view {
+  color: #635bff;
+}
+
+.action-btn-modern.edit {
+  color: #2e7d32;
+}
+
+.action-btn-modern.remove {
+  color: #d32f2f;
+}
+
+.action-btn-modern.contact {
+  color: #b80000;
+}
+
+.action-btn-modern:hover {
+  background: #f6f7fb;
+  border-color: #635bff;
+  opacity: 0.95;
+}
+
+.no-clients-modern {
+  text-align: center;
+  color: #b80000;
+  font-weight: 500;
+  padding: 24px 0;
+}
+
+/* Drawer/Modal Modern */
+.profile-drawer-overlay-modern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(44, 62, 80, 0.1);
+  z-index: 1000;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+.profile-drawer-modern {
+  background: #fff;
+  width: 410px;
+  max-width: 96vw;
+  height: 100vh;
+  box-shadow: -4px 0 24px rgba(44, 62, 80, 0.1);
+  padding: 38px 28px 28px 28px;
+  position: relative;
+  overflow-y: auto;
+  border-radius: 18px 0 0 18px;
+  animation: slideInDrawerModern 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInDrawerModern {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.drawer-close-modern {
+  position: absolute;
+  top: 16px;
+  right: 22px;
+  background: none;
+  border: none;
+  font-size: 2.2rem;
+  color: #b80000;
+  cursor: pointer;
+}
+
+.profile-section-modern {
+  margin-bottom: 18px;
+  font-size: 1.04rem;
+  color: #2d2d3a;
+  font-weight: 500;
+}
+
+.profile-actions-modern {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.sidebar-modern {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(44, 62, 80, 0.07);
+  padding: 24px 0 24px 0;
+  margin: 34px 0 34px 24px;
+}
+
+.sidebar-modern .sidebar-link {
+  color: #635bff;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 12px 24px;
+  display: block;
+  margin-bottom: 8px;
+  transition: background 0.18s, color 0.18s;
+}
+
+.sidebar-modern .sidebar-link.active,
+.sidebar-modern .sidebar-link:hover {
+  background: #f6f7fb;
+  color: #3b3b4f;
+}
+
+@media (max-width: 900px) {
+  .gym-clients-modern-container {
+    padding: 24px 6vw 18px 6vw;
+  }
+  .clients-table-modern {
+    min-width: 600px;
+  }
+  .profile-drawer-modern {
+    width: 98vw;
+    padding: 22px 8vw 18px 8vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .clients-table-modern {
+    min-width: 360px;
+  }
+  .profile-drawer-modern {
+    padding: 14px 2vw 12px 2vw;
+  }
+}
