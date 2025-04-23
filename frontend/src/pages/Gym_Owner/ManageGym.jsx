@@ -11,6 +11,8 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import "./Styles/ManageGym.css";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const ManageGym = () => {
   const { gymId } = useParams();
@@ -156,6 +158,101 @@ const ManageGym = () => {
       images: [...(prev.images || []), ...newImageURLs],
     }));
     closeImageEditModal();
+  };
+
+  // --- Report Generation Functions ---
+  const fetchClientsForReport = async (gymId, user) => {
+    const res = await fetch(`/api/gymOwner/gyms/${gymId}/Clientregistrations`, {
+      headers: { Authorization: `Bearer ${user?.token}` },
+      credentials: "include",
+    });
+    if (!res.ok) throw new Error("Failed to fetch clients for report.");
+    return await res.json();
+  };
+
+  const handleDownloadClientReport = (format) => async () => {
+    try {
+      const clients = await fetchClientsForReport(gymId, user);
+      if (!clients.length) {
+        alert("No clients found for this gym.");
+        return;
+      }
+      if (format === "csv") {
+        const headers = [
+          "Full Name",
+          "Email",
+          "Phone",
+          "Status",
+          "Start Date",
+          "DOB",
+          "Gender",
+          "Fitness Level",
+          "Fitness Goals",
+        ];
+        const csvRows = [headers.join(",")];
+        clients.forEach((client) => {
+          csvRows.push(
+            [
+              JSON.stringify(client.fullName ?? ""),
+              JSON.stringify(client.email ?? ""),
+              JSON.stringify(client.phone ?? ""),
+              JSON.stringify(client.status ?? ""),
+              JSON.stringify(
+                client.startDate
+                  ? new Date(client.startDate).toLocaleDateString()
+                  : ""
+              ),
+              JSON.stringify(
+                client.dob ? new Date(client.dob).toLocaleDateString() : ""
+              ),
+              JSON.stringify(client.gender ?? ""),
+              JSON.stringify(client.fitnessLevel ?? ""),
+              JSON.stringify(client.fitnessGoals ?? ""),
+            ].join(",")
+          );
+        });
+        const csv = csvRows.join("\n");
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `client_report_${gymId}.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else if (format === "pdf") {
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.setTextColor(39, 174, 96);
+        doc.text("Client Report", 14, 18);
+        doc.setFontSize(12);
+        doc.setTextColor(44, 62, 80);
+        doc.text(`Total Clients: ${clients.length}`, 14, 28);
+        doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 34);
+        const headers = ["Full Name", "Email", "Phone", "Status", "Start Date"];
+        const body = clients.map((client) => [
+          client.fullName ?? "",
+          client.email ?? "",
+          client.phone ?? "",
+          client.status ?? "",
+          client.startDate
+            ? new Date(client.startDate).toLocaleDateString()
+            : "",
+        ]);
+        autoTable(doc, {
+          startY: 40,
+          head: [headers],
+          body,
+          styles: { fontSize: 10 },
+          headStyles: { fillColor: [39, 174, 96] },
+          alternateRowStyles: { fillColor: [240, 255, 244] },
+        });
+        doc.save(`client_report_${gymId}.pdf`);
+      }
+      setShowClientReportModal(false);
+    } catch (err) {
+      alert("Error generating report: " + err.message);
+      setShowClientReportModal(false);
+    }
   };
 
   if (loading) {
@@ -523,9 +620,10 @@ const ManageGym = () => {
                     padding: "13px 0",
                     fontWeight: 600,
                     fontSize: "1.07rem",
-                    cursor: "not-allowed",
-                    opacity: 0.7,
+                    cursor: "pointer",
+                    opacity: 1,
                   }}
+                  onClick={handleDownloadClientReport("csv")}
                 >
                   Excel (.csv)
                 </button>
@@ -540,9 +638,10 @@ const ManageGym = () => {
                     padding: "13px 0",
                     fontWeight: 600,
                     fontSize: "1.07rem",
-                    cursor: "not-allowed",
-                    opacity: 0.7,
+                    cursor: "pointer",
+                    opacity: 1,
                   }}
+                  onClick={handleDownloadClientReport("pdf")}
                 >
                   PDF (.pdf)
                 </button>
