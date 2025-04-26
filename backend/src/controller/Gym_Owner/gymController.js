@@ -1,5 +1,6 @@
 const Gym = require("../../models/Gym_Owner/Gym");
 const Equipment = require("../../models/Gym_Owner/Equipment");
+const GymReview = require("../../models/Gym_Owner/GymReview");
 const mongoose = require("mongoose");
 
 // Register a new gym
@@ -117,10 +118,20 @@ const registerGym = async (req, res) => {
 // Get all approved gyms only (for public browse)
 const getAllGyms = async (req, res) => {
   try {
-    const approvedGyms = await Gym.find({ status: "approved" }).sort({
-      createdAt: -1,
-    });
-    res.status(200).json(approvedGyms);
+    const gyms = await Gym.find({ status: "approved" }).sort({ createdAt: -1 });
+    // Attach average rating to each gym
+    const gymsWithRatings = await Promise.all(
+      gyms.map(async (gym) => {
+        const reviews = await GymReview.find({ gymId: gym._id });
+        const avgRating = reviews.length
+          ? (
+              reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+            ).toFixed(1)
+          : 0;
+        return { ...gym.toObject(), avgRating };
+      })
+    );
+    res.status(200).json(gymsWithRatings);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

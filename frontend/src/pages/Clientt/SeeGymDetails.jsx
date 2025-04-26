@@ -15,16 +15,8 @@ const SeeGymDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [equipment, setEquipment] = useState([]);
-  // Mock data for announcements and reviews
-  const [announcements] = useState([
-    { id: 1, text: "New Yoga classes every Monday!" },
-    { id: 2, text: "20% off for students this month!" },
-  ]);
-  const [reviews] = useState([
-    { id: 1, user: "Alice", rating: 5, comment: "Amazing gym, great staff!" },
-    { id: 2, user: "Bob", rating: 4, comment: "Good equipment, clean space." },
-  ]);
-
+  const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
   const [slideIndex, setSlideIndex] = useState(0);
   // Reset slideIndex when images array changes
   useEffect(() => {
@@ -68,6 +60,21 @@ const SeeGymDetails = () => {
       }
     };
     fetchGym();
+  }, [gymId]);
+
+  useEffect(() => {
+    if (gymId) {
+      fetch(`/api/gym-reviews/${gymId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setReviews(data);
+          setLoadingReviews(false);
+        })
+        .catch(() => {
+          setReviews([]);
+          setLoadingReviews(false);
+        });
+    }
   }, [gymId]);
 
   const { user } = useAuthContext();
@@ -188,6 +195,31 @@ const SeeGymDetails = () => {
   if (loading) return <div className="seegymdetails-loading">Loading...</div>;
   if (error) return <div className="seegymdetails-error">{error}</div>;
   if (!gym) return <div className="seegymdetails-error">Gym not found.</div>;
+
+  // --- Review Stats Calculation ---
+  const totalReviews = reviews.length;
+  const avgRating = totalReviews
+    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews).toFixed(1)
+    : 0;
+
+  const categoryFields = [
+    { key: "staff", label: "Staff" },
+    { key: "facilities", label: "Facilities" },
+    { key: "cleanliness", label: "Cleanliness" },
+    { key: "comfort", label: "Comfort" },
+    { key: "freeWifi", label: "Free Wifi" },
+    { key: "valueForMoney", label: "Value for money" },
+    { key: "location", label: "Location" },
+  ];
+  const categoryAverages = {};
+  categoryFields.forEach(({ key }) => {
+    categoryAverages[key] = totalReviews
+      ? (
+          reviews.reduce((sum, r) => sum + (r.categoryRatings?.[key] || 0), 0) /
+          totalReviews
+        ).toFixed(1)
+      : 0;
+  });
 
   return (
     <div className="seegymdetails-container">
@@ -379,31 +411,122 @@ const SeeGymDetails = () => {
         }
         return null;
       })()}
-      {/* Announcements */}
-      <div className="seegymdetails-announcements-section">
-        <h3>Announcements</h3>
-        <ul>
-          {announcements.map((a) => (
-            <li key={a.id} className="seegymdetails-announcement">
-              {a.text}
-            </li>
-          ))}
-        </ul>
-      </div>
       {/* Reviews */}
-      <div className="seegymdetails-reviews-section">
-        <h3>Feedbacks</h3>
-        <ul>
-          {reviews.map((r) => (
-            <li key={r.id} className="seegymdetails-review">
-              <b>{r.user}</b>{" "}
-              <span className="seegymdetails-review-rating">
-                {"★".repeat(r.rating)}
+      <div className="gymdetails-reviews-preview">
+        <div
+          className="gymdetails-reviews-header"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <span className="gymdetails-reviews-title">Reviews</span>
+          <a className="gymreview-readall" href={`/gyms/${gymId}/reviews`}>
+            Read all reviews
+          </a>
+        </div>
+        <div className="gymdetails-reviewstats-box">
+          <span className="gymdetails-reviewstats-score">{avgRating}</span>
+          <span className="gymdetails-reviewstats-status">
+            {avgRating >= 7 ? "Good" : avgRating > 0 ? "Average" : "-"}
+          </span>
+          <span className="gymdetails-reviewstats-count">
+            · {totalReviews} reviews
+          </span>
+        </div>
+        <div className="gymdetails-reviewstats-categories">
+          {categoryFields.map(({ key, label }) => (
+            <div className="gymdetails-reviewstats-category" key={key}>
+              <span>{label}</span>
+              <div className="gymdetails-reviewstats-barwrap">
+                <div
+                  className="gymdetails-reviewstats-bar"
+                  style={{
+                    width: `${categoryAverages[key] * 10}%`,
+                    background:
+                      categoryAverages[key] >= 7 ? "#e53935" : "#b71c1c",
+                  }}
+                ></div>
+              </div>
+              <span className="gymdetails-reviewstats-catscore">
+                {categoryAverages[key]}
               </span>
-              : {r.comment}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
+        <div
+          className="gymdetails-reviews-list"
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "1.5rem",
+            marginTop: "2.5rem",
+          }}
+        >
+          {loadingReviews ? (
+            <div>Loading...</div>
+          ) : reviews.length === 0 ? (
+            <div>No reviews yet</div>
+          ) : (
+            reviews.slice(0, 2).map((r) => (
+              <div
+                key={r._id}
+                style={{
+                  background: "#fff",
+                  borderRadius: 12,
+                  boxShadow: "0 2px 10px rgba(31,38,135,0.08)",
+                  padding: "1.2rem 1.5rem",
+                  minWidth: 240,
+                  maxWidth: 340,
+                  flex: "1 1 240px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.6rem",
+                  border: "1px solid #f2f2f2",
+                  color: "#222",
+                  opacity: 1,
+                }}
+              >
+                <span
+                  style={{
+                    fontWeight: 700,
+                    fontSize: "1.1rem",
+                    color: "#222",
+                    marginBottom: 2,
+                    opacity: 1,
+                    background: "none",
+                  }}
+                >
+                  {r.clientName || "Client"}
+                </span>
+                <span style={{ fontSize: "1.3rem", marginBottom: 4 }}>
+                  {r.emoji || "🙂"}
+                </span>
+                <span
+                  style={{
+                    color: "#e53935",
+                    fontWeight: 600,
+                    fontSize: "1.1rem",
+                    marginBottom: 2,
+                  }}
+                >
+                  Rating: {r.rating || "-"}
+                </span>
+                <span
+                  style={{
+                    color: "#444",
+                    fontSize: "1rem",
+                    opacity: 1,
+                    background: "none",
+                  }}
+                >
+                  {r.content}
+                </span>
+              </div>
+            ))
+          )}
+        </div>
       </div>
       <div className="seegymdetails-actions">
         {!clientStatus.loading &&

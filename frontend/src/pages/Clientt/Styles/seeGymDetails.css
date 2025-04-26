@@ -168,7 +168,7 @@
 }
 
 .seegymdetails-announcement {
-  color: #ad8700;
+  color: #111 !important;
   font-size: 1.02rem;
   margin-bottom: 0.3rem;
 }
@@ -206,6 +206,208 @@
   background: linear-gradient(90deg, #e74c3c 0%, #7a6c6a 100%);
 }
 
+/* --- Gym Review Section (custom, themed, modular) --- */
+.gymreview-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.12rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+.gymreview-score {
+  background: #e53935;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.2rem 0.8rem;
+  margin-right: 0.2rem;
+  letter-spacing: 0.5px;
+}
+.gymreview-status {
+  color: #e53935;
+  font-weight: 600;
+  margin-right: 0.4rem;
+}
+.gymreview-count {
+  color: #222;
+  font-size: 1.02rem;
+  margin-right: 0.6rem;
+}
+.gymreview-readall {
+  margin-left: auto;
+  background: #fff;
+  color: #e53935;
+  border: 1.5px solid #e53935;
+  border-radius: 6px;
+  padding: 0.18rem 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+  font-size: 1.01rem;
+}
+.gymreview-readall:hover {
+  background: #e53935;
+  color: #fff;
+}
+.gymreview-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 2.2rem;
+  margin-bottom: 1.2rem;
+}
+.gymreview-category {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 230px;
+}
+.gymreview-bar-wrap {
+  flex: 1;
+  background: #f4eaea;
+  border-radius: 8px;
+  height: 9px;
+  margin: 0 0.5rem;
+  overflow: hidden;
+  min-width: 70px;
+  max-width: 120px;
+}
+.gymreview-bar {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.4s;
+}
+.gymreview-bar-low {
+  background: #b71c1c !important;
+}
+.gymreview-cat-score {
+  font-weight: 600;
+  color: #e53935;
+  font-size: 1.05rem;
+  margin-left: 0.2rem;
+}
+.gymreview-list {
+  margin-top: 1.5rem;
+}
+.gymreview-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.7rem 0 0.7rem 0;
+  border-bottom: 1px solid #f0eaea;
+  font-size: 1.09rem;
+  color: #111;
+}
+.gymreview-item:last-child {
+  border-bottom: none;
+}
+.gymreview-user {
+  color: #111;
+  font-weight: 600;
+  margin-right: 0.3rem;
+}
+.gymreview-stars {
+  color: #ffb400;
+  font-size: 1.13rem;
+  letter-spacing: 1px;
+}
+.gymreview-comment {
+  color: #222;
+  font-size: 1.04rem;
+  font-style: italic;
+}
+
+.gymdetails-reviewstats-box {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.12rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+.gymdetails-reviewstats-score {
+  background: #e53935;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.2rem 0.8rem;
+  margin-right: 0.2rem;
+  letter-spacing: 0.5px;
+}
+.gymdetails-reviewstats-status {
+  color: #e53935;
+  font-weight: 600;
+  margin-right: 0.4rem;
+}
+.gymdetails-reviewstats-count {
+  color: #222;
+  font-size: 1.02rem;
+  margin-right: 0.6rem;
+}
+.gymdetails-reviewstats-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 2.2rem;
+  margin-bottom: 1.2rem;
+}
+.gymdetails-reviewstats-category {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 230px;
+}
+.gymdetails-reviewstats-barwrap {
+  flex: 1;
+  background: #f4eaea;
+  border-radius: 8px;
+  height: 9px;
+  margin: 0 0.5rem;
+  overflow: hidden;
+  min-width: 70px;
+  max-width: 120px;
+}
+.gymdetails-reviewstats-bar {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.4s;
+  background: #e53935;
+}
+.gymdetails-reviewstats-catscore {
+  font-weight: 600;
+  color: #e53935;
+  font-size: 1.05rem;
+  margin-left: 0.2rem;
+}
+
+.gymdetails-reviewstats-category > span:first-child {
+  color: #181818 !important;
+  font-weight: 700;
+  min-width: 70px;
+  font-size: 1.06rem;
+  letter-spacing: 0.1px;
+}
+
+/* Fix: Make content text black for better contrast */
+.seegymdetails-section span,
+.seegymdetails-equipment-list,
+.seegymdetails-equipment-item,
+.seegymdetails-section ul,
+.seegymdetails-section li,
+.seegymdetails-section {
+  color: #111 !important;
+}
+.seegymdetails-map-section h3,
+.seegymdetails-announcements-section h3 {
+  color: #111 !important;
+}
+.gymreview-category > span:first-child {
+  color: #111 !important;
+  font-weight: 600;
+  min-width: 70px;
+}
+
 /* Responsive design improvements */
 @media (max-width: 900px) {
   .seegymdetails-main {
@@ -234,4 +436,19 @@
   .seegymdetails-info {
     padding: 1rem 0.6rem;
   }
+}
+
+.gymdetails-reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.gymdetails-reviews-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #222;
+  letter-spacing: 0.03rem;
+  margin-right: 1.2rem;
 }

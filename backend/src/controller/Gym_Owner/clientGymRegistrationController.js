@@ -108,6 +108,37 @@ exports.getUserClientRegistrations = async (req, res) => {
   }
 };
 
+// GET /api/gyms/:gymId/has-joined/:clientId
+exports.checkClientJoined = async (req, res) => {
+  try {
+    const { gymId, clientId } = req.params;
+    // Find any registration for this gym and client (any status)
+    const registration = await ClientGymRegistration.findOne({
+      gymId,
+      clientId,
+    });
+    if (!registration) {
+      return res.json({ joined: false });
+    }
+    // Fetch user details
+    const user = await require("../../models/userModel").findById(clientId);
+    res.json({
+      joined: true,
+      user: {
+        name: registration.fullName || user?.name || "",
+        email: registration.email || user?.email || "",
+        joined: registration.startDate
+          ? registration.startDate.toISOString().split("T")[0]
+          : registration.createdAt
+          ? registration.createdAt.toISOString().split("T")[0]
+          : "",
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // PATCH /api/gyms/:gymId/Clientregistrations/:registrationId
 exports.updateClientRegistrationStatus = async (req, res) => {
   try {

@@ -84,8 +84,8 @@ const BrowseGyms = () => {
                   <div className="browsegyms-info-row">
                     <span className="browsegyms-rating">
                       <FaStar style={{ color: "#fbbf24", marginRight: 4 }} />
-                      {/* Mock rating for now */}
-                      {gym.rating || 4 + Math.round(Math.random() * 10) / 10}
+                      {/* Show real average rating from backend */}
+                      {gym.avgRating ? gym.avgRating : "No rating"}
                     </span>
                     <span className="browsegyms-location">
                       <FaMapMarkerAlt style={{ marginRight: 4 }} />
