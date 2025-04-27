@@ -1,292 +1,409 @@
 import React, { useState, useEffect } from "react";
 import { FaReply, FaTrash } from "react-icons/fa";
-import SearchBar from "../../Components/Search/SearchBar";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import "./Styles/OwnerReviewsDashboard.css";
 
+const categoryFields = [
+  { key: "staff", label: "Staff" },
+  { key: "facilities", label: "Facilities" },
+  { key: "cleanliness", label: "Cleanliness" },
+  { key: "comfort", label: "Comfort" },
+  { key: "freeWifi", label: "Free Wifi" },
+  { key: "valueForMoney", label: "Value for money" },
+  { key: "location", label: "Location" },
+];
+
+// --- Modal Components ---
+const Modal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="owner-modal-overlay" onClick={onClose}>
+      <div className="owner-modal-content" onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const ReplyModal = ({ isOpen, onClose, onReply, value, setValue, review }) => (
+  <Modal isOpen={isOpen} onClose={onClose}>
+    <div className="owner-modal-title">Reply to Review</div>
+    {review && (
+      <div className="owner-modal-subtitle">
+        You are replying to{" "}
+        <span className="owner-modal-user">
+          {typeof review.clientName === "string" && review.clientName.trim()
+            ? review.clientName
+            : "Unknown"}
+        </span>
+        's review
+      </div>
+    )}
+    <textarea
+      className="owner-modal-textarea owner-modal-textarea-upgraded"
+      placeholder={`Write your reply to ${
+        review
+          ? typeof review.clientName === "string" && review.clientName.trim()
+            ? review.clientName
+            : "Unknown"
+          : "this user"
+      }...`}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      rows={5}
+      autoFocus
+    />
+    <div className="owner-modal-actions">
+      <button
+        className="owner-modal-btn owner-modal-btn-primary"
+        onClick={onReply}
+      >
+        Reply
+      </button>
+      <button className="owner-modal-btn" onClick={onClose}>
+        Cancel
+      </button>
+    </div>
+  </Modal>
+);
+
+const DeleteModal = ({ isOpen, onClose, onDelete }) => (
+  <Modal isOpen={isOpen} onClose={onClose}>
+    <div className="owner-modal-title owner-modal-title-delete">
+      Delete Review?
+    </div>
+    <div className="owner-modal-desc">
+      Are you sure you want to delete this review? This action cannot be undone.
+    </div>
+    <div className="owner-modal-actions">
+      <button
+        className="owner-modal-btn owner-modal-btn-danger"
+        onClick={onDelete}
+      >
+        Delete
+      </button>
+      <button className="owner-modal-btn" onClick={onClose}>
+        Cancel
+      </button>
+    </div>
+  </Modal>
+);
+
 const OwnerReviewsDashboard = () => {
-  const [loading, setLoading] = useState(true);
+  const { user } = useAuthContext();
+  const [gyms, setGyms] = useState([]);
   const [reviews, setReviews] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [dateFilter, setDateFilter] = useState("");
-  const [showReplyModal, setShowReplyModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [replyModalOpen, setReplyModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [replyValue, setReplyValue] = useState("");
   const [selectedReview, setSelectedReview] = useState(null);
-  const [replyText, setReplyText] = useState("");
 
-  // Mock data - replace with actual API call
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        setLoading(true);
-        // In a real app, you would fetch data from your API here
-        // const response = await fetch('/api/owner/reviews');
-        // const data = await response.json();
-        // setReviews(data);
+  const [selectedGym, setSelectedGym] = useState("all");
+  const [ratingFilter, setRatingFilter] = useState("all");
+  const [searchText, setSearchText] = useState("");
 
-        // For now, use mock data
-        const mockReviews = [
-          {
-            id: 1,
-            clientName: "John Doe",
-            rating: 4,
-            text: "Great facilities and excellent trainers!",
-            date: "2025-03-15",
-            gymName: "FitZone",
-            gymLocation: "New York",
-            reply: "",
-          },
-          {
-            id: 2,
-            clientName: "Jane Smith",
-            rating: 5,
-            text: "Best gym experience ever. Very clean and well-maintained.",
-            date: "2025-03-16",
-            gymName: "PowerHouse",
-            gymLocation: "Los Angeles",
-            reply: "",
-          },
-        ];
-
-        // Simulate API delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setReviews(mockReviews);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchReviews();
-  }, []);
-
-  const calculateStats = () => {
-    const totalReviews = reviews.length;
-    const averageRating =
-      reviews.reduce((acc, review) => acc + review.rating, 0) / totalReviews ||
-      0;
-    const recentReviews = reviews.filter((review) => {
-      const reviewDate = new Date(review.date);
-      const weekAgo = new Date();
-      weekAgo.setDate(weekAgo.getDate() - 7);
-      return reviewDate >= weekAgo;
-    }).length;
-
-    return { totalReviews, averageRating, recentReviews };
-  };
+  // --- Filtering logic ---
+  const filteredReviews = reviews.filter((r) => {
+    let pass = true;
+    if (selectedGym !== "all") {
+      pass = pass && r.gymId === selectedGym;
+    }
+    if (ratingFilter === "0") {
+      pass = pass && r.rating === 0;
+    } else if (ratingFilter === "2+") {
+      pass = pass && r.rating >= 2 && r.rating < 5;
+    } else if (ratingFilter === "5+") {
+      pass = pass && r.rating >= 5 && r.rating < 8;
+    } else if (ratingFilter === "8+") {
+      pass = pass && r.rating >= 8;
+    }
+    if (searchText.trim()) {
+      const searchLower = searchText.toLowerCase();
+      pass =
+        pass &&
+        ((r.clientName && r.clientName.toLowerCase().includes(searchLower)) ||
+          (r.heading && r.heading.toLowerCase().includes(searchLower)) ||
+          (r.content && r.content.toLowerCase().includes(searchLower)));
+    }
+    return pass;
+  });
 
   const handleReply = (review) => {
     setSelectedReview(review);
-    setShowReplyModal(true);
+    setReplyModalOpen(true);
   };
 
   const handleDelete = (review) => {
     setSelectedReview(review);
-    setShowDeleteModal(true);
+    setDeleteModalOpen(true);
   };
 
-  const submitReply = () => {
-    const updatedReviews = reviews.map((review) =>
-      review.id === selectedReview.id ? { ...review, reply: replyText } : review
-    );
-    setReviews(updatedReviews);
-    setShowReplyModal(false);
-    setReplyText("");
+  const handleReplySubmit = () => {
+    // Submit reply logic here
+    setReplyModalOpen(false);
   };
 
-  const confirmDelete = () => {
-    const updatedReviews = reviews.filter(
-      (review) => review.id !== selectedReview.id
-    );
-    setReviews(updatedReviews);
-    setShowDeleteModal(false);
+  const handleDeleteConfirm = () => {
+    // Delete review logic here
+    setDeleteModalOpen(false);
   };
 
-  const stats = calculateStats();
+  const handleOpenReplyModal = (review) => {
+    handleReply(review);
+  };
 
-  const filteredReviews = reviews.filter(
-    (review) =>
-      review.gymName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (!dateFilter || review.date === dateFilter)
-  );
+  const handleCloseReplyModal = () => {
+    setReplyModalOpen(false);
+  };
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading reviews...</p>
-      </div>
-    );
-  }
+  const handleOpenDeleteModal = (review) => {
+    handleDelete(review);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
+  // Fetch gyms with reviews for this owner (single API call)
+  useEffect(() => {
+    const fetchGymsWithReviews = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const token = user?.token;
+        console.log("[OwnerReviewsDashboard] Using token:", token);
+        const res = await fetch(
+          "http://localhost:4000/api/gym-owner/gym-reviews/gyms-with-reviews",
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+        console.log("[OwnerReviewsDashboard] Response status:", res.status);
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error("[OwnerReviewsDashboard] Error response:", errorText);
+          throw new Error("Failed to fetch gyms with reviews: " + errorText);
+        }
+        const gymsWithReviews = await res.json();
+        console.log(
+          "[OwnerReviewsDashboard] Fetched gymsWithReviews:",
+          gymsWithReviews
+        );
+        setGyms(gymsWithReviews);
+        // Flatten all reviews and attach gym info for display
+        const allReviews = gymsWithReviews.flatMap((gym) =>
+          gym.reviews.map((review) => ({
+            ...review,
+            gymName: gym.name,
+            gymLocation: gym.location?.city || gym.location?.district || "",
+            gymId: gym._id,
+          }))
+        );
+        setReviews(allReviews);
+      } catch (err) {
+        setError("Failed to fetch gyms with reviews");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchGymsWithReviews();
+  }, []);
 
   return (
     <div className="owner-reviews-main">
-      <div className="owner-reviews-content">
-        {/* Stats Cards */}
-        <div className="owner-reviews-stats">
-          <div className="owner-reviews-stat-card">
-            <div className="owner-reviews-stat-title">Total Reviews</div>
-            <div className="owner-reviews-stat-value">{stats.totalReviews}</div>
-          </div>
-          <div className="owner-reviews-stat-card">
-            <div className="owner-reviews-stat-title">Average Rating</div>
-            <div className="owner-reviews-stat-value">
-              {stats.averageRating.toFixed(1)}★
-            </div>
-          </div>
-          <div className="owner-reviews-stat-card">
-            <div className="owner-reviews-stat-title">
-              Recent Reviews (7 days)
-            </div>
-            <div className="owner-reviews-stat-value">
-              {stats.recentReviews}
-            </div>
-          </div>
-        </div>
+      {/* --- Page Title --- */}
+      <div className="owner-reviews-page-title-wrapper">
+        <h1 className="owner-reviews-page-title">Reviews Dashboard</h1>
+      </div>
 
-        {/* Search Section */}
-        <div className="owner-reviews-search">
-          <SearchBar
-            searchTerm={searchTerm}
-            dateFilter={dateFilter}
-            onSearchChange={setSearchTerm}
-            onDateChange={setDateFilter}
-          />
-        </div>
+      {/* --- Loading and Error States --- */}
+      {loading && <div className="owner-reviews-loading">Loading...</div>}
+      {error && <div className="owner-reviews-error">{error}</div>}
 
-        {/* Table Section */}
-        <div className="owner-reviews-table-container">
-          <table className="owner-reviews-table">
-            <thead>
-              <tr>
-                <th>CLIENT NAME</th>
-                <th>GYM NAME</th>
-                <th>LOCATION</th>
-                <th>RATING</th>
-                <th>REVIEW</th>
-                <th>DATE</th>
-                <th>ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredReviews.map((review) => (
-                <tr key={review.id}>
-                  <td>{review.clientName}</td>
-                  <td>{review.gymName}</td>
-                  <td>{review.gymLocation}</td>
-                  <td>{review.rating}★</td>
-                  <td>{review.text}</td>
-                  <td>{review.date}</td>
-                  <td>
-                    <div className="owner-reviews-actions">
-                      <button
-                        className="owner-reviews-action-btn owner-reviews-edit"
-                        onClick={() => handleReply(review)}
-                      >
-                        <FaReply />
-                      </button>
-                      <button
-                        className="owner-reviews-action-btn owner-reviews-delete"
-                        onClick={() => handleDelete(review)}
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* --- Overall Review Statistics Section --- */}
+      <div className="owner-reviews-stats-bar">
+        <div className="owner-reviews-stats-summary">
+          <span className="owner-reviews-stats-score">
+            {filteredReviews.length > 0
+              ? (
+                  filteredReviews.reduce((acc, r) => acc + (r.rating || 0), 0) /
+                  filteredReviews.length
+                ).toFixed(1)
+              : "-"}
+          </span>
+          <span className="owner-reviews-stats-status">
+            {filteredReviews.length > 0 ? "Good" : "-"}
+          </span>
+          <span className="owner-reviews-stats-count">
+            · {filteredReviews.length} reviews
+          </span>
+        </div>
+        <div className="owner-reviews-stats-categories">
+          {categoryFields.map(({ key, label }) => {
+            const avg =
+              filteredReviews.length > 0
+                ? (
+                    filteredReviews.reduce(
+                      (acc, r) => acc + (r.categoryRatings?.[key] || 0),
+                      0
+                    ) / filteredReviews.length
+                  ).toFixed(1)
+                : "-";
+            return (
+              <div className="cat-bar" key={key}>
+                <span className="cat-label">{label}</span>
+                <div className="cat-bar-bg">
+                  <div
+                    className="cat-bar-fill"
+                    style={{
+                      width: avg !== "-" ? `${(avg / 10) * 100}%` : "0%",
+                    }}
+                  ></div>
+                </div>
+                <span className="cat-score">{avg}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {showReplyModal && (
-        <div className="owner-reviews-modal">
-          <div className="owner-reviews-modal-content">
-            <div className="owner-reviews-modal-header">
-              <h2>Reply to Review</h2>
-              <button
-                className="owner-reviews-modal-close"
-                onClick={() => setShowReplyModal(false)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="owner-reviews-modal-body">
-              <p>
-                <strong>Client:</strong> {selectedReview.clientName}
-              </p>
-              <p>
-                <strong>Gym:</strong> {selectedReview.gymName}
-              </p>
-              <p>
-                <strong>Rating:</strong> {selectedReview.rating}★
-              </p>
-              <p>
-                <strong>Review:</strong> {selectedReview.text}
-              </p>
-              <textarea
-                value={replyText}
-                onChange={(e) => setReplyText(e.target.value)}
-                placeholder="Type your reply..."
-              />
-            </div>
-            <div className="owner-reviews-modal-footer">
-              <button
-                className="owner-reviews-modal-btn owner-reviews-modal-cancel"
-                onClick={() => setShowReplyModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="owner-reviews-modal-btn owner-reviews-modal-confirm"
-                onClick={submitReply}
-              >
-                Submit Reply
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* --- Gym Filter Dropdown --- */}
+      <div className="owner-reviews-search-bar">
+        <select
+          className="owner-reviews-search-select"
+          value={selectedGym}
+          onChange={(e) => setSelectedGym(e.target.value)}
+        >
+          <option value="all">All Gyms</option>
+          {gyms.map((gym) => (
+            <option value={gym._id} key={gym._id}>
+              {gym.name}
+            </option>
+          ))}
+        </select>
+        <select
+          className="owner-reviews-search-select"
+          value={ratingFilter}
+          onChange={(e) => setRatingFilter(e.target.value)}
+        >
+          <option value="all">All ratings</option>
+          <option value="0">0</option>
+          <option value="2+">2+</option>
+          <option value="5+">5+</option>
+          <option value="8+">8+</option>
+        </select>
+        <input
+          className="owner-reviews-search-input"
+          placeholder="Search by reviewer or title..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+      </div>
 
-      {showDeleteModal && (
-        <div className="owner-reviews-modal">
-          <div className="owner-reviews-modal-content">
-            <div className="owner-reviews-modal-header">
-              <h2>Delete Review</h2>
-              <button
-                className="owner-reviews-modal-close"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                ×
-              </button>
+      {/* --- Reviews List --- */}
+      <div className="owner-reviews-list-section">
+        {!loading && !error && filteredReviews.length === 0 && (
+          <div className="owner-reviews-empty">No reviews found.</div>
+        )}
+        {filteredReviews.map((review, idx) => (
+          <div className="owner-review-card" key={review._id || idx}>
+            <div className="owner-review-card-header">
+              <span className="owner-review-gym-name">{review.gymName}</span>
+              <span className="owner-review-gym-location">
+                {review.gymLocation}
+              </span>
             </div>
-            <div className="owner-reviews-modal-body">
-              <p>Are you sure you want to delete this review?</p>
-              <p>
-                <strong>Gym:</strong> {selectedReview.gymName}
-              </p>
-              <p>
-                <strong>Client:</strong> {selectedReview.clientName}
-              </p>
+            <div className="owner-review-user-details">
+              <span className="owner-review-user-name">
+                {typeof review.clientName === "string" &&
+                review.clientName.trim()
+                  ? review.clientName
+                  : "Unknown"}
+              </span>
+              {review.clientJoined ? (
+                <span className="owner-review-user-joined">
+                  Joined: {review.clientJoined}
+                </span>
+              ) : null}
             </div>
-            <div className="owner-reviews-modal-footer">
+            <div className="owner-review-title-row">
+              <span className="owner-review-title">{review.heading}</span>
+              <span className="owner-review-rating">
+                {review.rating}
+                <span className="owner-review-star">★</span>
+              </span>
+            </div>
+            <div className="owner-review-desc">{review.content}</div>
+            {/* Category-wise scores for this review */}
+            {review.categoryRatings && (
+              <div className="owner-review-categories">
+                {categoryFields.map(({ key, label }) => {
+                  const val = review.categoryRatings[key] || 0;
+                  return (
+                    <div className="cat-bar" key={key}>
+                      <span className="cat-label">{label}</span>
+                      <div className="cat-bar-bg">
+                        <div
+                          className="cat-bar-fill"
+                          style={{ width: `${(val / 10) * 100}%` }}
+                        ></div>
+                      </div>
+                      <span className="cat-score">{val !== 0 ? val : "-"}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {review.reply && (
+              <div className="owner-review-reply">
+                <span className="owner-review-reply-label">Owner Reply:</span>{" "}
+                {review.reply}
+              </div>
+            )}
+            <div className="owner-review-date-row">
+              <span className="owner-review-date-label">Reviewed:</span>
+              <span className="owner-review-date-value">
+                {review.date ? new Date(review.date).toLocaleDateString() : "-"}
+              </span>
+            </div>
+            <div className="owner-review-actions-row">
               <button
-                className="owner-reviews-modal-btn owner-reviews-modal-cancel"
-                onClick={() => setShowDeleteModal(false)}
+                className="owner-review-action-btn reply"
+                onClick={() => handleOpenReplyModal(review)}
               >
-                Cancel
+                <FaReply /> Reply
               </button>
               <button
-                className="owner-reviews-modal-btn owner-reviews-modal-delete"
-                onClick={confirmDelete}
+                className="owner-review-action-btn delete"
+                onClick={() => handleOpenDeleteModal(review)}
               >
-                Delete
+                <FaTrash /> Delete
               </button>
             </div>
           </div>
-        </div>
-      )}
+        ))}
+      </div>
+
+      {/* --- Modals --- */}
+      <ReplyModal
+        isOpen={replyModalOpen}
+        onClose={handleCloseReplyModal}
+        review={selectedReview}
+        onReply={handleReplySubmit}
+        value={replyValue}
+        setValue={setReplyValue}
+      />
+      <DeleteModal
+        isOpen={deleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onDelete={handleDeleteConfirm}
+        review={selectedReview}
+      />
     </div>
   );
 };

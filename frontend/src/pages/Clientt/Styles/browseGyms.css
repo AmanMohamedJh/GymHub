@@ -5,12 +5,12 @@
   margin-top: 7%;
   margin-bottom: 3%;
   padding: 2rem;
-  background: rgba(30, 30, 30, 0.38); /* dark glassy effect */
+  /* Remove heavy glassy effect and blur */
+  background: #f6f6f6; /* simple neutral background */
   border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(13px);
-  -webkit-backdrop-filter: blur(13px);
-  border: 1.5px solid rgba(255, 255, 255, 0.13);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  /* Removed backdrop-filter and webkit-backdrop-filter */
+  border: 1.5px solid #ececec;
   transition: background 0.2s;
 }
 
@@ -236,83 +236,377 @@
   border: 1.5px solid #b92d1f;
 }
 
-/* Browse Gyms Header Styles */
-.browsegyms-header-glass {
-  width: 100%;
-  margin: 0 auto 2.2rem auto;
-  padding: 2.8rem 0 1.3rem 0; /* extra top padding for navbar space */
-  background: rgba(30, 30, 30, 0.39);
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.13);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+.browse-gyms-header-modern {
+  width: 100vw;
+  background: #fff;
+  padding: 3.2rem 0 2.2rem 0;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  position: relative;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.06);
+}
+.browsegyms-header-modern-icon svg circle {
+  fill: #fff;
+}
+.browsegyms-header-modern-icon svg path {
+  stroke: #e74c3c;
+}
+.browsegyms-main-title-modern {
+  font-size: 2.7rem;
+  font-weight: 900;
+  color: #e74c3c;
+  letter-spacing: 1.5px;
+  text-shadow: none;
+}
+.browsegyms-main-sub-modern {
+  font-size: 1.25rem;
+  color: #b92d1f;
+  font-weight: 500;
+  margin-bottom: 0;
+  text-align: center;
+  text-shadow: none;
 }
 
+.grid-browsegyms-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.2rem;
+  justify-items: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2vw;
+  background: none;
+}
+
+.browsegyms-card {
+  position: relative;
+  border: 2.5px solid #e74c3c;
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.18),
+    0 0 24px 2px rgba(231, 76, 60, 0.25), 0 2px 12px rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.26s, border-color 0.22s;
+  min-width: 290px;
+  max-width: 390px;
+}
+.browsegyms-card:hover {
+  box-shadow: 0 0 0 2.5px #ffb199, 0 0 36px 6px #e74c3c,
+    0 8px 32px rgba(0, 0, 0, 0.13);
+  border-color: #ffb199;
+}
+
+@media (max-width: 900px) {
+  .browsegyms-main-title-modern {
+    font-size: 1.55rem;
+  }
+  .browsegyms-main-sub-modern {
+    font-size: 1rem;
+  }
+  .grid-browsegyms-list {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.2rem;
+    padding: 0 1vw;
+  }
+}
 @media (max-width: 600px) {
-  .browsegyms-header-glass {
-    padding: 2rem 0 1rem 0;
+  .browsegyms-main-title-modern {
+    font-size: 1.1rem;
+  }
+  .browsegyms-main-sub-modern {
+    font-size: 0.9rem;
+  }
+  .grid-browsegyms-list {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+    padding: 0 0.5vw;
+  }
+  .browsegyms-card {
+    min-width: 90vw;
+    max-width: 98vw;
+    padding: 0;
   }
 }
 
-.browsegyms-main-title {
-  font-size: 2.4rem;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: 1px;
-  margin-bottom: 0.3rem;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.19), 0 1.5px 0 #e74c3c;
-  background: linear-gradient(90deg, #e74c3c 0%, #fff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* --- MODERN HEADER --- */
+.browse-gyms-header-modern {
+  width: 100vw;
+  background: #fff;
+  padding: 3.5rem 0 2.2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
-
-.browsegyms-main-sub {
-  font-size: 1.18rem;
-  color: #eaeaea;
+.browsegyms-header-modern-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+}
+.browsegyms-header-modern-icon {
+  margin-bottom: 0.2rem;
+}
+.browsegyms-main-title-modern {
+  font-size: 2.7rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 1.5px;
+  text-shadow: 0 2px 22px rgba(231, 76, 60, 0.13), 0 1.5px 0 #fff;
+}
+.browsegyms-main-sub-modern {
+  font-size: 1.25rem;
+  color: #f7d7d2;
   font-weight: 500;
   margin-bottom: 0;
   text-align: center;
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.18);
 }
 
+/* --- MODERN FILTERS & SEARCH --- */
+.filters-container-modern {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 1.8rem;
+}
+.search-wrapper-modern {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.browsegyms-search-bar-modern {
+  width: 270px;
+  max-width: 95vw;
+  border: 2px solid #e74c3c;
+  border-radius: 10px;
+  font-size: 1.08rem;
+  padding: 12px 18px;
+  background: #fff;
+  color: #222;
+  outline: none;
+  box-shadow: 0 2px 12px rgba(231, 76, 60, 0.08);
+  transition: border 0.22s, box-shadow 0.22s;
+}
+.browsegyms-search-bar-modern:focus {
+  border: 2px solid #b92d1f;
+  box-shadow: 0 4px 18px rgba(231, 76, 60, 0.18);
+}
+.advanced-search-toggle {
+  background: linear-gradient(90deg, #e74c3c 0%, #ffb199 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.03rem;
+  padding: 11px 18px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(231, 76, 60, 0.09);
+  transition: background 0.18s;
+}
+.advanced-search-toggle:hover {
+  background: linear-gradient(90deg, #b92d1f 0%, #ffb199 100%);
+}
+.advanced-search-fields {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 0.2rem;
+}
+
+/* --- CARD REFLECTIVE RED BORDER --- */
+.browsegyms-card {
+  position: relative;
+  border: 2.5px solid #e74c3c;
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.18),
+    0 0 24px 2px rgba(231, 76, 60, 0.25), 0 2px 12px rgba(0, 0, 0, 0.06);
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.26s, border-color 0.22s;
+}
+.browsegyms-card:hover {
+  box-shadow: 0 0 0 2.5px #ffb199, 0 0 36px 6px #e74c3c,
+    0 8px 32px rgba(0, 0, 0, 0.13);
+  border-color: #ffb199;
+}
+
+/* --- RESPONSIVE --- */
 @media (max-width: 900px) {
-  .browsegyms-list {
-    flex-direction: column;
-    gap: 24px;
+  .browse-gyms-header-modern {
+    padding: 2.2rem 0 1.2rem 0;
   }
-  .browsegyms-card {
-    max-width: 98vw;
-    min-width: unset;
+  .browsegyms-main-title-modern {
+    font-size: 1.55rem;
   }
-}
-
-@media (max-width: 600px) {
-  .browsegyms-card {
-    max-width: 98vw;
-    padding: 0;
-  }
-  .browsegyms-card-header,
-  .browsegyms-card-body {
-    padding-left: 8vw;
-    padding-right: 8vw;
-  }
-  .browsegyms-gym-image {
-    max-width: 90vw;
-    height: 150px;
-  }
-}
-
-@media (max-width: 600px) {
-  .browsegyms-main-title {
-    font-size: 1.45rem;
-  }
-  .browsegyms-main-sub {
+  .browsegyms-main-sub-modern {
     font-size: 1rem;
   }
+}
+@media (max-width: 600px) {
+  .browsegyms-header-modern-content {
+    gap: 0.3rem;
+  }
+  .browsegyms-main-title-modern {
+    font-size: 1.15rem;
+  }
+  .browsegyms-main-sub-modern {
+    font-size: 0.95rem;
+  }
+  .browsegyms-search-bar-modern {
+    width: 96vw;
+    font-size: 0.99rem;
+    padding: 10px 10px;
+  }
+  .advanced-search-fields {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.3rem;
+  }
+}
+
+/* --- NEW STYLES --- */
+
+.browsegyms-hero-bg {
+  width: 100vw;
+  min-height: 340px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-bottom-left-radius: 60px;
+  border-bottom-right-radius: 60px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.09);
+  position: relative;
+  z-index: 1;
+  padding-bottom: 48px;
+}
+
+.browsegyms-hero-content {
+  background: none;
+  padding: 2.5rem 2.5rem 1.5rem 2.5rem;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: center;
+  max-width: 640px;
+  width: 90vw;
+}
+
+.grid-browsegyms-list-tight {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.1rem;
+  justify-items: stretch;
+  padding: 0 2vw;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.browsegyms-card {
+  margin: 0;
+  border-radius: 18px;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.07);
+}
+
+@media (max-width: 900px) {
+  .browsegyms-hero-bg {
+    min-height: 200px;
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+    padding-bottom: 24px;
+  }
+  .browsegyms-hero-content {
+    padding: 1.5rem 0.7rem 1rem 0.7rem;
+  }
+  .grid-browsegyms-list-tight {
+    gap: 0.5rem;
+    padding: 0 1vw;
+    max-width: 98vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .browsegyms-hero-title {
+    font-size: 1.4rem;
+  }
+  .browsegyms-hero-content {
+    padding: 0.7rem 0.2rem 0.7rem 0.2rem;
+  }
+  .browsegyms-hero-bg {
+    padding-bottom: 10px;
+    border-radius: 12px 12px 0 0;
+  }
+  .grid-browsegyms-list-tight {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+  .browsegyms-card {
+    border-radius: 10px;
+  }
+}
+
+.browsegyms-titlebar-bg {
+  width: 100vw;
+  background: #fff;
+  border-bottom-left-radius: 48px;
+  border-bottom-right-radius: 48px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.09);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2.5rem 0 2.5rem 0;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+.browsegyms-titlebar-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+}
+.browsegyms-titlebar-search {
+  margin-top: 1.2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+@media (max-width: 900px) {
+  .browsegyms-titlebar-bg {
+    border-bottom-left-radius: 22px;
+    border-bottom-right-radius: 22px;
+    padding: 1.2rem 0 1.2rem 0;
+  }
+  .browsegyms-titlebar-content {
+    max-width: 98vw;
+  }
+}
+@media (max-width: 600px) {
+  .browsegyms-titlebar-bg {
+    border-radius: 10px 10px 0 0;
+    padding: 0.7rem 0 0.7rem 0;
+  }
+  .browsegyms-titlebar-content {
+    padding: 0 0.2rem;
+  }
+}
+
+.browsegyms-hero-title {
+  color: #e74c3c;
+  font-size: 2.7rem;
+  font-weight: 900;
+  margin-bottom: 0.7rem;
+  letter-spacing: 1.5px;
+}
+
+.browsegyms-hero-sub {
+  color: #222;
+  font-size: 1.15rem;
+  margin-bottom: 2.2rem;
 }

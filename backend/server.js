@@ -46,7 +46,9 @@ app.use("/api/subscription", subscriptionRoutes);
 app.use("/api/equipment", equipmentRoutes);
 app.use("/api/gym", gymRoutes);
 app.use("/api/client", clientRoutes);
-app.use("/api/gym-reviews", gymReviewRoutes);
+
+app.use("/api/gym-reviews", gymReviewRoutes); // for public/client
+app.use("/api/gym-owner/gym-reviews", gymReviewRoutes); // for owner dashboard
 
 //contact us router and route
 app.use("/api/contactUs", contactUsRouter);

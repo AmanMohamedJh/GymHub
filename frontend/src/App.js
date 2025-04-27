@@ -180,6 +180,16 @@ function App() {
                   }
                 />
                 <Route
+                  path="/owner-reviews-dashboard"
+                  element={
+                    <NonAdminRoute>
+                      <ProtectedRoute allowedRole="gym_owner">
+                        <OwnerReviewsDashboard />
+                      </ProtectedRoute>
+                    </NonAdminRoute>
+                  }
+                />
+                <Route
                   path="/reviews-dashboard"
                   element={
                     <NonAdminRoute>

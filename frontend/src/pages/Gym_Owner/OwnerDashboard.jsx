@@ -300,6 +300,79 @@ const OwnerDashboard = () => {
 
   const defaultGymImage = gymImage;
 
+  // --- Reviews Data Fetching Logic (shared with OwnerReviewsDashboard) ---
+  const [reviews, setReviews] = React.useState([]);
+  const [reviewLoading, setReviewLoading] = React.useState(true);
+  const [reviewError, setReviewError] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchGymsWithReviews = async () => {
+      setReviewLoading(true);
+      setReviewError(null);
+      try {
+        const token = user?.token;
+        const res = await fetch(
+          "http://localhost:4000/api/gym-owner/gym-reviews/gyms-with-reviews",
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+        if (!res.ok) throw new Error("Failed to fetch gyms with reviews");
+        const gymsWithReviews = await res.json();
+        // Flatten all reviews and attach gym info for display
+        const allReviews = gymsWithReviews.flatMap((gym) =>
+          gym.reviews.map((review) => ({
+            ...review,
+            gymName: gym.name,
+            gymLocation: gym.location?.city || gym.location?.district || "",
+            gymId: gym._id,
+          }))
+        );
+        setReviews(allReviews);
+      } catch (err) {
+        setReviewError("Failed to fetch gyms with reviews");
+      } finally {
+        setReviewLoading(false);
+      }
+    };
+    if (user?.token) fetchGymsWithReviews();
+  }, [user?.token]);
+
+  // --- Review Statistics Calculation (same as OwnerReviewsDashboard) ---
+  const filteredReviews = reviews; // No filtering for dashboard summary
+  const avgRating =
+    filteredReviews.length > 0
+      ? (
+          filteredReviews.reduce((acc, r) => acc + (r.rating || 0), 0) /
+          filteredReviews.length
+        ).toFixed(1)
+      : "-";
+  const totalReviews = filteredReviews.length;
+  const categoryFields = [
+    { key: "staff", label: "Staff" },
+    { key: "facilities", label: "Facilities" },
+    { key: "cleanliness", label: "Cleanliness" },
+    { key: "comfort", label: "Comfort" },
+    { key: "freeWifi", label: "Free Wifi" },
+    { key: "valueForMoney", label: "Value for money" },
+    { key: "location", label: "Location" },
+  ];
+  const categoryAverages = {};
+  categoryFields.forEach(({ key }) => {
+    categoryAverages[key] =
+      filteredReviews.length > 0
+        ? (
+            filteredReviews.reduce(
+              (acc, r) => acc + (r.categoryRatings?.[key] || 0),
+              0
+            ) / filteredReviews.length
+          ).toFixed(1)
+        : "-";
+  });
+  const recentReviews = filteredReviews.slice(0, 2);
+
   return (
     <div className="owner_dashboard_container">
       <div className="owner_dashboard_header">
@@ -623,19 +696,202 @@ const OwnerDashboard = () => {
         )}
       </div>
 
-      {/* Client Feedback Section */}
-      <div className="dashboard-content-box">
-        <div className="dashboard-section-header">
-          <h3>Recent Client Feedback</h3>
-          <Link to="/reviews-dashboard">
-            <button className="dashboard-btn-primary">
-              <FaComments /> Manage Reviews
-            </button>
-          </Link>
+      {/* Recent Client Feedback Section - BUTTON FIXED TO RIGHT CORNER */}
+      <div
+        className="gymdetails-reviews-preview"
+        style={{
+          marginTop: 32,
+          marginBottom: 32,
+          background: "#fff",
+          borderRadius: 14,
+          boxShadow: "0 2px 10px rgba(31,38,135,0.08)",
+          padding: "2rem 2.2rem 2.2rem 2.2rem",
+        }}
+      >
+        <div
+          className="gymdetails-reviews-header"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 8,
+          }}
+        >
+          <span
+            className="dashboard-section-title"
+            style={{ color: "#e53935", fontSize: 26, fontWeight: 700 }}
+          >
+            Recent Client Feedback
+          </span>
+          <button
+            className="dashboard-btn-secondary"
+            style={{
+              fontWeight: 600,
+              fontSize: 16,
+              background: "#e53935",
+              color: "#fff",
+              border: "none",
+              borderRadius: 6,
+              padding: "0.38rem 1.1rem",
+              minWidth: "unset",
+              maxWidth: 180,
+              width: "auto",
+              boxShadow: "0 1px 6px rgba(229,57,53,0.07)",
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+              transition: "background 0.18s, color 0.18s",
+              justifyContent: "center",
+              whiteSpace: "nowrap",
+            }}
+            onClick={() => navigate("/owner-reviews-dashboard")}
+            type="button"
+          >
+            <FaComments style={{ marginRight: 8, fontSize: 18 }} />
+            Manage Reviews
+          </button>
         </div>
-        <div className="dashboard-feedback-grid">
-          {/* Removed: feedback (no longer needed, was mock data) */}
-        </div>
+        {/* Loader/Error for reviews */}
+        {reviewLoading ? (
+          <div
+            style={{ margin: "1.5rem 0", color: "#e53935", fontWeight: 600 }}
+          >
+            Loading reviews...
+          </div>
+        ) : reviewError ? (
+          <div
+            style={{ margin: "1.5rem 0", color: "#e53935", fontWeight: 600 }}
+          >
+            {reviewError}
+          </div>
+        ) : (
+          <>
+            <div
+              className="gymdetails-reviewstats-box"
+              style={{ marginBottom: 18 }}
+            >
+              <span className="gymdetails-reviewstats-score">{avgRating}</span>
+              <span className="gymdetails-reviewstats-status">
+                {avgRating !== "-" && avgRating >= 7
+                  ? "Good"
+                  : avgRating > 0
+                  ? "Average"
+                  : "-"}
+              </span>
+              <span className="gymdetails-reviewstats-count">
+                · {totalReviews} reviews
+              </span>
+            </div>
+            <div
+              className="gymdetails-reviewstats-categories"
+              style={{ marginBottom: 24 }}
+            >
+              {categoryFields.map(({ key, label }) => (
+                <div className="gymdetails-reviewstats-category" key={key}>
+                  <span>{label}</span>
+                  <div className="gymdetails-reviewstats-barwrap">
+                    <div
+                      className="gymdetails-reviewstats-bar"
+                      style={{
+                        width:
+                          categoryAverages[key] !== "-"
+                            ? `${(categoryAverages[key] / 10) * 100}%`
+                            : "0%",
+                        background:
+                          categoryAverages[key] !== "-" &&
+                          categoryAverages[key] >= 7
+                            ? "#e53935"
+                            : "#b71c1c",
+                      }}
+                    ></div>
+                  </div>
+                  <span className="gymdetails-reviewstats-catscore">
+                    {categoryAverages[key]}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div
+              className="gymdetails-reviews-list"
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "1.5rem",
+                marginTop: "2.5rem",
+                justifyContent: "flex-start",
+              }}
+            >
+              {recentReviews.length === 0 ? (
+                <span style={{ color: "#888", fontWeight: 500 }}>
+                  No reviews yet.
+                </span>
+              ) : (
+                recentReviews.map((r) => (
+                  <div
+                    key={r._id}
+                    style={{
+                      background: "#fff",
+                      borderRadius: 12,
+                      boxShadow: "0 2px 10px rgba(31,38,135,0.08)",
+                      padding: "1.2rem 1.5rem",
+                      minWidth: 240,
+                      maxWidth: 340,
+                      flex: "1 1 240px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.6rem",
+                      border: "1px solid #f2f2f2",
+                      color: "#222",
+                      opacity: 1,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontWeight: 700,
+                        fontSize: "1.1rem",
+                        color: "#222",
+                        marginBottom: 2,
+                        opacity: 1,
+                        background: "none",
+                      }}
+                    >
+                      {r.clientName || "Client"}
+                    </span>
+                    <span style={{ fontSize: "1.3rem", marginBottom: 4 }}>
+                      {r.emoji || "🙂"}
+                    </span>
+                    <span
+                      style={{
+                        color: "#e53935",
+                        fontWeight: 600,
+                        fontSize: "1.1rem",
+                        marginBottom: 2,
+                      }}
+                    >
+                      Rating: {r.rating || "-"}
+                    </span>
+                    <span
+                      style={{
+                        color: "#444",
+                        fontSize: "1rem",
+                        opacity: 1,
+                        background: "none",
+                      }}
+                    >
+                      {r.heading && (
+                        <b>
+                          {r.heading}
+                          <br />
+                        </b>
+                      )}
+                      {r.content}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       {/* Equipment Management Section - Enhanced */}

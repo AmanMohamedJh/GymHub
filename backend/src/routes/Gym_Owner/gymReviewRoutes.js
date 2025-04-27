@@ -1,9 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const gymReviewController = require("../../controller/Gym_Owner/gymReviewController");
+const requireAuth = require("../../middleware/requireAuth");
 
 // Create a review
 router.post("/", gymReviewController.createReview);
+
+// Get all gyms owned by the owner that have at least one review
+router.get(
+  "/gyms-with-reviews",
+  requireAuth,
+  gymReviewController.getOwnerGymsWithReviews
+);
 
 // Get all reviews for a gym
 router.get("/:gymId", gymReviewController.getReviewsByGym);

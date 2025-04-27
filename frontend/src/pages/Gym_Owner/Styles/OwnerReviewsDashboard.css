@@ -1,427 +1,475 @@
-.owner-reviews-main {
-  max-width: none;
-  margin: 10px;
-  margin-top: 4rem;
-  padding: 2rem 2rem;
-  position: relative;
-  min-height: calc(100vh - 140px);
-  overflow: hidden;
-  z-index: 1;
-}
-
-.owner-reviews-main::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url("../Styles/images/gym-background2.jpg.jpg") center/cover
-    no-repeat;
-  filter: blur(5px);
-  z-index: -1;
-  transform: scale(1.1);
-}
-
-.owner-reviews-main::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: -1;
-}
-
-/* Header Styles */
-.owner-reviews-header {
-  margin: 0 0 3rem 0;
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding-top: 2rem;
-}
-
-.owner-reviews-header h1 {
-  color: #ffffff;
-  font-size: 2.8rem;
-  font-weight: 600;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* Stats Cards */
-.owner-reviews-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-bottom: 3rem;
-  padding: 0 2rem;
-}
-
-.owner-reviews-stat-card {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 1.8rem;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.owner-reviews-stat-card:hover {
-  transform: translateY(-5px);
-}
-
-.owner-reviews-stat-title {
-  color: #333;
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.owner-reviews-stat-value {
-  color: #ff4757;
-  font-size: 2.5rem;
-  font-weight: bold;
-}
-
-/* Search Section */
-.owner-reviews-search {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 1.5rem;
-  border-radius: 10px;
-  margin: 0 2rem 3rem 2rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.owner-reviews-search-container {
+/* --- Reviews List Section --- */
+.owner-reviews-list-section {
+  margin-top: 2.5rem;
   display: flex;
-  gap: 1.5rem;
-  width: 100%;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.6rem;
 }
-
-.owner-reviews-search-input-wrapper,
-.owner-reviews-date-input-wrapper {
+.owner-review-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(31, 38, 135, 0.09);
+  padding: 2.1rem 2.2rem 1.4rem 2.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   position: relative;
+  transition: box-shadow 0.18s;
+  border: 1.5px solid #f2f2f2;
+}
+.owner-review-card:hover {
+  box-shadow: 0 8px 26px rgba(229, 57, 53, 0.13);
+}
+.owner-review-card-header {
   display: flex;
   align-items: center;
-}
-
-.owner-reviews-search-icon,
-.owner-reviews-calendar-icon {
-  position: absolute;
-  left: 1rem;
-  color: #666;
-  font-size: 1rem;
-}
-
-.owner-reviews-search-input-wrapper input {
-  padding-left: 2.5rem !important;
-  width: 300px;
-}
-
-.owner-reviews-date-input-wrapper input {
-  padding-left: 2.5rem !important;
-  width: 200px;
-}
-
-.owner-reviews-search input {
-  padding: 1rem 1.5rem;
-  border: 2px solid #e1e1e1;
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 100%;
-  max-width: 400px;
-  transition: all 0.3s ease;
-  background: white;
-}
-
-.owner-reviews-search input[type="date"] {
-  min-width: 200px;
-  color: #333;
-  cursor: pointer;
-}
-
-.owner-reviews-search input::placeholder {
-  color: #666;
-}
-
-.owner-reviews-search input:focus {
-  outline: none;
-  border-color: #ff4757;
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
-}
-
-/* Table Styles */
-.owner-reviews-table-container {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin: 0 2rem;
-}
-
-.owner-reviews-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.owner-reviews-table th {
-  background: #f8f9fa;
-  color: #333;
+  gap: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  padding: 1.2rem 1.5rem;
-  text-align: left;
-  border-bottom: 2px solid #ff4757;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 0.9rem;
+  color: #e53935;
 }
-
-.owner-reviews-table td {
-  padding: 1.2rem 1.5rem;
-  background: rgba(255, 255, 255, 0.9);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  color: #333;
+.owner-review-gym-name {
+  font-size: 1.12rem;
+  font-weight: 700;
+}
+.owner-review-gym-location {
+  color: #888;
   font-size: 1rem;
+  font-weight: 500;
 }
-
-.owner-reviews-table tr:hover td {
-  background: rgba(255, 255, 255, 1);
-}
-
-.owner-reviews-actions {
+.owner-review-user-details {
   display: flex;
-  gap: 1.5rem;
-  justify-content: flex-start;
+  gap: 1.3rem;
+  color: #444;
+  font-size: 0.98rem;
+  font-weight: 500;
 }
-
-.owner-reviews-action-btn {
-  background: none;
+.owner-review-user-details .owner-review-user-name {
+  color: #000000;
+  font-weight: 700;
+  font-size: 1.08rem;
+  background: #fff6f6;
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.2px;
+}
+.owner-review-user-joined {
+  color: #888;
+  font-size: 0.97rem;
+  margin-left: 0.7rem;
+  font-weight: 500;
+}
+.owner-review-title-row {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+.owner-review-title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #222;
+}
+.owner-review-rating {
+  font-size: 1.02rem;
+  color: #e53935;
+  font-weight: 700;
+  background: #fff3f2;
+  padding: 2px 10px;
+  border-radius: 7px;
+  margin-left: 8px;
+}
+.owner-review-desc {
+  color: #222;
+  font-size: 1.07rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+.owner-review-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem 2.5rem;
+  margin-bottom: 0.4rem;
+}
+.owner-review-category-score {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.97rem;
+  color: #e53935;
+  background: #fff7f7;
+  padding: 0.2rem 0.95rem 0.2rem 0.7rem;
+  border-radius: 7px;
+  font-weight: 600;
+}
+.owner-review-actions-row {
+  display: flex;
+  gap: 1.1rem;
+  margin-top: 0.8rem;
+}
+.owner-review-actions {
+  display: flex;
+  gap: 1.4rem;
+  margin-top: 0.3rem;
+}
+.owner-review-action-btn {
   border: none;
-  padding: 0.5rem;
+  background: #f8f8f8;
+  color: #e53935;
+  font-weight: 600;
+  font-size: 1.08rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 1.2rem;
-  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: background 0.18s, color 0.18s;
+}
+.owner-review-action-btn.reply:hover {
+  background: #e53935;
+  color: #fff;
+}
+.owner-review-action-btn.delete:hover {
+  background: #b71c1c;
+  color: #fff;
+}
+.owner-review-reply {
+  background: #f6f6f6;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-top: 0.7rem;
+  color: #333;
+  font-size: 1.01rem;
+  border-left: 4px solid #e53935;
+}
+.owner-review-reply-label {
+  font-weight: 700;
+  color: #e53935;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+.owner-review-reply-content {
+  margin-left: 0.2rem;
+}
+.owner-review-date-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 0.8rem;
+  margin-bottom: -0.3rem;
+  gap: 0.4rem;
+}
+.owner-review-date-label {
+  color: #888;
+  font-size: 0.97rem;
+  font-weight: 500;
+}
+.owner-review-date-value {
+  color: #e53935;
+  font-size: 0.98rem;
+  font-weight: 600;
+  background: #fff7f7;
+  padding: 2px 10px;
+  border-radius: 7px;
 }
 
-.owner-reviews-edit {
-  color: #2ecc71;
+/* --- Stats Bar Section --- */
+.owner-reviews-stats-bar {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(31, 38, 135, 0.08);
+  padding: 2.2rem 2.2rem 1.3rem 2.2rem;
+  margin-bottom: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.owner-reviews-stats-summary {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #e53935;
+}
+.owner-reviews-stats-score {
+  background: #e53935;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.12rem;
+  padding: 6px 16px;
+  border-radius: 8px;
+  margin-right: 0.7rem;
+}
+.owner-reviews-stats-status {
+  color: #e53935;
+  font-weight: 600;
+  font-size: 1.09rem;
+  margin-right: 0.7rem;
+}
+.owner-reviews-stats-count {
+  color: #888;
+  font-size: 1.01rem;
+  font-weight: 500;
+}
+.owner-reviews-stats-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 2.6rem;
+}
+.owner-reviews-stats-category {
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+  font-size: 1.01rem;
+  font-weight: 600;
+  color: #222;
+}
+.cat-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.7rem;
+  min-width: 210px;
+}
+.cat-label {
+  color: #222;
+  font-weight: 600;
+  font-size: 1.01rem;
+  min-width: 100px;
+}
+.cat-bar-bg {
+  background: #f5d8d8;
+  border-radius: 6px;
+  width: 90px;
+  height: 8px;
+  overflow: hidden;
+  margin: 0 0.3rem;
+  flex-shrink: 0;
+}
+.cat-bar-fill {
+  background: #e53935;
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.25s;
+}
+.cat-score {
+  color: #e53935;
+  font-weight: 700;
+  font-size: 1.01rem;
+  margin-left: 0.3rem;
 }
 
-.owner-reviews-edit:hover {
-  color: #27ae60;
-  transform: scale(1.1);
-  opacity: 1;
+/* --- Search Bar Section --- */
+.owner-reviews-search-bar {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(31, 38, 135, 0.08);
+  padding: 1.3rem 2.2rem;
+  margin-bottom: -1.8em;
+  margin-top: -1.3rem;
+  flex-wrap: wrap;
+}
+.owner-reviews-search-select {
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  border: 1.5px solid #e53935;
+  background: #fff;
+  color: #e53935;
+  font-size: 1.01rem;
+  font-weight: 600;
+  outline: none;
+  transition: border 0.18s;
+}
+.owner-reviews-search-select:focus {
+  border: 1.5px solid #b71c1c;
+}
+.owner-reviews-search-input {
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  border: 1.5px solid #e53935;
+  background: #fff;
+  color: #222;
+  font-size: 1.01rem;
+  font-weight: 500;
+  outline: none;
+  min-width: 220px;
+  transition: border 0.18s;
+}
+.owner-reviews-search-input:focus {
+  border: 1.5px solid #b71c1c;
 }
 
-.owner-reviews-delete {
-  color: #ff4757;
+/* --- Page Title Section --- */
+.owner-reviews-page-title-wrapper {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(31, 38, 135, 0.08);
+  margin-bottom: 1.3rem;
+  margin-top: 5rem;
+  padding: 1.2rem 2.2rem 0.8rem 2.2rem;
+  z-index: 2;
+  position: relative;
+}
+.owner-reviews-page-title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #e53935;
+  letter-spacing: 0.5px;
+  text-align: left;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-left: 0;
 }
 
-.owner-reviews-delete:hover {
-  color: #e74c3c;
-  transform: scale(1.1);
-  opacity: 1;
-}
-
-/* Modal Styles */
-.owner-reviews-modal {
+/* --- Modal Styles --- */
+.owner-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(30, 30, 30, 0.28);
+  z-index: 1002;
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  justify-content: center;
 }
-
-.owner-reviews-modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 500px;
-  position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.owner-reviews-modal-header {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #f1f1f1;
-}
-
-.owner-reviews-modal-header h2 {
-  color: #333;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-}
-
-.owner-reviews-modal-body {
-  margin-bottom: 1.5rem;
-}
-
-.owner-reviews-modal-body textarea {
+.owner-modal-content {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 32px rgba(31, 38, 135, 0.18);
+  padding: 2.1rem 2.2rem 1.6rem 2.2rem;
+  min-width: 340px;
+  max-width: 98vw;
   width: 100%;
-  padding: 1rem;
-  border: 2px solid #e1e1e1;
-  border-radius: 8px;
-  font-size: 1rem;
-  min-height: 120px;
-  resize: vertical;
-  margin-bottom: 1rem;
+  max-width: 420px;
+  position: relative;
+  box-sizing: border-box;
 }
-
-.owner-reviews-modal-body textarea:focus {
-  outline: none;
-  border-color: #ff4757;
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+.owner-modal-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #e53935;
+  margin-bottom: 1.1rem;
 }
-
-.owner-reviews-modal-body p {
+.owner-modal-title-delete {
+  color: #b71c1c;
+}
+.owner-modal-subtitle {
+  font-size: 1.07rem;
   color: #333;
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-}
-
-.owner-reviews-modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-}
-
-.owner-reviews-modal-btn {
-  padding: 0.8rem 1.5rem;
-  border-radius: 6px;
-  font-size: 1rem;
+  margin-bottom: 1.05rem;
   font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
+  letter-spacing: 0.01em;
 }
-
-.owner-reviews-modal-cancel {
-  background: #f1f1f1;
-  color: #666;
+.owner-modal-user {
+  color: #e53935;
+  font-weight: 700;
 }
-
-.owner-reviews-modal-cancel:hover {
-  background: #e1e1e1;
-}
-
-.owner-reviews-modal-confirm {
-  background: #ff4757;
-  color: white;
-}
-
-.owner-reviews-modal-confirm:hover {
-  background: #ff3547;
-  transform: translateY(-1px);
-}
-
-.owner-reviews-modal-delete {
-  background: #ff4757;
-  color: white;
-}
-
-.owner-reviews-modal-delete:hover {
-  background: #ff3547;
-  transform: translateY(-1px);
-}
-
-/* Close button */
-.owner-reviews-modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #666;
-  cursor: pointer;
-  padding: 0.5rem;
-  line-height: 1;
-  transition: all 0.2s ease;
-}
-
-.owner-reviews-modal-close:hover {
+.owner-modal-desc {
+  font-size: 1.04rem;
   color: #333;
-  transform: scale(1.1);
+  margin-bottom: 1.2rem;
+}
+.owner-modal-textarea-upgraded {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 100px;
+  max-height: 220px;
+  border-radius: 10px;
+  border: 1.7px solid #e53935;
+  font-size: 1.07rem;
+  font-family: inherit;
+  line-height: 1.6;
+  background: #faf9fa;
+  box-shadow: 0 1px 6px rgba(31, 38, 135, 0.07);
+  padding: 1.1rem 1.3rem;
+  margin-bottom: 1.3rem;
+  resize: vertical;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  color: #222;
+}
+.owner-modal-textarea-upgraded:focus {
+  border: 1.7px solid #b71c1c;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(31, 38, 135, 0.12);
+}
+.owner-modal-actions {
+  display: flex;
+  gap: 1.1rem;
+  justify-content: flex-end;
+}
+.owner-modal-btn {
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  background: #f2f2f2;
+  color: #e53935;
+  font-weight: 700;
+  font-size: 1.01rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.owner-modal-btn-primary {
+  background: #e53935;
+  color: #fff;
+}
+.owner-modal-btn-danger {
+  background: #b71c1c;
+  color: #fff;
+}
+.owner-modal-btn:active {
+  opacity: 0.85;
+}
+@media (max-width: 600px) {
+  .owner-modal-content {
+    min-width: 90vw;
+    padding: 1.1rem 0.7rem 1rem 0.7rem;
+  }
 }
 
-@media (max-width: 1200px) {
-  .owner-reviews-main {
-    padding: 2rem;
+@media (max-width: 600px) {
+  .owner-reviews-page-title {
+    font-size: 1.45rem;
   }
-
-  .owner-reviews-stats,
-  .owner-reviews-search,
-  .owner-reviews-table-container {
-    margin: 0 0 2rem 0;
+  .owner-reviews-page-title-wrapper {
+    padding: 0.8rem 1rem 0.5rem 1rem;
   }
 }
 
-@media (max-width: 992px) {
-  .owner-reviews-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .owner-reviews-header h1 {
-    font-size: 2.4rem;
+@media (max-width: 600px) {
+  .owner-reviews-page-title {
+    font-size: 1.45rem;
+    margin-bottom: 1.1rem;
   }
 }
 
-@media (max-width: 768px) {
-  .owner-reviews-main {
-    padding: 1.5rem;
+@media (max-width: 800px) {
+  .owner-review-card {
+    padding: 1.3rem 0.9rem 1.1rem 0.9rem;
   }
-
-  .owner-reviews-header {
-    margin-bottom: 2rem;
+  .owner-reviews-list-section {
+    gap: 1.2rem;
   }
-
-  .owner-reviews-header h1 {
-    font-size: 2rem;
+  .owner-review-categories {
+    gap: 0.7rem 1.2rem;
   }
+}
 
-  .owner-reviews-stats {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+@media (max-width: 900px) {
+  .owner-reviews-stats-categories {
+    gap: 0.7rem 1.1rem;
   }
-
-  .owner-reviews-search {
+  .owner-reviews-search-bar {
     flex-direction: column;
-    padding: 1.5rem;
-    gap: 1rem;
-  }
-
-  .owner-reviews-search input {
-    max-width: none;
-  }
-
-  .owner-reviews-table-container {
-    overflow-x: auto;
-  }
-
-  .owner-reviews-table {
-    min-width: 800px;
-  }
-
-  .owner-reviews-table th,
-  .owner-reviews-table td {
-    padding: 1rem;
+    align-items: stretch;
+    gap: 0.8rem;
+    padding: 1rem 1rem;
   }
 }

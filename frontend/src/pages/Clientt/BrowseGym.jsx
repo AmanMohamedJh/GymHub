@@ -5,7 +5,10 @@ import "./Styles/browseGyms.css";
 
 const BrowseGyms = () => {
   const [gyms, setGyms] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [advancedSearch, setAdvancedSearch] = useState(false);
+  const [city, setCity] = useState("");
+  const [amenity, setAmenity] = useState("");
+  const [minRating, setMinRating] = useState("");
 
   useEffect(() => {
     const fetchGyms = async () => {
@@ -21,41 +24,79 @@ const BrowseGyms = () => {
     fetchGyms();
   }, []);
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleAdvancedSearch = () => setAdvancedSearch((v) => !v);
 
-  // Filter by city (case-insensitive)
-  const filteredGyms = gyms.filter(
-    (gym) =>
-      gym.location &&
-      gym.location.city &&
-      gym.location.city.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredGyms = gyms.filter((gym) => {
+    let match = true;
+    if (city && gym.location?.city) {
+      match =
+        match && gym.location.city.toLowerCase().includes(city.toLowerCase());
+    }
+    if (amenity && gym.amenities) {
+      match =
+        match &&
+        gym.amenities.some((a) =>
+          a.toLowerCase().includes(amenity.toLowerCase())
+        );
+    }
+    if (minRating && gym.avgRating) {
+      match = match && gym.avgRating >= parseFloat(minRating);
+    }
+    return match;
+  });
 
   return (
-    <div className="browse-gyms-page">
-      <div className="browse-gyms-header">
-        <div className="browsegyms-header-glass">
-          <h1 className="browsegyms-main-title">Find Your Perfect Gym</h1>
-          <p className="browsegyms-main-sub">
-            Discover the best fitness facilities across Sri Lanka
-          </p>
-        </div>
-      </div>
-      <div className="browse-gyms-container">
-        <div className="filters-container">
-          <div className="search-wrapper">
-            <input
-              type="text"
-              placeholder="Search by location"
-              className="search-bar browsegyms-search-bar"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
+    <div className="browse-gyms-page-bg">
+      <div className="browsegyms-container">
+        <div className="browsegyms-titlebar-bg">
+          <div className="browsegyms-titlebar-content">
+            <h1 className="browsegyms-hero-title">
+              Explore Sri Lanka's Top Gyms
+            </h1>
+            <p className="browsegyms-hero-sub">
+              Smart search. Real reviews. Modern fitness.
+            </p>
+            <div className="filters-container-modern browsegyms-titlebar-search">
+              <div className="search-wrapper-modern">
+                <input
+                  type="text"
+                  placeholder="Quick search by city..."
+                  className="search-bar browsegyms-search-bar-modern"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                />
+                <button
+                  className="advanced-search-toggle"
+                  onClick={handleAdvancedSearch}
+                >
+                  {advancedSearch ? "Hide Advanced" : "Advanced Search"}
+                </button>
+              </div>
+              {advancedSearch && (
+                <div className="advanced-search-fields">
+                  <input
+                    type="text"
+                    placeholder="Amenity (e.g. pool, parking)"
+                    className="browsegyms-search-bar-modern"
+                    value={amenity}
+                    onChange={(e) => setAmenity(e.target.value)}
+                  />
+                  <input
+                    type="number"
+                    min="0"
+                    max="5"
+                    step="0.1"
+                    placeholder="Min Rating"
+                    className="browsegyms-search-bar-modern"
+                    value={minRating}
+                    onChange={(e) => setMinRating(e.target.value)}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        <div className="gyms-list browsegyms-list">
+        <div className="gyms-list browsegyms-list grid-browsegyms-list grid-browsegyms-list-tight">
           {filteredGyms.length > 0 ? (
             filteredGyms.map((gym) => (
               <div key={gym._id} className="browsegyms-card">
@@ -84,7 +125,6 @@ const BrowseGyms = () => {
                   <div className="browsegyms-info-row">
                     <span className="browsegyms-rating">
                       <FaStar style={{ color: "#fbbf24", marginRight: 4 }} />
-                      {/* Show real average rating from backend */}
                       {gym.avgRating ? gym.avgRating : "No rating"}
                     </span>
                     <span className="browsegyms-location">
