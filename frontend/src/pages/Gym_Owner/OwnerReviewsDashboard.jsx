@@ -141,14 +141,54 @@ const OwnerReviewsDashboard = () => {
     setDeleteModalOpen(true);
   };
 
-  const handleReplySubmit = () => {
-    // Submit reply logic here
-    setReplyModalOpen(false);
+  const handleReplySubmit = async () => {
+    if (!selectedReview || !replyValue.trim()) return;
+    try {
+      const res = await fetch(
+        `/api/gym-reviews/${selectedReview._id}/response`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: user?.token ? `Bearer ${user.token}` : "",
+          },
+          body: JSON.stringify({ response: replyValue.trim() }),
+        }
+      );
+      if (!res.ok) throw new Error("Failed to submit reply");
+      const data = await res.json();
+      // Update review in local state
+      setReviews((prev) =>
+        prev.map((r) =>
+          r._id === selectedReview._id
+            ? { ...r, response: replyValue.trim() }
+            : r
+        )
+      );
+      setReplyModalOpen(false);
+      setReplyValue("");
+    } catch (err) {
+      alert(err.message || "Could not submit reply.");
+    }
   };
 
-  const handleDeleteConfirm = () => {
-    // Delete review logic here
-    setDeleteModalOpen(false);
+  const handleDeleteConfirm = async () => {
+    if (!selectedReview) return;
+    try {
+      const res = await fetch(`/api/gym-reviews/${selectedReview._id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: user?.token ? `Bearer ${user.token}` : "",
+        },
+      });
+      if (!res.ok) throw new Error("Failed to delete review");
+      // Remove from local state
+      setReviews((prev) => prev.filter((r) => r._id !== selectedReview._id));
+      setDeleteModalOpen(false);
+      setSelectedReview(null);
+    } catch (err) {
+      alert(err.message || "Could not delete review.");
+    }
   };
 
   const handleOpenReplyModal = (review) => {
@@ -195,7 +235,7 @@ const OwnerReviewsDashboard = () => {
           gymsWithReviews
         );
         setGyms(gymsWithReviews);
-        // Flatten all reviews and attach gym info for display
+        //  reviews and attach gym info for display
         const allReviews = gymsWithReviews.flatMap((gym) =>
           gym.reviews.map((review) => ({
             ...review,
@@ -363,6 +403,14 @@ const OwnerReviewsDashboard = () => {
               <div className="owner-review-reply">
                 <span className="owner-review-reply-label">Owner Reply:</span>{" "}
                 {review.reply}
+              </div>
+            )}
+            {review.response && (
+              <div className="owner-review-reply">
+                <span className="owner-review-reply-label">Your Reply:</span>
+                <span className="owner-review-reply-content">
+                  {review.response}
+                </span>
               </div>
             )}
             <div className="owner-review-date-row">

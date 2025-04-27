@@ -22,4 +22,7 @@ router.get("/single/:reviewId", gymReviewController.getReviewById);
 // Optionally: Delete review
 router.delete("/:reviewId", gymReviewController.deleteReview);
 
+// PATCH: Add/update owner response to a review
+router.patch("/:id/response", requireAuth, gymReviewController.replyToReview);
+
 module.exports = router;

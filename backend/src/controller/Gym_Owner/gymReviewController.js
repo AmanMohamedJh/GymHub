@@ -85,6 +85,26 @@ exports.deleteReview = async (req, res) => {
   }
 };
 
+// PATCH: Owner reply to a review
+exports.replyToReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { response } = req.body;
+    if (!response || typeof response !== "string") {
+      return res.status(400).json({ error: "Response text is required." });
+    }
+    const review = await GymReview.findByIdAndUpdate(
+      id,
+      { response },
+      { new: true }
+    );
+    if (!review) return res.status(404).json({ error: "Review not found" });
+    res.json({ message: "Reply added successfully", review });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Get all gyms owned by the logged-in owner that have at least one review
 exports.getOwnerGymsWithReviews = async (req, res) => {
   try {
@@ -141,6 +161,7 @@ exports.getOwnerGymsWithReviews = async (req, res) => {
             emoji: review.emoji,
             date: review.date,
             categoryRatings: review.categoryRatings,
+            response: review.response, // Added
           };
         })
       );
@@ -165,5 +186,6 @@ module.exports = {
   getReviewsByGym: exports.getReviewsByGym,
   getReviewById: exports.getReviewById,
   deleteReview: exports.deleteReview,
+  replyToReview: exports.replyToReview,
   getOwnerGymsWithReviews: exports.getOwnerGymsWithReviews,
 };

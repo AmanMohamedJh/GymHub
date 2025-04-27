@@ -1,14 +1,14 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const GymReviewSchema = new mongoose.Schema({
   gymId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Gym',
+    ref: "Gym",
     required: true,
   },
   clientId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
   heading: {
@@ -23,15 +23,19 @@ const GymReviewSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 1,
-    max: 10
+    max: 10,
   },
   emoji: {
     type: String,
-    default: ''
+    default: "",
+  },
+  response: {
+    type: String,
+    default: "",
   },
   date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   categoryRatings: {
     facilities: { type: Number, default: 0 },
@@ -40,7 +44,7 @@ const GymReviewSchema = new mongoose.Schema({
     freeWifi: { type: Number, default: 0 },
     valueForMoney: { type: Number, default: 0 },
     location: { type: Number, default: 0 },
-  }
+  },
 });
 
-module.exports = mongoose.model('GymReview', GymReviewSchema);
+module.exports = mongoose.model("GymReview", GymReviewSchema);

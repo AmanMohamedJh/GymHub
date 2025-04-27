@@ -315,13 +315,13 @@ const GymReviews = () => {
                   </span>
                 </div>
                 <div className="gymreviews-review-content">{r.content}</div>
-                {r.ownerResponse && (
+                {(r.response || r.ownerResponse) && (
                   <div className="gymreviews-owner-response">
                     <span className="gymreviews-owner-label">
                       Gym Owner Response:
                     </span>
                     <span className="gymreviews-owner-text">
-                      {r.ownerResponse}
+                      {r.response || r.ownerResponse}
                     </span>
                   </div>
                 )}
