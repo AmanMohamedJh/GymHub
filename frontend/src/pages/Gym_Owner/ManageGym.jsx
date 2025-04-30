@@ -37,21 +37,6 @@ const ManageGym = () => {
     },
   ]);
 
-  const [equipment] = useState([
-    {
-      id: 1,
-      name: "Treadmill",
-      quantity: 5,
-      condition: "Good",
-    },
-    {
-      id: 2,
-      name: "Dumbbells Set",
-      quantity: 10,
-      condition: "Excellent",
-    },
-  ]);
-
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -1073,126 +1058,25 @@ const ManageGym = () => {
           </div>
         </div>
 
-        {/* Client Report Modal */}
-        {showClientReportModal && (
-          <div className="modal-overlay" style={{ zIndex: 10000 }}>
-            <div
-              className="modal-content"
-              style={{
-                maxWidth: 400,
-                textAlign: "center",
-                padding: "2.5rem 2rem",
-              }}
-            >
-              <h2
-                style={{
-                  color: "#eb5757",
-                  fontWeight: 700,
-                  marginBottom: "1.2rem",
-                }}
-              >
-                Download Report
-              </h2>
-              <p style={{ color: "#222", marginBottom: "2rem" }}>
-                Choose your preferred format for the <b>Client</b> report:
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "1.2rem",
-                  justifyContent: "center",
-                  marginBottom: "2rem",
-                }}
-              >
-                <button
-                  style={{
-                    flex: 1,
-                    background:
-                      "linear-gradient(90deg, #27ae60 0%, #6fcf97 100%)",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "999px",
-                    padding: "13px 0",
-                    fontWeight: 600,
-                    fontSize: "1.07rem",
-                    cursor: "pointer",
-                    opacity: 1,
-                  }}
-                  onClick={handleDownloadClientReport("csv")}
-                >
-                  Excel (.csv)
-                </button>
-                <button
-                  style={{
-                    flex: 1,
-                    background:
-                      "linear-gradient(90deg, #f2c94c 0%, #f2994a 100%)",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "999px",
-                    padding: "13px 0",
-                    fontWeight: 600,
-                    fontSize: "1.07rem",
-                    cursor: "pointer",
-                    opacity: 1,
-                  }}
-                  onClick={handleDownloadClientReport("pdf")}
-                >
-                  PDF (.pdf)
-                </button>
-              </div>
-              <button
-                className="cancel-btn"
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#eb5757",
-                  fontWeight: 600,
-                  fontSize: "1.05rem",
-                  cursor: "pointer",
-                  marginTop: "0.5rem",
-                }}
-                onClick={() => setShowClientReportModal(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Equipment Management Section */}
-        <div className="equipment-section">
+        <div className="equipment-management-info">
           <h2>Equipment Management</h2>
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Equipment</th>
-                  <th>Quantity</th>
-                  <th>Condition</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {equipment.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.quantity}</td>
-                    <td>{item.condition}</td>
-                    <td className="actions">
-                      <button className="icon-btn">
-                        <FaEdit />
-                      </button>
-                      <button className="icon-btn delete">
-                        <FaTrash />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <p className="equipment-management-desc">
+            Welcome to Equipment Management! For advanced equipment control,
+            please visit our dedicated Equipment Management page. There you can
+            easily add new equipment, update or remove existing items, manage
+            maintenance schedules, and receive notifications about repairs or
+            required maintenance. Enjoy a seamless experience in keeping your
+            gym equipment up to date and in the best condition for your clients.
+          </p>
+          <div className="equipment-management-center-btn">
+            <button
+              className="equipment-management-btn"
+              onClick={() => navigate("/equipment-management")}
+            >
+              Go to Equipment Management
+            </button>
           </div>
-          <button className="add-btn">Add New Equipment</button>
         </div>
 
         {/* Notes & Contact Section */}

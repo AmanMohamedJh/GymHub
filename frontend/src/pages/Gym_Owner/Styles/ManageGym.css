@@ -1001,3 +1001,48 @@ h2 {
     opacity: 1;
   }
 }
+
+/* Equipment Management Info Section */
+.equipment-management-info {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  padding: 2.5rem 2rem 2rem 2rem;
+  margin: 2.5rem auto 2.5rem auto;
+  max-width: 700px;
+  text-align: center;
+}
+.equipment-management-info h2 {
+  color: #e74c3c;
+  font-size: 2rem;
+  margin-bottom: 1.1rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+.equipment-management-desc {
+  color: #333;
+  font-size: 1.15rem;
+  margin-bottom: 2.2rem;
+  line-height: 1.7;
+  font-weight: 400;
+}
+.equipment-management-center-btn {
+  display: flex;
+  justify-content: center;
+}
+.equipment-management-btn {
+  background: linear-gradient(90deg, #e74c3c 0%, #f2994a 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.95rem 2.5rem;
+  font-size: 1.13rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(231, 76, 60, 0.07);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.equipment-management-btn:hover {
+  background: linear-gradient(90deg, #f2994a 0%, #e74c3c 100%);
+  box-shadow: 0 4px 18px rgba(231, 76, 60, 0.15);
+}
