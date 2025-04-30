@@ -203,15 +203,22 @@ const updateGym = async (req, res) => {
     // Update other fields
     const updates = req.body;
     Object.keys(updates).forEach((key) => {
+      let dbKey = key;
+      // Map frontend allowedGenders to backend genderAccess
+      if (key === "allowedGenders") dbKey = "genderAccess";
+      // Prevent location updates from PATCH
+      if (dbKey === "location") return; // skip location
       if (
-        key === "location" ||
-        key === "operatingHours" ||
-        key === "amenities" ||
-        key === "equipment"
+        dbKey === "operatingHours" ||
+        dbKey === "amenities" ||
+        dbKey === "equipment"
       ) {
-        gym[key] = JSON.parse(updates[key]);
+        gym[dbKey] =
+          typeof updates[key] === "string"
+            ? JSON.parse(updates[key])
+            : updates[key];
       } else {
-        gym[key] = updates[key];
+        gym[dbKey] = updates[key];
       }
     });
 

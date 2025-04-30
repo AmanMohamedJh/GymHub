@@ -225,6 +225,61 @@
   color: #000000;
 }
 
+/* Statistics Section Redefined */
+.statistics-section {
+  margin: 36px 0;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.statistics-section h2 {
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.statistics-grid {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 220px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.stat-title {
+  color: #e74c3c;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+}
+
+@media (max-width: 900px) {
+  .statistics-grid {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .stat-card {
+    min-width: 0;
+  }
+}
+
 /* Make statistics cards white like detail cards */
 .manage-gym-container .stat-card {
   background: rgba(255, 255, 255, 0.95);
@@ -343,6 +398,83 @@
 
 .add-btn:hover {
   background-color: #b06d66;
+}
+
+/* Edit Pen Button */
+.edit-pen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #e74c3c !important;
+  font-size: 1.1em;
+  margin-left: 8px;
+  padding: 2px 4px;
+  cursor: pointer;
+  vertical-align: middle;
+  box-shadow: none;
+  float: none;
+  position: relative;
+  top: 2px;
+  transition: color 0.2s, background 0.2s;
+}
+.edit-pen:hover {
+  color: #222 !important;
+  background: #ffeaea;
+  border-radius: 4px;
+}
+
+.details-grid .detail-card h3 {
+  display: flex;
+  align-items: center;
+  font-size: 1.18rem;
+  font-weight: 600;
+  color: #e74c3c;
+  margin-bottom: 0.7rem;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+/* Minimal override for edit input/buttons */
+.edit-input {
+  width: 95%;
+  margin: 7px 0;
+}
+.edit-save-btn,
+.edit-cancel-btn {
+  min-width: 70px;
+  width: 80px;
+  height: 34px;
+  margin-top: 5px;
+  margin-right: 5px;
+  padding: 4px 0;
+  font-size: 0.97em;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  display: inline-block;
+}
+.edit-save-btn {
+  background: #e74c3c;
+  color: #fff;
+  transition: background 0.2s;
+}
+.edit-save-btn:hover {
+  background: #c0392b;
+}
+.edit-cancel-btn {
+  background: #eee;
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+  transition: background 0.2s, color 0.2s;
+}
+.edit-cancel-btn:hover {
+  background: #e74c3c;
+  color: #fff;
 }
 
 /* Notes Section */
@@ -707,5 +839,165 @@ h2 {
   .clients-section .client-report-desc {
     padding: 1rem 0.7rem;
     font-size: 0.98rem;
+  }
+}
+
+/* Delete Gym Modal Styles - Improved */
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 30, 30, 0.7);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modalOverlayFadeIn 0.2s;
+}
+
+.delete-modal {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.28);
+  padding: 2.7rem 2.1rem 2.1rem 2.1rem;
+  max-width: 420px;
+  width: 96vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  animation: modalFadeIn 0.23s cubic-bezier(0.36, 1.44, 0.63, 1);
+  border-top: 7px solid #e74c3c;
+}
+
+.delete-modal h3 {
+  color: #e74c3c;
+  font-size: 1.48rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+.delete-effects {
+  margin: 0 0 1.2rem 0;
+  padding-left: 1.3rem;
+  color: #b71c1c;
+  font-size: 1.11rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.delete-effects li {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.delete-warning {
+  margin: 0.8rem 0 0.5rem 0;
+  font-size: 1.09rem;
+  font-weight: 600;
+  color: #e74c3c;
+  background: #fff6f6;
+  padding: 0.7rem 1rem 0.5rem 1rem;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 1.5px solid #f5b7b1;
+}
+
+.delete-confirm-input {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.7rem;
+  border: 1.7px solid #e74c3c;
+  border-radius: 0 0 8px 8px;
+  font-size: 1.09rem;
+  background: #fff6f6;
+  color: #c0392b;
+  letter-spacing: 0.01em;
+  outline: none;
+  font-weight: 700;
+  box-sizing: border-box;
+}
+
+.delete-radio-row {
+  display: flex;
+  align-items: center;
+  margin: 0.8rem 0 0.2rem 0;
+  font-size: 1.07rem;
+  font-weight: 500;
+  color: #333;
+  gap: 8px;
+}
+
+.delete-modal-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 1.4rem;
+  justify-content: flex-end;
+}
+
+.delete-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 11px 28px;
+  font-size: 1.13rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.17s, box-shadow 0.17s, transform 0.13s;
+  box-shadow: 0 3px 12px rgba(231, 76, 60, 0.13);
+  letter-spacing: 0.01em;
+}
+.delete-btn:disabled {
+  background: #f5b7b1;
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.delete-btn:not(:disabled):hover {
+  background: #c0392b;
+  transform: translateY(-2px) scale(1.04);
+}
+.cancel-btn {
+  background: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 7px;
+  padding: 11px 28px;
+  font-size: 1.09rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.17s, transform 0.13s;
+}
+.cancel-btn:hover {
+  background: #e0e0e0;
+  transform: translateY(-1px) scale(1.03);
+}
+.delete-error {
+  color: #e74c3c;
+  font-size: 1.03rem;
+  margin: 0.5rem 0 0.2rem 0;
+  font-weight: 600;
+  text-align: center;
+}
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes modalOverlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

@@ -13,6 +13,8 @@ import {
 import "./Styles/ManageGym.css";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 const ManageGym = () => {
   const { gymId } = useParams();
@@ -52,10 +54,26 @@ const ManageGym = () => {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showImageEditModal, setShowImageEditModal] = useState(false);
   const [imageFiles, setImageFiles] = useState([]);
   const [showClientReportModal, setShowClientReportModal] = useState(false);
+
+  const [editValues, setEditValues] = useState({
+    weekdays: "",
+    weekends: "",
+    amenities: "",
+    allowedGenders: "",
+    amenityInput: "",
+  });
+
+  const [notesValue, setNotesValue] = useState("");
+  const [isEditingNotes, setIsEditingNotes] = useState(false);
+
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleteAcknowledge, setDeleteAcknowledge] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
     const fetchGymData = async () => {
@@ -69,6 +87,18 @@ const ManageGym = () => {
         });
         if (!response.ok) throw new Error("Failed to fetch gym data");
         const data = await response.json();
+
+        // Parallel fetches for statistics
+        const [reviewsRes, clientsRes] = await Promise.all([
+          fetch(`/api/gym-reviews/${gymId}`),
+          fetch(`/api/gyms/${gymId}/Clientregistrations`, {
+            headers: { Authorization: `Bearer ${user?.token}` },
+            credentials: "include",
+          }),
+        ]);
+        const reviews = reviewsRes.ok ? await reviewsRes.json() : [];
+        const clients = clientsRes.ok ? await clientsRes.json() : [];
+
         // Transform backend data to UI shape
         const transformed = {
           name: data.name || "",
@@ -77,25 +107,22 @@ const ManageGym = () => {
                 .filter(Boolean)
                 .join(", ")
             : "",
+          locationObj: data.location || { coordinates: {} },
           images: (data.images || []).map((img) =>
-            img.startsWith("http")
-              ? img
-              : `${
-                  process.env.REACT_APP_API_URL
-                    ? process.env.REACT_APP_API_URL.replace(/\/$/, "")
-                    : ""
-                }/${img.replace(/^\//, "")}`
+            img.startsWith("http") ? img : `/${img.replace(/^\//, "")}`
           ),
           hours: data.operatingHours || { weekdays: "", weekends: "" },
           allowedGenders: data.genderAccess || "",
           amenities: data.amenities || [],
-          statistics: data.statistics || {
-            totalClients: 0,
-            monthlyRevenue: "",
-            popularPlan: "",
-            peakHours: "",
+          statistics: {
+            totalClients: Array.isArray(clients) ? clients.length : 0,
+            reviewCount: Array.isArray(reviews) ? reviews.length : 0,
+            announcementCount: 0,
+            eventCount: 0,
           },
           pricing: data.pricing || { monthly: 0, yearly: 0 },
+          certificate: data.certificate || null,
+          notes: data.notes || "",
         };
         setGymData(transformed);
         setLoading(false);
@@ -106,6 +133,20 @@ const ManageGym = () => {
     };
     if (gymId) fetchGymData();
   }, [gymId, user]);
+
+  useEffect(() => {
+    setEditValues({
+      weekdays: gymData?.hours?.weekdays || "",
+      weekends: gymData?.hours?.weekends || "",
+      amenities: (gymData?.amenities || []).join(", "),
+      allowedGenders: gymData?.allowedGenders || "",
+      amenityInput: "",
+    });
+  }, [gymData]);
+
+  useEffect(() => {
+    setNotesValue(gymData?.notes || "");
+  }, [gymData]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % (gymData?.images?.length || 0));
@@ -253,6 +294,61 @@ const ManageGym = () => {
       alert("Error generating report: " + err.message);
       setShowClientReportModal(false);
     }
+  };
+
+  const handleSaveAllEdits = async () => {
+    let patchBody = {};
+    // Hours (must send as JSON string)
+    patchBody.operatingHours = JSON.stringify({
+      weekdays: editValues.weekdays || "",
+      weekends: editValues.weekends || "",
+    });
+    // Amenities (must send as JSON string)
+    patchBody.amenities = JSON.stringify(
+      (editValues.amenities || "")
+        .split(",")
+        .map((a) => a.trim())
+        .filter(Boolean)
+    );
+    // Allowed Genders (send as genderAccess, not allowedGenders)
+    let val = editValues.allowedGenders;
+    if (!["Both", "Male", "Female"].includes(val)) val = "Both";
+    patchBody.genderAccess = val;
+
+    try {
+      const response = await fetch(`/api/gym/${gymId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+        body: JSON.stringify(patchBody),
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to update gym");
+      }
+      const updatedGym = await response.json();
+      setGymData((prev) => ({
+        ...prev,
+        hours: updatedGym.operatingHours,
+        amenities: updatedGym.amenities,
+        allowedGenders: updatedGym.genderAccess,
+      }));
+      setIsEditing(false);
+    } catch (error) {
+      alert("Error updating gym: " + error.message);
+    }
+  };
+  const handleCancelAllEdits = () => {
+    setEditValues({
+      weekdays: gymData?.hours?.weekdays || "",
+      weekends: gymData?.hours?.weekends || "",
+      amenities: (gymData?.amenities || []).join(", "),
+      allowedGenders: gymData?.allowedGenders || "",
+      amenityInput: "",
+    });
+    setIsEditing(false);
   };
 
   if (loading) {
@@ -417,74 +513,473 @@ const ManageGym = () => {
 
         {/* Gym Details Section */}
         <div className="details-section">
-          <h2>Gym Details</h2>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <h2>Gym Details</h2>
+            {!isEditing && (
+              <button
+                className="icon-btn edit-pen"
+                onClick={() => setIsEditing(true)}
+                title="Edit All Details"
+              >
+                <FaEdit />
+              </button>
+            )}
+          </div>
           <div className="details-grid">
+            {/* Location Section (read-only, with warning) */}
             <div className="detail-card">
               <h3>Location</h3>
               <p>{gymData.location}</p>
+              <div
+                style={{
+                  color: "#e74c3c",
+                  fontWeight: "bold",
+                  marginTop: 8,
+                  fontSize: "0.98rem",
+                }}
+              >
+                You can't change the location after the gym is verified and
+                certified by Admin
+              </div>
             </div>
             <div className="detail-card">
               <h3>Hours</h3>
-              <p>Weekdays: {gymData.hours.weekdays}</p>
-              <p>Weekends: {gymData.hours.weekends}</p>
+              {isEditing ? (
+                <>
+                  <input
+                    type="text"
+                    value={editValues.weekdays}
+                    onChange={(e) =>
+                      setEditValues({ ...editValues, weekdays: e.target.value })
+                    }
+                    placeholder="Weekdays"
+                    className="edit-input"
+                    style={{ marginBottom: 4 }}
+                  />
+                  <input
+                    type="text"
+                    value={editValues.weekends}
+                    onChange={(e) =>
+                      setEditValues({ ...editValues, weekends: e.target.value })
+                    }
+                    placeholder="Weekends"
+                    className="edit-input"
+                  />
+                </>
+              ) : (
+                <>
+                  <p>Weekdays: {gymData.hours.weekdays}</p>
+                  <p>Weekends: {gymData.hours.weekends}</p>
+                </>
+              )}
             </div>
             <div className="detail-card">
               <h3>Amenities</h3>
-              <ul>
-                {(gymData.amenities || []).map((amenity, index) => (
-                  <li key={index}>{amenity}</li>
-                ))}
-              </ul>
+              {isEditing ? (
+                <>
+                  <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+                    <input
+                      type="text"
+                      value={editValues.amenityInput || ""}
+                      onChange={(e) =>
+                        setEditValues({
+                          ...editValues,
+                          amenityInput: e.target.value,
+                        })
+                      }
+                      placeholder="Add amenity (e.g., Swimming Pool)"
+                      className="edit-input"
+                      style={{ flex: 1 }}
+                    />
+                    <button
+                      className="save-btn edit-save-btn"
+                      style={{ minWidth: 70, width: 80 }}
+                      onClick={() => {
+                        if (
+                          editValues.amenityInput &&
+                          editValues.amenityInput.trim() !== ""
+                        ) {
+                          setEditValues((ev) => ({
+                            ...ev,
+                            amenities: (ev.amenities
+                              ? ev.amenities.split(",").map((a) => a.trim())
+                              : []
+                            )
+                              .concat(ev.amenityInput.trim())
+                              .join(", "),
+                            amenityInput: "",
+                          }));
+                        }
+                      }}
+                    >
+                      Add
+                    </button>
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {(editValues.amenities
+                      ? editValues.amenities
+                          .split(",")
+                          .map((a) => a.trim())
+                          .filter(Boolean)
+                      : []
+                    ).map((amenity, idx) => (
+                      <span
+                        key={idx}
+                        style={{
+                          background: "#f5f5f5",
+                          border: "1px solid #e74c3c",
+                          color: "#333",
+                          borderRadius: 16,
+                          padding: "4px 12px",
+                          display: "flex",
+                          alignItems: "center",
+                          fontSize: 14,
+                        }}
+                      >
+                        {amenity}
+                        <button
+                          style={{
+                            marginLeft: 8,
+                            background: "none",
+                            border: "none",
+                            color: "#e74c3c",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            fontSize: 16,
+                          }}
+                          onClick={() => {
+                            setEditValues((ev) => ({
+                              ...ev,
+                              amenities: ev.amenities
+                                ? ev.amenities
+                                    .split(",")
+                                    .map((a) => a.trim())
+                                    .filter((_, i) => i !== idx)
+                                    .join(", ")
+                                : "",
+                            }));
+                          }}
+                          title="Remove"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <ul>
+                  {(gymData.amenities || []).map((amenity, index) => (
+                    <li key={index}>{amenity}</li>
+                  ))}
+                </ul>
+              )}
             </div>
             <div className="detail-card">
               <h3>Allowed Genders</h3>
-              <p>{gymData.allowedGenders}</p>
+              {isEditing ? (
+                <select
+                  value={editValues.allowedGenders}
+                  onChange={(e) =>
+                    setEditValues({
+                      ...editValues,
+                      allowedGenders: e.target.value,
+                    })
+                  }
+                  className="edit-input"
+                >
+                  <option value="Both">Both</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              ) : (
+                <p>{gymData.allowedGenders}</p>
+              )}
             </div>
           </div>
+          {isEditing && (
+            <div style={{ marginTop: 24, textAlign: "right" }}>
+              <button
+                className="save-btn edit-save-btn"
+                onClick={handleSaveAllEdits}
+              >
+                Save
+              </button>
+              <button
+                className="cancel-btn edit-cancel-btn"
+                onClick={handleCancelAllEdits}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
+
+        {/* Map Section */}
+        {gymData &&
+        gymData.locationObj &&
+        gymData.locationObj.coordinates &&
+        typeof gymData.locationObj.coordinates.lat === "number" &&
+        typeof gymData.locationObj.coordinates.lng === "number" ? (
+          <div
+            className="map-section"
+            style={{
+              margin: "32px 0",
+              borderRadius: 12,
+              overflow: "hidden",
+              boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+            }}
+          >
+            <h2 style={{ marginBottom: 16 }}>Gym Location</h2>
+            <div style={{ height: 340, width: "100%" }}>
+              <MapContainer
+                center={[
+                  gymData.locationObj.coordinates.lat,
+                  gymData.locationObj.coordinates.lng,
+                ]}
+                zoom={15}
+                style={{ height: "100%", width: "100%" }}
+                scrollWheelZoom={false}
+                dragging={false}
+                doubleClickZoom={false}
+                zoomControl={false}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker
+                  position={[
+                    gymData.locationObj.coordinates.lat,
+                    gymData.locationObj.coordinates.lng,
+                  ]}
+                >
+                  <Popup>{gymData.location || "Gym Location"}</Popup>
+                </Marker>
+              </MapContainer>
+            </div>
+          </div>
+        ) : (
+          <div
+            className="map-section"
+            style={{ margin: "32px 0", textAlign: "center", color: "#888" }}
+          >
+            <h2 style={{ color: "#fff" }}>Gym Location</h2>
+            <div style={{ padding: 32 }}>
+              Map unavailable: No coordinates found for this gym.
+            </div>
+          </div>
+        )}
 
         {/* Statistics Section */}
-        <div className="statistics-section">
-          <h2>Statistics</h2>
-          <div className="stats-grid">
-            <div className="stat-card">
-              <h3>Total Clients</h3>
-              <p>{gymData.statistics.totalClients}</p>
+        <div
+          className="statistics-section"
+          style={{
+            margin: "36px 0",
+            padding: 24,
+            background: "rgba(255,255,255,0.97)",
+            borderRadius: 12,
+            boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+          }}
+        >
+          <h2 style={{ marginBottom: 20, fontWeight: 700 }}>Statistics</h2>
+          <div
+            className="statistics-grid"
+            style={{
+              display: "flex",
+              gap: 24,
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+            }}
+          >
+            {/* Total Clients */}
+            <div
+              className="stat-card"
+              style={{
+                flex: 1,
+                minWidth: 220,
+                background: "#fff",
+                borderRadius: 10,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                padding: 24,
+                textAlign: "center",
+                marginBottom: 12,
+              }}
+            >
+              <div
+                style={{
+                  color: "#e74c3c",
+                  fontWeight: 700,
+                  fontSize: "1.1rem",
+                  marginBottom: 8,
+                }}
+              >
+                Total Clients
+              </div>
+              <div style={{ fontSize: 28, fontWeight: 700, color: "#222" }}>
+                {gymData.statistics?.totalClients ?? 0}
+              </div>
             </div>
-            <div className="stat-card">
-              <h3>Monthly Revenue</h3>
-              <p>{gymData.statistics.monthlyRevenue}</p>
+            {/* Number of Reviews */}
+            <div
+              className="stat-card"
+              style={{
+                flex: 1,
+                minWidth: 220,
+                background: "#fff",
+                borderRadius: 10,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                padding: 24,
+                textAlign: "center",
+                marginBottom: 12,
+              }}
+            >
+              <div
+                style={{
+                  color: "#e74c3c",
+                  fontWeight: 700,
+                  fontSize: "1.1rem",
+                  marginBottom: 8,
+                }}
+              >
+                Number of Reviews
+              </div>
+              <div style={{ fontSize: 28, fontWeight: 700, color: "#222" }}>
+                {gymData.statistics?.reviewCount ?? 0}
+              </div>
             </div>
-            <div className="stat-card">
-              <h3>Popular Plan</h3>
-              <p>{gymData.statistics.popularPlan}</p>
+            {/* Number of Announcements */}
+            <div
+              className="stat-card"
+              style={{
+                flex: 1,
+                minWidth: 220,
+                background: "#fff",
+                borderRadius: 10,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                padding: 24,
+                textAlign: "center",
+                marginBottom: 12,
+              }}
+            >
+              <div
+                style={{
+                  color: "#e74c3c",
+                  fontWeight: 700,
+                  fontSize: "1.1rem",
+                  marginBottom: 8,
+                }}
+              >
+                Number of Announcements
+              </div>
+              <div style={{ fontSize: 28, fontWeight: 700, color: "#222" }}>
+                {gymData.statistics?.announcementCount ?? 0}
+              </div>
             </div>
-            <div className="stat-card">
-              <h3>Peak Hours</h3>
-              <p>{gymData.statistics.peakHours}</p>
+            {/* Number of Events */}
+            <div
+              className="stat-card"
+              style={{
+                flex: 1,
+                minWidth: 220,
+                background: "#fff",
+                borderRadius: 10,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                padding: 24,
+                textAlign: "center",
+                marginBottom: 12,
+              }}
+            >
+              <div
+                style={{
+                  color: "#e74c3c",
+                  fontWeight: 700,
+                  fontSize: "1.1rem",
+                  marginBottom: 8,
+                }}
+              >
+                Number of Events
+              </div>
+              <div style={{ fontSize: 28, fontWeight: 700, color: "#222" }}>
+                {gymData.statistics?.eventCount ?? 0}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Membership Pricing Section */}
-        <div className="pricing-section">
-          <h2>Membership Pricing</h2>
-          <div className="pricing-grid">
-            <div className="price-card">
-              <h3>Monthly Plan</h3>
-              <p className="price">₹{gymData.pricing.monthly}</p>
-              <button className="edit-btn">
-                <FaEdit /> Edit
-              </button>
+        {/* Certificates Section */}
+        <div
+          className="certificates-section"
+          style={{
+            margin: "36px 0",
+            padding: 24,
+            background: "rgba(255,255,255,0.97)",
+            borderRadius: 12,
+            boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+          }}
+        >
+          <h2 style={{ marginBottom: 20, fontWeight: 700 }}>Certificates</h2>
+          {gymData.certificate ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src={
+                  gymData.certificate.startsWith("http")
+                    ? gymData.certificate
+                    : `/` + gymData.certificate.replace(/^\//, "")
+                }
+                alt="Certificate"
+                style={{
+                  maxWidth: 350,
+                  maxHeight: 320,
+                  borderRadius: 8,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
+                  marginBottom: 16,
+                  background: "#fff",
+                }}
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
+              />
+              <div
+                style={{
+                  color: "#e74c3c",
+                  fontWeight: "bold",
+                  fontSize: "1.05rem",
+                  textAlign: "center",
+                  marginTop: 4,
+                }}
+              >
+                <span role="img" aria-label="lock">
+                  🔒
+                </span>{" "}
+                You can't change or add certificates after being approved by the
+                Admin
+              </div>
             </div>
-            <div className="price-card">
-              <h3>Yearly Plan</h3>
-              <p className="price">₹{gymData.pricing.yearly}</p>
-              <button className="edit-btn">
-                <FaEdit /> Edit
-              </button>
+          ) : (
+            <div
+              style={{
+                color: "#888",
+                textAlign: "center",
+                fontSize: "1.05rem",
+                padding: 32,
+              }}
+            >
+              No certificate uploaded for this gym.
             </div>
-          </div>
+          )}
         </div>
 
         {/* Clients Management Section */}
@@ -561,7 +1056,7 @@ const ManageGym = () => {
                   >
                     <path
                       fill="#fff"
-                      d="M12 2a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L11 11.586V3a1 1 0 0 1 1-1Zm7 14a1 1 0 0 1 1 1v2a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2a1 1 0 1 1 2 0v2a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2a1 1 0 0 1 1-1Z"
+                      d="M12 2a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L11 11.586V3a1 1 0 0 1 1-1Zm7 14a1 1 0 0 1 1 1v2a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2a1 1 0 0 1 1-1Z"
                     />
                   </svg>
                   Client Report
@@ -704,52 +1199,248 @@ const ManageGym = () => {
         <div className="notes-section">
           <h2>Notes & Contact Details</h2>
           <div className="notes-container">
-            <textarea
-              placeholder="Add important notes about the gym..."
-              rows="4"
-            ></textarea>
-            <button className="save-btn">Save Notes</button>
+            {isEditingNotes ? (
+              <>
+                <textarea
+                  value={notesValue}
+                  onChange={(e) => setNotesValue(e.target.value)}
+                  rows="4"
+                  style={{ width: "100%", marginBottom: 12 }}
+                />
+                <div style={{ display: "flex", gap: 12 }}>
+                  <button
+                    className="save-btn"
+                    onClick={async () => {
+                      try {
+                        const res = await fetch(`/api/gym/${gymId}`, {
+                          method: "PATCH",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${user?.token}`,
+                          },
+                          body: JSON.stringify({ notes: notesValue }),
+                        });
+                        if (!res.ok) throw new Error("Failed to update notes");
+                        setIsEditingNotes(false);
+                        setGymData((prev) => ({ ...prev, notes: notesValue }));
+                      } catch (err) {
+                        alert("Error updating notes: " + err.message);
+                      }
+                    }}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="cancel-btn"
+                    onClick={() => {
+                      setNotesValue(gymData.notes || "");
+                      setIsEditingNotes(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  {gymData.notes && (
+                    <button
+                      className="delete-btn"
+                      style={{
+                        marginLeft: "auto",
+                        background: "#e74c3c",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: 6,
+                        padding: "8px 16px",
+                        fontWeight: 600,
+                      }}
+                      onClick={async () => {
+                        try {
+                          const res = await fetch(`/api/gym/${gymId}`, {
+                            method: "PATCH",
+                            headers: {
+                              "Content-Type": "application/json",
+                              Authorization: `Bearer ${user?.token}`,
+                            },
+                            body: JSON.stringify({ notes: "" }),
+                          });
+                          if (!res.ok)
+                            throw new Error("Failed to delete notes");
+                          setNotesValue("");
+                          setGymData((prev) => ({ ...prev, notes: "" }));
+                          setIsEditingNotes(false);
+                        } catch (err) {
+                          alert("Error deleting notes: " + err.message);
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <textarea
+                  value={gymData.notes || ""}
+                  readOnly
+                  rows="4"
+                  style={{
+                    width: "100%",
+                    marginBottom: 12,
+                    background: "#f9f9f9",
+                    color: "#444",
+                  }}
+                  placeholder="Add important notes about the gym..."
+                />
+                <div style={{ display: "flex", gap: 12 }}>
+                  <button
+                    className="edit-btn"
+                    onClick={() => {
+                      setNotesValue(gymData.notes || "");
+                      setIsEditingNotes(true);
+                    }}
+                  >
+                    {gymData.notes ? "Edit Notes" : "Add Notes"}
+                  </button>
+                  {gymData.notes && (
+                    <button
+                      className="delete-btn"
+                      style={{
+                        background: "#e74c3c",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: 6,
+                        padding: "8px 16px",
+                        fontWeight: 600,
+                      }}
+                      onClick={async () => {
+                        try {
+                          const res = await fetch(`/api/gym/${gymId}`, {
+                            method: "PATCH",
+                            headers: {
+                              "Content-Type": "application/json",
+                              Authorization: `Bearer ${user?.token}`,
+                            },
+                            body: JSON.stringify({ notes: "" }),
+                          });
+                          if (!res.ok)
+                            throw new Error("Failed to delete notes");
+                          setNotesValue("");
+                          setGymData((prev) => ({ ...prev, notes: "" }));
+                        } catch (err) {
+                          alert("Error deleting notes: " + err.message);
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
         {/* Delete Gym Section */}
         <div className="delete-section">
           <h2>Delete Gym</h2>
-          <p className="warning">Warning: This action cannot be undone.</p>
+          <p>Warning: This action cannot be undone.</p>
           <button
             className="delete-btn"
-            onClick={() => setShowDeleteConfirm(true)}
+            onClick={() => setShowDeleteModal(true)}
           >
             Delete Gym
           </button>
         </div>
-      </div>
 
-      {/* Delete Confirmation Modal - Moved outside main container */}
-      {showDeleteConfirm && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>
-              <FaTrash /> Confirm Delete
-            </h3>
-            <p>
-              Are you sure you want to delete this gym? This action cannot be
-              undone.
-            </p>
-            <div className="modal-buttons">
-              <button
-                className="cancel-button"
-                onClick={() => setShowDeleteConfirm(false)}
-              >
-                Cancel
-              </button>
-              <button className="delete-button" onClick={handleDeleteGym}>
-                Delete Gym
-              </button>
+        {/* Delete Confirmation Modal */}
+        {showDeleteModal && (
+          <div className="delete-modal-overlay">
+            <div className="delete-modal">
+              <h3>Are you absolutely sure?</h3>
+              <ul className="delete-effects">
+                <li>
+                  All gym data (clients, reviews, equipment, schedules) will be
+                  permanently deleted.
+                </li>
+                <li>
+                  Clients and trainers will lose access to this gym's
+                  information.
+                </li>
+                <li>Any future events or announcements will be lost.</li>
+                <li>This action cannot be undone.</li>
+              </ul>
+              <div className="delete-warning">
+                <b>
+                  Type <span style={{ color: "#e74c3c" }}>Delete gym</span>{" "}
+                  below to confirm:
+                </b>
+                <input
+                  type="text"
+                  value={deleteConfirmText}
+                  onChange={(e) => setDeleteConfirmText(e.target.value)}
+                  placeholder="Type 'Delete gym' to confirm"
+                  className="delete-confirm-input"
+                  autoFocus
+                />
+              </div>
+              <div className="delete-radio-row">
+                <input
+                  type="radio"
+                  id="acknowledge"
+                  checked={deleteAcknowledge}
+                  onChange={() => setDeleteAcknowledge(!deleteAcknowledge)}
+                />
+                <label htmlFor="acknowledge" style={{ marginLeft: 8 }}>
+                  I have read and understand these effects
+                </label>
+              </div>
+              {deleteError && <div className="delete-error">{deleteError}</div>}
+              <div className="delete-modal-actions">
+                <button
+                  className="delete-btn"
+                  disabled={
+                    deleteConfirmText !== "Delete gym" ||
+                    !deleteAcknowledge ||
+                    deleting
+                  }
+                  onClick={async () => {
+                    setDeleting(true);
+                    setDeleteError("");
+                    try {
+                      const res = await fetch(`/api/gym/${gymId}`, {
+                        method: "DELETE",
+                        headers: {
+                          Authorization: `Bearer ${user?.token}`,
+                        },
+                      });
+                      if (!res.ok) throw new Error("Failed to delete gym");
+                      setShowDeleteModal(false);
+                      // Optionally redirect or refresh
+                      window.location.href = "/dashboard";
+                    } catch (err) {
+                      setDeleteError(err.message);
+                    } finally {
+                      setDeleting(false);
+                    }
+                  }}
+                >
+                  {deleting ? "Deleting..." : "Confirm Delete"}
+                </button>
+                <button
+                  className="cancel-btn"
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setDeleteConfirmText("");
+                    setDeleteAcknowledge(false);
+                    setDeleteError("");
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };
