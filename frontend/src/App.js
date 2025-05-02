@@ -40,8 +40,8 @@ import GymReviews from "./pages/Gym_Owner/GymReviews";
 // Trainer Components
 import TrainerDashboard from "./pages/Trainer/TrainerDashboard.jsx";
 import TrainerRegistration from "./pages/Trainer/TrainerRegistration.jsx";
-import TrainerList from "./pages/Trainer/TrainerList.jsx";
-import TrainerSession from "./pages/Trainer/TrainerDashboard.jsx";
+
+import TrainerSession from "./pages/Trainer/TrainerSession.jsx";
 import TrainerWorkoutPlans from "./pages/Trainer/TrainerWorkoutPlans.jsx";
 import ClientProgress from "./pages/Trainer/ClientProgress.jsx";
 
@@ -274,11 +274,47 @@ function App() {
                   }
                 />
                 <Route
-                  path="/trainer-registration"
+                  path="/trainer/registration"
                   element={
                     <NonAdminRoute>
                       <ProtectedRoute allowedRole="trainer">
                         <TrainerRegistration />
+                      </ProtectedRoute>
+                    </NonAdminRoute>
+                  }
+                />
+                <Route
+                  path="/trainer/session"
+                  element={
+                    <NonAdminRoute>
+                      <ProtectedRoute allowedRole="trainer">
+                        <RequireSubscription>
+                          <TrainerSession />
+                        </RequireSubscription>
+                      </ProtectedRoute>
+                    </NonAdminRoute>
+                  }
+                />
+                <Route
+                  path="/trainer/workout-plans"
+                  element={
+                    <NonAdminRoute>
+                      <ProtectedRoute allowedRole="trainer">
+                        <RequireSubscription>
+                          <TrainerWorkoutPlans />
+                        </RequireSubscription>
+                      </ProtectedRoute>
+                    </NonAdminRoute>
+                  }
+                />
+                <Route
+                  path="/trainer/client-progress"
+                  element={
+                    <NonAdminRoute>
+                      <ProtectedRoute allowedRole="trainer">
+                        <RequireSubscription>
+                          <ClientProgress />
+                        </RequireSubscription>
                       </ProtectedRoute>
                     </NonAdminRoute>
                   }

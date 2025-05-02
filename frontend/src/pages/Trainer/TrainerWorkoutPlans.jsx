@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import useWorkoutPlans from "../../hooks/Trainer/useWorkoutPlans";
 import "./Styles/trainerWorkoutPlans.css";
 
-const TrainerWorkoutPlans = () => {
-  const [workoutPlans, setWorkoutPlans] = useState([]);
+const TrainerWorkoutPlans = ({ trainerId }) => {
   const [newPlan, setNewPlan] = useState({
     title: "",
     description: "",
@@ -12,17 +12,16 @@ const TrainerWorkoutPlans = () => {
   });
   const [showForm, setShowForm] = useState(false);
 
+  const { workoutPlans, loading, error, createWorkoutPlan, deleteWorkoutPlan } = useWorkoutPlans(trainerId);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewPlan((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setNewPlan((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setWorkoutPlans((prev) => [...prev, { ...newPlan, id: Date.now() }]);
+    createWorkoutPlan({ ...newPlan, trainerId });
     setNewPlan({
       title: "",
       description: "",
@@ -32,6 +31,9 @@ const TrainerWorkoutPlans = () => {
     });
     setShowForm(false);
   };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="workout-plans-container">
@@ -64,47 +66,25 @@ const TrainerWorkoutPlans = () => {
                 required
               />
             </div>
-            <div className="form-group">
-              <label>Duration (weeks):</label>
-              <input
-                type="number"
-                name="duration"
-                value={newPlan.duration}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Difficulty:</label>
-              <select
-                name="difficulty"
-                value={newPlan.difficulty}
-                onChange={handleInputChange}
-              >
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
-            </div>
-            <div className="form-buttons">
-              <button type="submit">Save Plan</button>
-              <button type="button" onClick={() => setShowForm(false)}>
-                Cancel
-              </button>
-            </div>
+            <button type="submit">Save Plan</button>
+            <button type="button" onClick={() => setShowForm(false)}>
+              Cancel
+            </button>
           </form>
         </div>
       )}
 
       <div className="plans-grid">
         {workoutPlans.map((plan) => (
-          <div key={plan.id} className="plan-card">
+          <div key={plan._id} className="plan-card">
             <h3>{plan.title}</h3>
             <p>{plan.description}</p>
-            <div className="plan-details">
-              <span>Duration: {plan.duration} weeks</span>
-              <span>Difficulty: {plan.difficulty}</span>
-            </div>
+            <button
+              className="delete-plan-btn"
+              onClick={() => deleteWorkoutPlan(plan._id)}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>

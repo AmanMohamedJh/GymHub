@@ -18,6 +18,12 @@ const {
 } = require("./src/routes/Gym_Owner/clientGymRegistration");
 const gymReviewRoutes = require("./src/routes/Gym_Owner/gymReviewRoutes");
 
+//Trainer Routes
+
+const trainerSessionRoutes = require("./src/routes/Trainer/trainerSessionRoutes");
+const workoutPlanRoutes = require("./src/routes/Trainer/workoutPlanRoutes");
+const progressRoutes = require("./src/routes/Trainer/progressRoutes");
+
 const app = express();
 const PORT = process.env.PORT || 4070;
 
@@ -55,6 +61,13 @@ app.use("/api/contactUs", contactUsRouter);
 
 app.use("/api", clientGymRegistrationRoutes);
 app.use("/api/gymOwner", gymOwnerRouter);
+
+// Trainer routes
+const trainerRegistrationRoutes = require("./src/routes/Trainer/trainerRegistrationRoutes");
+app.use("/api/trainer/registration", trainerRegistrationRoutes);
+app.use("/api/trainer/session", trainerSessionRoutes);
+app.use("/api/trainer/workout-plan", workoutPlanRoutes);
+app.use("/api/trainer/progress", progressRoutes);
 
 // Serve static files from the uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

@@ -1,21 +1,11 @@
 /* Root color theme */
-:root {
+.workout-plans-container {
   --background-color: #000;
   --text-color: #fff;
   --accent-color: #e74c3c;
   --card-bg: rgba(255, 255, 255, 0.9);
-}
-
-body,
-html {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
-}
-
-.workout-plans-container {
   max-width: none;
   margin: 0;
   padding: 5rem;

@@ -9,90 +9,90 @@
 }
 
 /* Header Section */
-.header-section {
+.progress-container .header-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.header-section h2 {
+.progress-container .header-section h2 {
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 0;
 }
 
-.profile-info {
+.progress-container .profile-info {
   display: flex;
   align-items: center;
 }
 
-.profile-pic {
+.progress-container .profile-pic {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   margin-right: 20px;
 }
 
-.client-info {
+.progress-container .client-info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.client-info h3 {
+.progress-container .client-info h3 {
   font-size: 22px;
   margin: 0;
 }
 
-.client-info p {
+.progress-container .client-info p {
   font-size: 16px;
   color: #bbb;
 }
 
 /* Progress Overview Section */
-.overview-section {
+.progress-container .overview-section {
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
 }
 
-.workout-summary {
+.progress-container .workout-summary {
   width: 45%;
 }
 
-.summary-details {
+.progress-container .summary-details {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
 }
 
-.summary-item h5 {
+.progress-container .summary-item h5 {
   font-size: 18px;
   margin-bottom: 5px;
 }
 
-.summary-item p {
+.progress-container .summary-item p {
   font-size: 16px;
   color: #ffd700;
 }
 
 /* Workout History Section */
-.history-section {
+.progress-container .history-section {
   margin-bottom: 30px;
 }
 
-.history-section h4 {
+.progress-container .history-section h4 {
   font-size: 22px;
   margin-bottom: 10px;
 }
 
-.history-section ul {
+.progress-container .history-section ul {
   list-style-type: none;
   padding: 0;
 }
 
-.history-section li {
+.progress-container .history-section li {
   font-size: 16px;
   margin-bottom: 10px;
 }

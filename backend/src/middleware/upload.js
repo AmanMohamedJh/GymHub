@@ -8,6 +8,7 @@ const createUploadDirs = () => {
     "uploads/profiles",
     "uploads/Gym_images",
     "uploads/Gym_certificates",
+    "uploads/Trainer_certificates",
   ];
 
   dirs.forEach((dir) => {
@@ -27,7 +28,12 @@ const storage = multer.diskStorage({
     if (file.fieldname === "gymImages") {
       uploadPath = "uploads/Gym_images/";
     } else if (file.fieldname === "certificate") {
-      uploadPath = "uploads/Gym_certificates/";
+      // If this is for trainer registration, use Trainer_certificates
+      if (req.baseUrl && req.baseUrl.includes("trainer/registration")) {
+        uploadPath = "uploads/Trainer_certificates/";
+      } else {
+        uploadPath = "uploads/Gym_certificates/";
+      }
     }
 
     cb(null, uploadPath);

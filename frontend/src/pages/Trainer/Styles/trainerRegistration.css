@@ -1,76 +1,221 @@
+/* Trainer Registration Styles - Inspired by RegisterGym.css */
 .trainer-registration-container {
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
+  position: relative;
   padding: 2rem;
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url('../Styles/Images/gym-background.jpg.jpg') center/cover no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: 80px;
+  z-index: 1;
+  /* No background, let global image show through */
 }
 
-.registration-form-wrapper {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  width: 100%;
+
+.trainer-registration-form {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 20px;
   max-width: 600px;
+  margin: 2rem auto;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.25), 0 1.5px 6px rgba(231,76,60,0.08);
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
-.registration-form-wrapper h2 {
+.form-header {
   text-align: center;
-  color: #333;
   margin-bottom: 2rem;
-  font-size: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(231, 76, 60, 0.1);
 }
 
-.registration-form {
-  display: grid;
-  gap: 1.5rem;
+.form-header h2 {
+  color: #e74c3c;
+  font-size: 2.6rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 8px #000, 0 2px 8px rgba(0,0,0,0.32);
+  text-align: left;
+}
+
+.form-header p {
+  color: #495151;
+  font-size: 1.1rem;
+}
+
+.form-section {
+  margin-bottom: 1.5rem;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
+  display: block;
   font-weight: 600;
-  color: #444;
-}
-
-.form-group input,
-.form-group select {
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-.file-input {
-  padding: 0.5rem 0;
-}
-
-.submit-btn {
-  background-color: #007bff;
-  color: white;
-  padding: 1rem;
-  border: none;
-  border-radius: 5px;
+  color: #34495e;
+  margin-bottom: 0.7rem;
   font-size: 1.1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 1rem;
 }
 
-.submit-btn:hover {
-  background-color: #0056b3;
+.required {
+  color: #e74c3c;
+  margin-left: 0.2rem;
+}
+
+.trainer-registration-form .form-group input,
+.trainer-registration-form .form-group textarea,
+.trainer-registration-form .form-group select {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #fff !important;
+  color: #2c3e50;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Unique fix for phone input */
+.trainer-registration-form .form-group input.trainer-phone-input {
+  background: #fff !important;
+  color: #2c3e50;
+  border: 2px solid #ecf0f1;
+}
+
+.trainer-registration-form .form-group input.trainer-phone-input:focus,
+.trainer-registration-form .form-group input.trainer-phone-input:active {
+  background: #fff !important;
+  color: #2c3e50;
+  border-color: #e74c3c;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.trainer-registration-form .form-group input.trainer-phone-input[aria-invalid="true"] {
+  background: #fff !important;
+  color: #2c3e50;
+  border-color: #e74c3c;
+}
+
+.trainer-registration-form-group input:focus,
+.trainer-registration-form-group textarea:focus,
+.trainer-registration-form-group select:focus {
+  outline: none;
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.trainer-registration-form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.trainer-registration-gender-options.trainer-gender-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2.5rem;
+  margin-top: 0.5rem;
+}
+
+.trainer-gender-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1.08rem;
+  margin-right: 0.5rem;
+}
+
+.trainer-gender-label input[type="radio"] {
+  margin-right: 0.35em;
+  accent-color: #e74c3c;
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.certificate-preview img {
+  max-width: 180px;
+  border-radius: 8px;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.08);
+}
+
+.error-text {
+  color: #e74c3c;
+  font-size: 0.95rem;
+  margin-top: 0.3rem;
+  display: block;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.submit-button {
+  width: 100%;
+  background: #ff0000 !important;
+  color: #fff !important;
+  border: none;
+  padding: 1.1rem 2.8rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background 0.2s;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(231,76,60,0.09);
+}
+
+.submit-button:hover {
+  background: #ff0000 !important;
+}
+
+@media (max-width: 600px) {
+  .trainer-registration-form {
+    padding: 1.1rem;
+    max-width: 98vw;
+  }
+  .submit-button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
+  }
+}
+
+.submit-button {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 1.1rem 2.8rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background 0.2s;
+}
+
+.submit-button:hover {
+  background: #c0392b;
+}
+
+@media (max-width: 768px) {
+  .trainer-registration-container {
+    padding: 1rem;
+  }
+  .trainer-registration-form {
+    padding: 1.2rem;
+  }
 }
