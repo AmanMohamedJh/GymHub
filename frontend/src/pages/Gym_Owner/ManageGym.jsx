@@ -1058,6 +1058,104 @@ const ManageGym = () => {
           </div>
         </div>
 
+        {/* Client Report Modal */}
+        {showClientReportModal && (
+          <div
+            className="modal-overlay"
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              background: "rgba(0,0,0,0.3)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 9999,
+            }}
+          >
+            <div
+              className="modal-content"
+              style={{
+                background: "#fff",
+                padding: 32,
+                borderRadius: 16,
+                minWidth: 320,
+                boxShadow: "0 2px 24px rgba(0,0,0,0.15)",
+              }}
+            >
+              <h3 style={{ marginBottom: 16 }}>Download Client Report</h3>
+              <p style={{ marginBottom: 24 }}>
+                Select the format you want to download the client report in:
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 16,
+                  marginBottom: 24,
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                <button
+                  onClick={handleDownloadClientReport("csv")}
+                  style={{
+                    padding: "10px 22px",
+                    borderRadius: 8,
+                    background: "#27ae60",
+                    color: "#fff",
+                    border: "none",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    minWidth: 180,
+                  }}
+                >
+                  Download as CSV
+                </button>
+                <button
+                  onClick={handleDownloadClientReport("pdf")}
+                  style={{
+                    padding: "10px 22px",
+                    borderRadius: 8,
+                    background: "#2980b9",
+                    color: "#fff",
+                    border: "none",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    minWidth: 180,
+                  }}
+                >
+                  Download as PDF
+                </button>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                <button
+                  onClick={() => setShowClientReportModal(false)}
+                  style={{
+                    background: "#e74c3c",
+                    border: "none",
+                    color: "#fff",
+                    cursor: "pointer",
+                    fontSize: 16,
+                    padding: "10px 32px",
+                    borderRadius: 8,
+                    fontWeight: 600,
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Equipment Management Section */}
         <div className="equipment-management-info">
           <h2>Equipment Management</h2>
