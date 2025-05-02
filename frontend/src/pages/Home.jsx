@@ -15,8 +15,17 @@ import gymImage1 from "../Images/gym1.jpg.jpg";
 import gymImage2 from "../Images/gym2.jpg.jpg";
 import gymImage3 from "../Images/gym3.jpg.jpg";
 import "../styles/Home/home.css";
+import { PopupAdDisplay } from "../Components/Ads/AdService";
+// import AdManager if needed to show how to connect the click handler
 
 export default function Home() {
+  // Handler to update ad clicks globally (can be lifted to context or passed to AdManager)
+  const handleAdClickUpdate = (adId, updatedAd) => {
+    // For demo: log or connect to AdManager via context or prop
+    console.log("Ad click updated:", adId, updatedAd);
+    // If AdManager is rendered here, pass this handler as a prop
+    // Or update context/global state
+  };
   const { user } = useAuthContext();
   const [showVideo, setShowVideo] = useState(false);
 
@@ -303,6 +312,15 @@ export default function Home() {
           </div>
         </section>
       </main>
+
+      {/* Popup Ad */}
+      <PopupAdDisplay
+        location={user?.location}
+        ageGroup={user?.ageGroup}
+        interests={user?.interests}
+        onAdClick={handleAdClickUpdate}
+      />
+      {/* If AdManager is rendered here, also pass handleAdClickUpdate as a prop */}
     </div>
   );
 }

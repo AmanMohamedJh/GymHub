@@ -5,7 +5,7 @@ import {
   XMarkIcon as XIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
-import { FaTools } from "react-icons/fa";
+import { FaTools, FaAd } from "react-icons/fa";
 import { Fragment } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import "../Common/Navbar.css";
@@ -145,6 +145,21 @@ export default function Navbar() {
                             )}
                           </Menu.Item>
                         )}
+                        {user.role === "gym_owner" && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                to="/ad-manager"
+                                className={`dropdown-item ${
+                                  active ? "active" : ""
+                                }`}
+                              >
+                                <FaAd className="menu-icon" />
+                                Ad Manager
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        )}
                         <Menu.Item>
                           {({ active }) => (
                             <Link
@@ -228,6 +243,12 @@ export default function Navbar() {
                   <Link to="/equipment-management" className="mobile-nav-link">
                     <FaTools className="menu-icon" />
                     Equipment Management
+                  </Link>
+                )}
+                {user.role === "gym_owner" && (
+                  <Link to="/ad-manager" className="mobile-nav-link">
+                    <FaAd className="menu-icon" />
+                    Ad Manager
                   </Link>
                 )}
                 <Link to="/user-profile" className="mobile-nav-link">
