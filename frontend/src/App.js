@@ -44,7 +44,8 @@ import TrainerRegistration from "./pages/Trainer/TrainerRegistration.jsx";
 import ManageTrainerSession from "./pages/Trainer/ManageTrainerSession.jsx";
 import AddTrainerSession from "./pages/Trainer/AddTrainerSession.jsx";
 
-import TrainerWorkoutPlans from "./pages/Trainer/TrainerWorkoutPlans.jsx";
+import ManageTrainerTips from "./pages/Trainer/ManageTrainerTips.jsx";
+import TrainerTips from "./pages/Trainer/TrainerTips.jsx";
 import ClientProgress from "./pages/Trainer/ClientProgress.jsx";
 
 // Client Components
@@ -300,12 +301,12 @@ function App() {
                 />
 
                 <Route
-                  path="/trainer/workout-plans"
+                  path="/trainer/manage-tips"
                   element={
                     <NonAdminRoute>
                       <ProtectedRoute allowedRole="trainer">
                         <RequireSubscription>
-                          <TrainerWorkoutPlans />
+                          <ManageTrainerTips />
                         </RequireSubscription>
                       </ProtectedRoute>
                     </NonAdminRoute>
@@ -455,6 +456,22 @@ function App() {
                   }
                 />
                 <Route path="/gyms/:gymId/reviews" element={<GymReviews />} />
+
+                {/* Trainer Tips - Public to all users with subscription, non-admin only */}
+                <Route
+                  path="/trainer-tips"
+                  element={
+                    <NonAdminRoute>
+                      <ProtectedRoute
+                        allowedRole={["client", "trainer", "gym_owner"]}
+                      >
+                        <RequireSubscription>
+                          <TrainerTips />
+                        </RequireSubscription>
+                      </ProtectedRoute>
+                    </NonAdminRoute>
+                  }
+                />
 
                 {/* Admin Routes */}
                 <Route

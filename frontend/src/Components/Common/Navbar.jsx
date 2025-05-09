@@ -9,6 +9,7 @@ import { FaTools, FaAd } from "react-icons/fa";
 import { Fragment } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import "../Common/Navbar.css";
+import "../Common/NavbarDropdown.css"; // custom dropdown style
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -67,17 +68,98 @@ export default function Navbar() {
               </div>
 
               <div className="navbar-links">
-                {getNavigation(user).map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={`nav-link ${
-                      location.pathname === item.href ? "active" : ""
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+                {[
+                  ...getNavigation(user).map((item) => {
+                    if (item.name === "Trainers") {
+                      return (
+                        <div
+                          key="Trainers"
+                          className="nav-link dropdown"
+                          style={{
+                            position: "relative",
+                            display: "inline-block",
+                          }}
+                        >
+                          <span
+                            className={`nav-link ${
+                              location.pathname === "/client-browse-trainer"
+                                ? "active"
+                                : ""
+                            }`}
+                            tabIndex={0}
+                            style={{ cursor: "pointer", userSelect: "none" }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              const menu = e.currentTarget.nextSibling;
+                              if (menu)
+                                menu.style.display =
+                                  menu.style.display === "block"
+                                    ? "none"
+                                    : "block";
+                              const closeDropdown = (evt) => {
+                                if (
+                                  menu &&
+                                  !menu.contains(evt.target) &&
+                                  evt.target !== e.currentTarget
+                                ) {
+                                  menu.style.display = "none";
+                                  document.removeEventListener(
+                                    "mousedown",
+                                    closeDropdown
+                                  );
+                                }
+                              };
+                              document.addEventListener(
+                                "mousedown",
+                                closeDropdown
+                              );
+                            }}
+                          >
+                            Trainers
+                          </span>
+                          <div
+                            className="dropdown-menu-custom"
+                            style={{
+                              display: "none",
+                              position: "absolute",
+                              top: "calc(100% + 4px)",
+                              left: 0,
+                              zIndex: 1000,
+                            }}
+                          >
+                            <div
+                              className="dropdown-item"
+                              onClick={() => {
+                                window.location.href = "/client-browse-trainer";
+                              }}
+                            >
+                              All Trainers
+                            </div>
+                            <div
+                              className="dropdown-item"
+                              onClick={() => {
+                                navigate("/trainer-tips");
+                              }}
+                            >
+                              Workout Tips
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={`nav-link ${
+                          location.pathname === item.href ? "active" : ""
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    );
+                  }),
+                ]}
               </div>
 
               <div className="navbar-auth">

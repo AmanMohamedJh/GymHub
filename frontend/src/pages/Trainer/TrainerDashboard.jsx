@@ -40,8 +40,8 @@ const TrainerDashboard = () => {
     setLoading(true);
     fetch("/api/trainer/registration/me", {
       headers: {
-        Authorization: user.token ? `Bearer ${user.token}` : ""
-      }
+        Authorization: user.token ? `Bearer ${user.token}` : "",
+      },
     })
       .then(async (res) => {
         if (!res.ok) {
@@ -80,31 +80,31 @@ const TrainerDashboard = () => {
 
         if (editedData.certificateFile) {
           formData = new FormData();
-          Object.keys(editedData).forEach(key => {
-            if (key !== 'certificateUrl' && key !== 'certificateFile') {
+          Object.keys(editedData).forEach((key) => {
+            if (key !== "certificateUrl" && key !== "certificateFile") {
               formData.append(key, editedData[key]);
             }
           });
-          formData.append('certificate', editedData.certificateFile);
+          formData.append("certificate", editedData.certificateFile);
           isMultipart = true;
         } else {
           formData = { ...editedData };
           delete formData.certificateFile;
         }
 
-        const res = await fetch('/api/trainer/registration/me', {
-          method: 'PUT',
+        const res = await fetch("/api/trainer/registration/me", {
+          method: "PUT",
           headers: isMultipart
-            ? { Authorization: user.token ? `Bearer ${user.token}` : '' }
+            ? { Authorization: user.token ? `Bearer ${user.token}` : "" }
             : {
-                'Content-Type': 'application/json',
-                Authorization: user.token ? `Bearer ${user.token}` : '',
+                "Content-Type": "application/json",
+                Authorization: user.token ? `Bearer ${user.token}` : "",
               },
           body: isMultipart ? formData : JSON.stringify(formData),
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Update failed');
+        if (!res.ok) throw new Error(data.error || "Update failed");
         setTrainerData(data);
         setIsEditing(false);
       } catch (err) {
@@ -137,76 +137,90 @@ const TrainerDashboard = () => {
   };
 
   const navigateToWorkoutPlans = () => {
-    navigate("/trainer/workout-plans");
+    navigate("/trainer/manage-tips");
   };
 
   const trainingTypes = [
-  'Yoga',
-  'Body Fitness',
-  'Nutritionist',
-  'Dietist',
-  'Personal Training',
-  'Crossfit',
-  'Cardio',
-  'Other',
-];
+    "Yoga",
+    "Body Fitness",
+    "Nutritionist",
+    "Dietist",
+    "Personal Training",
+    "Crossfit",
+    "Cardio",
+    "Other",
+  ];
 
-const renderDetailItem = (label, field) => {
-  // Gender dropdown
-  if (field === 'gender' && isEditing) {
+  const renderDetailItem = (label, field) => {
+    // Gender dropdown
+    if (field === "gender" && isEditing) {
+      return (
+        <div className={`detail-item editing`}>
+          <label>{label}:</label>
+          <select
+            value={editedData.gender || ""}
+            onChange={(e) => handleInputChange("gender", e.target.value)}
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+      );
+    }
+    // Training Type dropdown
+    if (field === "trainingType" && isEditing) {
+      return (
+        <div className={`detail-item editing`}>
+          <label>{label}:</label>
+          <select
+            value={editedData.trainingType || ""}
+            onChange={(e) => handleInputChange("trainingType", e.target.value)}
+          >
+            <option value="">Select Training Type</option>
+            {trainingTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
+      );
+    }
+    // Default: text input
     return (
-      <div className={`detail-item editing`}>
+      <div className={`detail-item ${isEditing ? "editing" : ""}`}>
         <label>{label}:</label>
-        <select
-          value={editedData.gender || ''}
-          onChange={e => handleInputChange('gender', e.target.value)}
-        >
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
+        {isEditing ? (
+          <input
+            type="text"
+            value={
+              editedData[field] !== undefined
+                ? editedData[field]
+                : trainerData[field] || ""
+            }
+            onChange={(e) => handleInputChange(field, e.target.value)}
+          />
+        ) : (
+          <span>{trainerData[field]}</span>
+        )}
       </div>
     );
-  }
-  // Training Type dropdown
-  if (field === 'trainingType' && isEditing) {
-    return (
-      <div className={`detail-item editing`}>
-        <label>{label}:</label>
-        <select
-          value={editedData.trainingType || ''}
-          onChange={e => handleInputChange('trainingType', e.target.value)}
-        >
-          <option value="">Select Training Type</option>
-          {trainingTypes.map(type => (
-            <option key={type} value={type}>{type}</option>
-          ))}
-        </select>
-      </div>
-    );
-  }
-  // Default: text input
-  return (
-    <div className={`detail-item ${isEditing ? "editing" : ""}`}>
-      <label>{label}:</label>
-      {isEditing ? (
-        <input
-          type="text"
-          value={editedData[field] !== undefined ? editedData[field] : (trainerData[field] || '')}
-          onChange={e => handleInputChange(field, e.target.value)}
-        />
-      ) : (
-        <span>{trainerData[field]}</span>
-      )}
-    </div>
-  );
-};
+  };
 
   if (loading) {
-    return <div className="trainer-dashboard"><p>Loading trainer profile...</p></div>;
+    return (
+      <div className="trainer-dashboard">
+        <p>Loading trainer profile...</p>
+      </div>
+    );
   }
   if (error) {
-    return <div className="trainer-dashboard"><p style={{color: 'red'}}>Error: {error}</p></div>;
+    return (
+      <div className="trainer-dashboard">
+        <p style={{ color: "red" }}>Error: {error}</p>
+      </div>
+    );
   }
   if (!trainerData) {
     return (
@@ -222,11 +236,11 @@ const renderDetailItem = (label, field) => {
   const handleDeleteRegistration = async () => {
     setDeleting(true);
     try {
-      const res = await fetch('/api/trainer/registration/me', {
-        method: 'DELETE',
-        headers: { Authorization: user.token ? `Bearer ${user.token}` : '' },
+      const res = await fetch("/api/trainer/registration/me", {
+        method: "DELETE",
+        headers: { Authorization: user.token ? `Bearer ${user.token}` : "" },
       });
-      if (!res.ok) throw new Error('Failed to delete registration');
+      if (!res.ok) throw new Error("Failed to delete registration");
       setTrainerData(null);
       setShowDeleteModal(false);
     } catch (err) {
@@ -247,57 +261,140 @@ const renderDetailItem = (label, field) => {
 
       {/* Modal for already registered trainers */}
       {showModal && (
-        <div className="modal-overlay" style={{
-          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-          background: 'rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999
-        }}>
-          <div className="modal-content" style={{
-            background: '#fff', borderRadius: 12, padding: '2rem 2.5rem', boxShadow: '0 4px 24px rgba(0,0,0,0.18)',
-            maxWidth: 400, textAlign: 'center', position: 'relative'
-          }}>
-            <h2 style={{ color: '#e74c3c', marginBottom: '1rem' }}>Already Registered</h2>
-            <p style={{ marginBottom: '1.5rem', color: '#333', fontSize: '1.1rem' }}>
+        <div
+          className="modal-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+          }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              background: "#fff",
+              borderRadius: 12,
+              padding: "2rem 2.5rem",
+              boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
+              maxWidth: 400,
+              textAlign: "center",
+              position: "relative",
+            }}
+          >
+            <h2 style={{ color: "#e74c3c", marginBottom: "1rem" }}>
+              Already Registered
+            </h2>
+            <p
+              style={{
+                marginBottom: "1.5rem",
+                color: "#333",
+                fontSize: "1.1rem",
+              }}
+            >
               You have already registered as a trainer, can't register twice.
             </p>
-            <button onClick={closeModal} style={{
-              background: '#e74c3c', color: '#fff', border: 'none', borderRadius: 6,
-              padding: '0.6rem 1.8rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer',
-              transition: 'background 0.2s'
-            }}>OK</button>
+            <button
+              onClick={closeModal}
+              style={{
+                background: "#e74c3c",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                padding: "0.6rem 1.8rem",
+                fontWeight: 600,
+                fontSize: "1rem",
+                cursor: "pointer",
+                transition: "background 0.2s",
+              }}
+            >
+              OK
+            </button>
           </div>
         </div>
       )}
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="modal-overlay" style={{
-          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-          background: 'rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999
-        }}>
-          <div className="modal-content" style={{
-            background: '#fff', borderRadius: 12, padding: '2rem 2.5rem', boxShadow: '0 4px 24px rgba(0,0,0,0.18)',
-            maxWidth: 400, textAlign: 'center', position: 'relative'
-          }}>
-            <h2 style={{ color: '#e74c3c', marginBottom: '1rem' }}>Cancel Registration</h2>
-            <p style={{ marginBottom: '1.5rem', color: '#333', fontSize: '1.1rem' }}>
-              Are you sure you want to cancel your trainer registration? This action cannot be undone.
+        <div
+          className="modal-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+          }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              background: "#fff",
+              borderRadius: 12,
+              padding: "2rem 2.5rem",
+              boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
+              maxWidth: 400,
+              textAlign: "center",
+              position: "relative",
+            }}
+          >
+            <h2 style={{ color: "#e74c3c", marginBottom: "1rem" }}>
+              Cancel Registration
+            </h2>
+            <p
+              style={{
+                marginBottom: "1.5rem",
+                color: "#333",
+                fontSize: "1.1rem",
+              }}
+            >
+              Are you sure you want to cancel your trainer registration? This
+              action cannot be undone.
             </p>
             <button
               onClick={handleDeleteRegistration}
               disabled={deleting}
               style={{
-                background: '#e74c3c', color: '#fff', border: 'none', borderRadius: 6,
-                padding: '0.6rem 1.8rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer',
-                marginRight: 10, opacity: deleting ? 0.7 : 1
+                background: "#e74c3c",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                padding: "0.6rem 1.8rem",
+                fontWeight: 600,
+                fontSize: "1rem",
+                cursor: "pointer",
+                marginRight: 10,
+                opacity: deleting ? 0.7 : 1,
               }}
-            >{deleting ? 'Deleting...' : 'Confirm'}</button>
+            >
+              {deleting ? "Deleting..." : "Confirm"}
+            </button>
             <button
               onClick={() => setShowDeleteModal(false)}
               style={{
-                background: '#bbb', color: '#fff', border: 'none', borderRadius: 6,
-                padding: '0.6rem 1.8rem', fontWeight: 600, fontSize: '1rem', cursor: 'pointer'
+                background: "#bbb",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                padding: "0.6rem 1.8rem",
+                fontWeight: 600,
+                fontSize: "1rem",
+                cursor: "pointer",
               }}
-            >Cancel</button>
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
@@ -324,7 +421,20 @@ const renderDetailItem = (label, field) => {
             )}
             {/* Cancel Registration Button */}
             {!isEditing && (
-              <button className="cancel-registration-btn" style={{background: '#e74c3c', color: '#fff', marginLeft: 12, border: 'none', borderRadius: 6, padding: '0.5rem 1.3rem', fontWeight: 600, cursor: 'pointer'}} onClick={() => setShowDeleteModal(true)}>
+              <button
+                className="cancel-registration-btn"
+                style={{
+                  background: "#e74c3c",
+                  color: "#fff",
+                  marginLeft: 12,
+                  border: "none",
+                  borderRadius: 6,
+                  padding: "0.5rem 1.3rem",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+                onClick={() => setShowDeleteModal(true)}
+              >
                 Cancel Registration
               </button>
             )}
@@ -342,67 +452,110 @@ const renderDetailItem = (label, field) => {
           </div>
 
           {/* Editable fields when editing, otherwise show as text */}
-          {renderDetailItem('Phone', 'phone')}
-          {renderDetailItem('Gender', 'gender')}
-          {renderDetailItem('Training Type', 'trainingType')}
-          {renderDetailItem('Address', 'address')}
-          {renderDetailItem('Age', 'age')}
-          {renderDetailItem('Years of Experience', 'yearsOfExperience')}
+          {renderDetailItem("Phone", "phone")}
+          {renderDetailItem("Gender", "gender")}
+          {renderDetailItem("Training Type", "trainingType")}
+          {renderDetailItem("Address", "address")}
+          {renderDetailItem("Age", "age")}
+          {renderDetailItem("Years of Experience", "yearsOfExperience")}
 
           <div className="detail-item">
             <label>Certificate Image:</label>
             {isEditing ? (
-  <div style={{display: 'flex', flexDirection: 'column', gap: 8}}>
-    {editedData.certificateUrl && (
-      <>
-        <img
-          src={editedData.certificateUrl.startsWith('http') ? editedData.certificateUrl : editedData.certificateUrl}
-          alt="Certificate"
-          className="certificate-img"
-          style={{ maxWidth: 220, borderRadius: 10, marginTop: 8, boxShadow: "0 2px 8px rgba(231,76,60,0.09)" }}
-        />
-        <button
-          style={{marginTop: 4, maxWidth: 120, background: '#e74c3c', color: '#fff', border: 'none', borderRadius: 5, padding: '0.3rem 0.7rem', cursor: 'pointer'}}
-          onClick={() => {
-            handleInputChange('certificateUrl', '');
-            handleInputChange('certificateFile', null);
-          }}
-          type="button"
-        >Remove Image</button>
-      </>
-    )}
-    <label htmlFor="certificate-upload" style={{fontWeight: 600, color: '#e74c3c', marginTop: 12, marginBottom: 4, cursor: 'pointer'}}>
-      {editedData.certificateUrl ? 'Replace Certificate Image' : 'Add Certificate Image'}
-    </label>
-    <input
-      id="certificate-upload"
-      type="file"
-      accept="image/*"
-      style={{marginTop: 2, marginBottom: 4}}
-      onChange={e => {
-        const file = e.target.files[0];
-        if (file) {
-          handleInputChange('certificateUrl', URL.createObjectURL(file));
-          handleInputChange('certificateFile', file);
-        }
-      }}
-    />
-    {editedData.certificateFile && (
-      <span style={{color:'#888', fontSize:'0.95em'}}>New image selected: {editedData.certificateFile.name}</span>
-    )}
-  </div>
-) : (
-  editedData.certificateUrl ? (
-    <img
-      src={editedData.certificateUrl.startsWith('http') ? editedData.certificateUrl : editedData.certificateUrl}
-      alt="Certificate"
-      className="certificate-img"
-      style={{ maxWidth: 220, borderRadius: 10, marginTop: 8, boxShadow: "0 2px 8px rgba(231,76,60,0.09)" }}
-    />
-  ) : (
-    <span>No image</span>
-  )
-)}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {editedData.certificateUrl && (
+                  <>
+                    <img
+                      src={
+                        editedData.certificateUrl.startsWith("http")
+                          ? editedData.certificateUrl
+                          : editedData.certificateUrl
+                      }
+                      alt="Certificate"
+                      className="certificate-img"
+                      style={{
+                        maxWidth: 220,
+                        borderRadius: 10,
+                        marginTop: 8,
+                        boxShadow: "0 2px 8px rgba(231,76,60,0.09)",
+                      }}
+                    />
+                    <button
+                      style={{
+                        marginTop: 4,
+                        maxWidth: 120,
+                        background: "#e74c3c",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: 5,
+                        padding: "0.3rem 0.7rem",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        handleInputChange("certificateUrl", "");
+                        handleInputChange("certificateFile", null);
+                      }}
+                      type="button"
+                    >
+                      Remove Image
+                    </button>
+                  </>
+                )}
+                <label
+                  htmlFor="certificate-upload"
+                  style={{
+                    fontWeight: 600,
+                    color: "#e74c3c",
+                    marginTop: 12,
+                    marginBottom: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  {editedData.certificateUrl
+                    ? "Replace Certificate Image"
+                    : "Add Certificate Image"}
+                </label>
+                <input
+                  id="certificate-upload"
+                  type="file"
+                  accept="image/*"
+                  style={{ marginTop: 2, marginBottom: 4 }}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      handleInputChange(
+                        "certificateUrl",
+                        URL.createObjectURL(file)
+                      );
+                      handleInputChange("certificateFile", file);
+                    }
+                  }}
+                />
+                {editedData.certificateFile && (
+                  <span style={{ color: "#888", fontSize: "0.95em" }}>
+                    New image selected: {editedData.certificateFile.name}
+                  </span>
+                )}
+              </div>
+            ) : editedData.certificateUrl ? (
+              <img
+                src={
+                  editedData.certificateUrl.startsWith("http")
+                    ? editedData.certificateUrl
+                    : editedData.certificateUrl
+                }
+                alt="Certificate"
+                className="certificate-img"
+                style={{
+                  maxWidth: 220,
+                  borderRadius: 10,
+                  marginTop: 8,
+                  boxShadow: "0 2px 8px rgba(231,76,60,0.09)",
+                }}
+              />
+            ) : (
+              <span>No image</span>
+            )}
           </div>
         </div>
       </div>
@@ -418,8 +571,11 @@ const renderDetailItem = (label, field) => {
           onClick={navigateToWorkoutPlans}
         >
           <FaDumbbell className="icon" />
-          <h3>Add Workout Plan</h3>
-          <p>Create and manage workout plans for clients</p>
+          <h3>Add Fitness Tips</h3>
+          <p>
+            Provide Fitness Tips to your clients and help them achieve their
+            goals
+          </p>
         </div>
         <div
           className="trainer-dashboard-card"
