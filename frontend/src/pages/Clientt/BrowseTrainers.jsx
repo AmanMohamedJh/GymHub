@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FaChartLine } from "react-icons/fa";
 import "./Styles/browseTrainers.css";
 
 const BrowseTrainers = () => {
+  const navigate = useNavigate();
   const [trainers, setTrainers] = useState([]);
   const [filteredTrainers, setFilteredTrainers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -92,11 +94,12 @@ const BrowseTrainers = () => {
                 : "N/A"}
             </p>
 
-            <Link to="/gymDetails" style={{ textDecoration: "none" }}>
-              <button className="btn-view">
-                <FaChartLine /> View Full Details
-              </button>
-            </Link>
+            <button
+              className="btn-view"
+              onClick={() => navigate(`/trainer/details/${trainer._id}`)}
+            >
+              <FaChartLine /> View Trainer Sessions
+            </button>
           </div>
         ))}
       </div>

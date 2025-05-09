@@ -1,0 +1,318 @@
+/* ManageTrainerSession.css */
+.manage-trainer-session-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 32px 24px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(44,62,80,0.07);
+}
+
+.manage-trainer-session-container h2 {
+  margin-bottom: 32px;
+  font-size: 2.3rem;
+  color: #2d3e50;
+  font-weight: 700;
+  text-align: center;
+}
+
+.session-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: center;
+}
+
+.session-card {
+  background: #f8fafc;
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+  padding: 32px 26px 22px 26px;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  transition: box-shadow 0.22s, transform 0.18s;
+  position: relative;
+  border: 1.5px solid #f1f1f1;
+}
+
+.session-card:hover {
+  box-shadow: 0 14px 36px rgba(44,62,80,0.19);
+  transform: translateY(-3px) scale(1.018);
+}
+
+/* Add a colored bar at the top of each card */
+.session-card::before {
+  content: "";
+  display: block;
+  height: 7px;
+  width: 100%;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  background: linear-gradient(90deg, #e74c3c 0%, #2980ef 100%);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.session-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.session-header h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #34495e;
+  margin: 0;
+}
+
+.session-status {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-right: 4px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+}
+
+.session-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 38px 36px;
+  justify-content: flex-start;
+  margin-top: 18px;
+}
+
+/* Buttons styling */
+.session-actions button {
+  border: none;
+  border-radius: 7px;
+  padding: 7px 15px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.14s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+}
+
+.btn-details {
+  background: #2980ef;
+  color: #fff;
+}
+.btn-details:hover {
+  background: #1761b0;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(41,128,239,0.19);
+}
+
+.btn-edit {
+  background: #f1c40f;
+  color: #2d3e50;
+}
+.btn-edit:hover {
+  background: #d4ac0d;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(241,196,15,0.16);
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: #fff;
+}
+.btn-delete:hover {
+  background: #c0392b;
+  box-shadow: 0 4px 16px rgba(231,76,60,0.18);
+}
+
+
+.session-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.session-header h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #34495e;
+  margin: 0;
+}
+
+.session-status {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.session-info {
+  margin-bottom: 18px;
+  color: #34495e;
+  font-size: 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.session-info .icon {
+  margin-right: 7px;
+  color: #7b8ca7;
+}
+
+.session-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.session-actions button {
+  border: none;
+  border-radius: 7px;
+  padding: 7px 15px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.btn-details {
+  background: #2980ef;
+  color: #fff;
+}
+.btn-details:hover {
+  background: #1761b0;
+}
+
+.btn-edit {
+  background: #f1c40f;
+  color: #2d3e50;
+}
+.btn-edit:hover {
+  background: #d4ac0d;
+  color: #fff;
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: #fff;
+}
+.btn-delete:hover {
+  background: #c0392b;
+}
+
+.no-sessions {
+  text-align: center;
+  color: #888;
+  font-size: 1.2rem;
+  margin-top: 42px;
+  width: 100%;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(44,62,80,0.17);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(44,62,80,0.16);
+  padding: 36px 32px 24px 32px;
+  min-width: 380px;
+  max-width: 480px;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 1.7rem;
+  color: #e74c3c;
+  cursor: pointer;
+}
+
+.modal-details {
+  margin-top: 12px;
+  font-size: 1.1rem;
+  color: #34495e;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.client-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 8px;
+}
+
+.client-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 9px;
+}
+
+.btn-remove-client {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.98rem;
+  margin-left: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.18s;
+}
+.btn-remove-client:hover {
+  background: #c0392b;
+}
+
+.btn-remove-client:disabled {
+  background: #bdc3c7;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.removing {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}

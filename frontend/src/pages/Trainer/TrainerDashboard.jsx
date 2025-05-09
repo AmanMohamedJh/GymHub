@@ -129,7 +129,7 @@ const TrainerDashboard = () => {
   };
 
   const navigateToSession = () => {
-    navigate("/trainer/session");
+    navigate("/trainer/manage-sessions");
   };
 
   const navigateToClientProgress = () => {
@@ -410,7 +410,7 @@ const renderDetailItem = (label, field) => {
       <div className="dashboard-sections">
         <div className="trainer-dashboard-card" onClick={navigateToSession}>
           <FaCalendarPlus className="icon" />
-          <h3>Add Session</h3>
+          <h3>Manage Sessions</h3>
           <p>Schedule and manage your training sessions</p>
         </div>
         <div

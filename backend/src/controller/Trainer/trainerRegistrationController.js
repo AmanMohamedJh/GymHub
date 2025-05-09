@@ -59,6 +59,8 @@ exports.getMyTrainerRegistration = async (req, res) => {
   }
 };
 
+
+
 // Update current user's trainer registration
 exports.updateMyTrainerRegistration = async (req, res) => {
   try {
@@ -85,6 +87,20 @@ exports.updateMyTrainerRegistration = async (req, res) => {
     }
 
     res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// PUBLIC: Get trainer registration details by user id
+exports.getTrainerRegistrationByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const trainer = await TrainerRegistration.findOne({ user: userId }).populate('user', 'name email');
+    if (!trainer) {
+      return res.status(404).json({ error: 'Trainer registration not found.' });
+    }
+    res.json(trainer);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

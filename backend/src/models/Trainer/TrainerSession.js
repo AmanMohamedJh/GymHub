@@ -1,12 +1,29 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const trainerSessionSchema = new mongoose.Schema({
-  trainerName: { type: String, required: true },
-  day: { type: String, required: true },
+const TrainerSessionSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  trainerRegistration: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TrainerRegistration',
+    required: true
+  },
+  title: { type: String, required: true },
+  date: { type: String, required: true },
   time: { type: String, required: true },
-  payment: { type: Number, required: true },
+  location: { type: String, required: true },
   description: { type: String, required: true },
-}, { timestamps: true });
+  type: { type: String, required: true }, // from TrainerRegistration.trainingType
+  status: {
+    type: String,
+    enum: ['active', 'paused', 'cancelled'],
+    default: 'active',
+    required: true
+  },
+  createdAt: { type: Date, default: Date.now }
+}, { collection: 'TrainerSessions' });
 
-const TrainerSession = mongoose.model("TrainerSession", trainerSessionSchema);
-module.exports = TrainerSession;
+module.exports = mongoose.model('TrainerSession', TrainerSessionSchema);
