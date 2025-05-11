@@ -24,6 +24,7 @@ const ProgressTracking = () => {
   const [isBmiFormOpen, setIsBmiFormOpen] = useState(false);
   const [isLogFormOpen, setIsLogFormOpen] = useState(false);
   const [fitnessData, setfitnessData] = useState({});
+  const [submitted, setSubmitted] = useState(false);
 
   const { getFitnessData } = Client();
 
@@ -35,10 +36,12 @@ const ProgressTracking = () => {
       }
     };
 
-    fetchFitness();
+    if (submitted) {
+      setSubmitted(false);
+    }
 
-    console.log(fitnessData);
-  }, [user]);
+    fetchFitness();
+  }, [user, submitted]);
 
   const handleEditGoal = (goal) => {
     setEditingGoal(goal);
@@ -46,62 +49,11 @@ const ProgressTracking = () => {
   };
 
   const handleFormSubmit = () => {
-    console.log("Form successfully submitted!");
     setIsFormOpen(false);
     setIsBmiFormOpen(false);
     setIsLogFormOpen(false);
-    window.location.reload(); // Optionally close the form
+    setSubmitted(true);
   };
-
-  // Mock data - replace with actual data from your backend
-  const workoutLogs = [
-    {
-      _id: 1,
-      date: "2025-03-25",
-      workout: "Upper Body Strength",
-      exercises: [
-        { name: "Bench Press", sets: 3, reps: 10, weight: "60kg" },
-        { name: "Pull-ups", sets: 3, reps: 8, weight: "Body weight" },
-      ],
-      duration: "45 min",
-      calories: 320,
-    },
-    {
-      _id: 2,
-      date: "2025-03-24",
-      workout: "Cardio",
-      exercises: [
-        { name: "Treadmill", duration: "30 min", distance: "5km" },
-        { name: "Rowing", duration: "15 min", distance: "2km" },
-      ],
-      duration: "45 min",
-      calories: 400,
-    },
-  ];
-
-  const fitnessGoals = [
-    {
-      _id: 1,
-      goal: "Lose 5kg",
-      deadline: "2025-06-01",
-      progress: 60,
-      status: "In Progress",
-    },
-    {
-      _id: 2,
-      goal: "Run 10km",
-      deadline: "2025-05-15",
-      progress: 80,
-      status: "In Progress",
-    },
-    {
-      _id: 3,
-      goal: "Bench Press 80kg",
-      deadline: "2025-07-01",
-      progress: 40,
-      status: "In Progress",
-    },
-  ];
 
   const calculateBMIStatus = (bmi) => {
     if (bmi < 18.5) return { status: "Underweight", color: "#ffc107" };
@@ -148,7 +100,7 @@ const ProgressTracking = () => {
             </div>
           ))
         ) : (
-          <p>No workout logs available.</p> // ✅ Prevents crash if workoutLogs is undefined or empty
+          <p>No workout logs available.</p>
         )}
       </div>
     </div>
@@ -187,8 +139,14 @@ const ProgressTracking = () => {
               </span>
             </div>
             <div className="bmi-details">
-              <span>Weight: {fitnessData.weight || "N/A"} kg</span>
-              <span>Height: {fitnessData.height || "N/A"} cm</span>
+              <span>
+                Weight:{" "}
+                {fitnessData.bmi[fitnessData.bmi.length - 1].weight || "N/A"} kg
+              </span>
+              <span>
+                Height:{" "}
+                {fitnessData.bmi[fitnessData.bmi.length - 1].height || "N/A"} cm
+              </span>
             </div>
           </div>
           <div className="bmi-history">
@@ -254,7 +212,8 @@ const ProgressTracking = () => {
               </div>
               <div className="goal-footer">
                 <span className="goal-deadline">
-                  <FaCalendarAlt /> {goal.deadline.split("T")[0]}
+                  <FaCalendarAlt />{" "}
+                  {goal.deadline ? goal.deadline.split("T")[0] : "No deadline"}
                 </span>
                 <span className={`goal-status ${goal.status.toLowerCase()}`}>
                   {goal.status === "Completed" ? <FaCheck /> : null}
@@ -264,11 +223,18 @@ const ProgressTracking = () => {
             </div>
           ))
         ) : (
-          <p>No workout logs available.</p>
+          <p>No fitness goals available.</p>
         )}
       </div>
     </div>
   );
+
+  const totalWorkouts = fitnessData?.workoutLogs?.length || 0;
+  const activeGoals =
+    fitnessData?.fitnessGoals?.filter((g) => g.status === "In Progress")
+      .length || 0;
+  const currentWeight = fitnessData?.weight || "N/A";
+  const currentHeight = fitnessData?.height || "N/A";
 
   return (
     <div className="dashboard-main-container">
@@ -280,19 +246,22 @@ const ProgressTracking = () => {
         <div className="dashboard-stat-item">
           <FaDumbbell className="dashboard-icon" />
           <h3>Total Workouts</h3>
-          <div className="dashboard-number">24</div>
+          <div className="dashboard-number">{totalWorkouts}</div>
         </div>
         <div className="dashboard-stat-item">
           <FaWeight className="dashboard-icon" />
           <h3>Current Weight</h3>
-          <div className="dashboard-number">kg</div>
+          <div className="dashboard-number">{currentWeight} kg</div>
+        </div>
+        <div className="dashboard-stat-item">
+          <FaBullseye className="dashboard-icon" />
+          <h3>Current Height</h3>
+          <div className="dashboard-number">{currentHeight} cm</div>
         </div>
         <div className="dashboard-stat-item">
           <FaBullseye className="dashboard-icon" />
           <h3>Active Goals</h3>
-          <div className="dashboard-number">
-            {fitnessGoals.filter((g) => g.status === "In Progress").length}
-          </div>
+          <div className="dashboard-number">{activeGoals}</div>
         </div>
       </div>
 
@@ -328,6 +297,7 @@ const ProgressTracking = () => {
         {activeTab === "bmiTracking" && renderBMITracking()}
         {activeTab === "fitnessGoals" && renderFitnessGoals()}
       </div>
+
       {isFormOpen && (
         <FitnessGoalForm
           editGoal={editingGoal}

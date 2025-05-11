@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Client = require("../../models/Client/clientModel");
+const User = require("../../models/userModel");
 
 // --- New Client Data ---
 const newClient = Client({
@@ -278,10 +279,111 @@ const contactClientByEmail = async (req, res) => {
   }
 };
 
+const registerClient = async (req, res) => {
+  console.log("[REGISTER] Called with user:", req.user, "body:", req.body);
+  try {
+    const clientId = req.user._id;
+    const user = await User.findById(clientId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const existingClient = await Client.findOne({ userId: clientId });
+    if (existingClient) {
+      return res.status(400).json({ error: "Client already registered" });
+    }
+
+    const {
+      dob,
+      age,
+      gender,
+      address,
+      medical,
+      startDate,
+      emergencyName,
+      emergencyPhone,
+      emergencyRelation,
+      fitnessGoals,
+      fitnessLevel,
+      promoCode
+    } = req.body;
+
+    if (!dob || !age || !gender || !address || !startDate || !emergencyName || !emergencyPhone || !emergencyRelation || !fitnessLevel) {
+      return res.status(400).json({ error: "All required fields must be filled" });
+    }
+
+    const newClient = new Client({
+      userId: clientId,
+      name: user.name,
+      bio: {
+        DOB: dob,
+        age,
+        gender,
+        address,
+        medicalCondition: Array.isArray(medical) ? medical : medical ? [medical] : [],
+        emContactPerson: emergencyName,
+        emContactRelation: emergencyRelation,
+        emContactNumber: emergencyPhone,
+        joinedIn: startDate,
+        fitnessLevel,
+      },
+      fitness: {
+        weight: "",
+        height: "",
+        bmi: [],
+        workoutLogs: [],
+        fitnessGoals: fitnessGoals
+          ? [{ goal: fitnessGoals, description: "", progress: 0, status: "Not Started" }]
+          : [],
+      },
+    });
+
+    await newClient.save();
+    res.status(201).json({ message: "Registration successful", client: newClient });
+
+  } catch (error) {
+    console.error("[REGISTER] Registration error:", error);
+    res.status(500).json({ error: "Registration failed", details: error.message });
+  }
+};
+
+
+const checkClientProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const userRole = req.user.role;
+
+    // Proceed only if the user is a client
+    if (userRole !== 'client') {
+      return res.status(200).json({ hasProfile: true });
+    }
+
+    const client = await Client.findOne({ userId });
+
+    if (!client) {
+      return res.status(200).json({ hasProfile: false });
+    }
+
+    // Check if required fields are present
+    const hasProfile = !!(client.bio && client.bio.address && client.bio.DOB);
+
+    // Return the full client profile along with hasProfile status
+    return res.status(200).json({ hasProfile, profile: client });
+  } catch (error) {
+    console.error('[CHECK CLIENT PROFILE ERROR]', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+
+
 module.exports = {
   addWorkoutLog,
   updateBMI,
   addFitnessGoal,
   getFitnessData,
   contactClientByEmail,
+  registerClient,
+  checkClientProfile,
 };

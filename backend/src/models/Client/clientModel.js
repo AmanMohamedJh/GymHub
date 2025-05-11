@@ -2,14 +2,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const clientSchema = new Schema({
-
-    userId: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-    },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    name: { type: String, required: true },
     fitness: {
         weight: { type: String },
         height: { type: String },
@@ -25,8 +19,7 @@ const clientSchema = new Schema({
                 sets: { type: Number },
                 reps: { type: Number },
                 weight: { type: String },
-            }]
-
+            }],
         }],
         fitnessGoals: [{
             goal: { type: String },
@@ -34,36 +27,24 @@ const clientSchema = new Schema({
             deadline: { type: Date },
             progress: { type: Number },
             status: { type: String },
-        }
-        ],
+        }],
     },
-
-    membership: {
-        plan: { type: String },
-        startDate: { type: Date },
-        isActive: { type: Boolean },
-        payments: [
-            {
-                date: { type: Date },
-                amount: { type: Number },
-                status: { type: String },
-            }
-        ]
-    },
-
     bio: {
-        DOB: { type: Date },
-        gender: { type: String },
-        address: { type: String },
+        DOB: { type: Date, required: true },
+        age: { type: Number, required: true },
+        gender: { type: String, required: true },
+        address: { type: String, required: true },
         medicalCondition: [{ type: String }],
-
+        fitnessLevel: { type: String, required: true },
+        emContactPerson: { type: String, required: true },
+        emContactRelation: { type: String, required: true },
+        emContactNumber: { type: String, required: true },
+        joinedIn: { type: Date, required: true },
     },
     gymActivity: {
-        checkIns: { type: Number },
-        classBookings: { type: Number }
+        checkIns: { type: Number, default: 0 },
+        classBookings: { type: Number, default: 0 },
     },
-
-
 });
 
 module.exports = mongoose.model("Client", clientSchema);

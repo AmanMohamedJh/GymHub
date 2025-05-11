@@ -184,6 +184,7 @@ const SeeGymDetails = () => {
         setSubmitStatus("Registration successful!");
         setShowModal(false); // Close the registration modal
         setShowSuccessPopup(true); // Show the success popup on the main page
+        navigate("/client-dashboard");
       } else {
         setSubmitStatus(data.error || "Registration failed.");
       }
@@ -607,9 +608,16 @@ const SeeGymDetails = () => {
             >
               &times;
             </button>
-            <div className="seegymdetails-modal-title">
-              Register for this Gym
-            </div>
+            <div className="seegymdetails-modal-title" style={{ marginBottom: 0 }}>
+  Register to gym as Confirmation
+</div>
+<ul style={{ margin: '16px 0 24px 24px', padding: 0, color: '#444', fontSize: '1rem', lineHeight: 1.7 }}>
+  <li>This form clarifies the gym owners the participation of Clients</li>
+  <li>Gym owner strictly surveying the status of the clients</li>
+  <li>All information provided will be kept confidential</li>
+  <li>Ensure your contact details are accurate for communication</li>
+  <li>Registration is subject to gym approval and verification</li>
+</ul>
             <form
               onSubmit={handleRegisterSubmit}
               className="seegymdetails-modal-form"
@@ -817,7 +825,7 @@ const SeeGymDetails = () => {
             <div className="success-popup-buttons">
               <button
                 className="success-btn"
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/client-dashboard")}
               >
                 Go to Dashboard
               </button>

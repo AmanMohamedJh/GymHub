@@ -9,6 +9,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GymContextProvider } from "./context/Gym_Owner/GymContext";
 import { EquipmentContextProvider } from "./context/Gym_Owner/EquipmentContext";
+import { ProfileProvider } from "./context/Client/clientProfileContex";
+import ClientRegister from "./pages/Clientt/ClientRegister";
 
 // Styles
 import "./styles/common.css";
@@ -96,6 +98,8 @@ function App() {
                   <SubscriptionBanner />
                 )}
               <Routes>
+                {/* Client Registration Route */}
+                <Route path="/client-register" element={<ClientRegister />} />
                 {/* Public Routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
@@ -357,7 +361,9 @@ function App() {
                     <NonAdminRoute>
                       <ProtectedRoute allowedRole="client">
                         <RequireSubscription>
-                          <ClientDashboard />
+                          <ProfileProvider>
+                            <ClientDashboard />
+                          </ProfileProvider>
                         </RequireSubscription>
                       </ProtectedRoute>
                     </NonAdminRoute>
@@ -369,7 +375,9 @@ function App() {
                     <NonAdminRoute>
                       <ProtectedRoute allowedRole="client">
                         <RequireSubscription>
-                          <ClientProgressTracking />
+                          <ProfileProvider>
+                            <ClientProgressTracking />
+                          </ProfileProvider>
                         </RequireSubscription>
                       </ProtectedRoute>
                     </NonAdminRoute>
@@ -381,7 +389,9 @@ function App() {
                     <NonAdminRoute>
                       <ProtectedRoute allowedRole="client">
                         <RequireSubscription>
-                          <ClientFitnessGoalForm />
+                          <ProfileProvider>
+                            <ClientFitnessGoalForm />
+                          </ProfileProvider>
                         </RequireSubscription>
                       </ProtectedRoute>
                     </NonAdminRoute>
@@ -393,7 +403,9 @@ function App() {
                     <NonAdminRoute>
                       <ProtectedRoute allowedRole="client">
                         <RequireSubscription>
-                          <ClientBMIUpdateForm />
+                          <ProfileProvider>
+                            <ClientBMIUpdateForm />
+                          </ProfileProvider>
                         </RequireSubscription>
                       </ProtectedRoute>
                     </NonAdminRoute>
@@ -405,7 +417,9 @@ function App() {
                     <NonAdminRoute>
                       <ProtectedRoute allowedRole="client">
                         <RequireSubscription>
-                          <ClientWorkoutlogForm />
+                          <ProfileProvider>
+                            <ClientWorkoutlogForm />
+                          </ProfileProvider>
                         </RequireSubscription>
                       </ProtectedRoute>
                     </NonAdminRoute>
@@ -418,7 +432,23 @@ function App() {
                       <ProtectedRoute
                         allowedRole={["client", "trainer", "gym_owner"]}
                       >
-                        <ClientBrowseGym />
+                        <ProfileProvider>
+                          <ClientBrowseGym />
+                        </ProfileProvider>
+                      </ProtectedRoute>
+                    </NonAdminRoute>
+                  }
+                />
+                <Route
+                  path="/client-browse-trainer"
+                  element={
+                    <NonAdminRoute>
+                      <ProtectedRoute
+                        allowedRole={["client", "trainer", "gym_owner"]}
+                      >
+                        <ProfileProvider>
+                          <ClientBrowseTrainer />
+                        </ProfileProvider>
                       </ProtectedRoute>
                     </NonAdminRoute>
                   }
@@ -436,28 +466,17 @@ function App() {
                   }
                 />
                 <Route
-                  path="/client-browse-trainer"
-                  element={
-                    <NonAdminRoute>
-                      <ProtectedRoute
-                        allowedRole={["client", "trainer", "gym_owner"]}
-                      >
-                        <ClientBrowseTrainer />
-                      </ProtectedRoute>
-                    </NonAdminRoute>
-                  }
-                />
-                <Route
                   path="/gyms/:gymId"
                   element={
                     <RequireSubscription>
-                      <SeeGymDetails />
+                      <ProfileProvider>
+                        <SeeGymDetails />
+                      </ProfileProvider>
                     </RequireSubscription>
                   }
                 />
                 <Route path="/gyms/:gymId/reviews" element={<GymReviews />} />
 
-                {/* Trainer Tips - Public to all users with subscription, non-admin only */}
                 <Route
                   path="/trainer-tips"
                   element={

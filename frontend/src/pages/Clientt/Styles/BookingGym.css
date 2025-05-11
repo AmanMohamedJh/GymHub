@@ -1,0 +1,168 @@
+/* Modal overlay */
+.seegymdetails-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
+    /* add blur effect */
+    z-index: 1000;
+    display: flex;
+    align-items: flex-start;
+    /* align to top for tall modals */
+    justify-content: center;
+    overflow-y: auto;
+    padding-top: 36px;
+    /* add spacing from top */
+    box-sizing: border-box;
+}
+
+/* Container for the whole page */
+.register-gym-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ecf0f1;
+    padding: 2rem;
+}
+
+/* Card styling */
+.form-card {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Form title */
+.form-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Form structure */
+.register-gym-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Row layout for grouping two inputs */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+/* Individual input section */
+.form-section {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels */
+.form-section label {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+/* Input fields */
+.form-section input[type="text"],
+.form-section input[type="email"],
+.form-section input[type="tel"],
+.form-section input[type="date"],
+.form-section input[type="time"] {
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.form-section input:focus {
+    border-color: #e74c3c;
+}
+
+/* Amenities checkboxes */
+.amenities-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 0.5rem;
+}
+
+.amenities-group label {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    color: #2c3e50;
+}
+
+/* Submit button */
+.submit-button {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 0.85rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #c0392b;
+}
+
+/* Form actions section */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* ======== Responsive Styles ======== */
+
+/* Tablets and smaller (≤768px) */
+@media (max-width: 768px) {
+    .form-card {
+        padding: 2rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-section {
+        min-width: 100%;
+    }
+}
+
+/* Phones (≤480px) */
+@media (max-width: 480px) {
+    .form-card {
+        padding: 1.5rem;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+    }
+
+    .submit-button {
+        width: 100%;
+        font-size: 1rem;
+    }
+}

@@ -1,6 +1,56 @@
 import { useState } from "react";
+import { useAuthContext } from "../useAuthContext";
 
 export const Client = () => {
+
+    // Registration function
+    const { user } = useAuthContext();
+    const registerClient = async (payload) => {
+        console.log("registerClient called with payload:", payload);
+        setIsLoading(true);
+        setError(null);
+        if (!user || !user.token) {
+            setError('User authentication token missing. Please log in again.');
+            setIsLoading(false);
+            return false;
+        }
+        let response, json;
+        console.log('[registerClient] Before fetch');
+        try {
+            response = await fetch("/api/client/registerClient", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${user.token}`
+                },
+                body: JSON.stringify(payload),
+            });
+            console.log('[registerClient] After fetch, before json');
+        } catch (fetchErr) {
+            console.error('Fetch error:', fetchErr);
+            setError('Network error: ' + fetchErr.message);
+            setIsLoading(false);
+            return false;
+        }
+        try {
+            json = await response.json();
+        } catch (jsonErr) {
+            console.error('Failed to parse JSON:', jsonErr);
+            setError('Server error (invalid JSON)');
+            setIsLoading(false);
+            return false;
+        }
+        console.log('Registration response:', response.status, json);
+        if (!response.ok) {
+            setError(json.error);
+            setIsLoading(false);
+            return false;
+        } else {
+            setIsLoading(false);
+            return true;
+        }
+    };
+
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
 
@@ -14,6 +64,7 @@ export const Client = () => {
             });
 
             const json = await response.json();
+console.log('Registration response:', response.status, json);
 
             if (!response.ok) {
                 setError(json.error);
@@ -42,6 +93,7 @@ export const Client = () => {
             });
 
             const json = await response.json();
+console.log('Registration response:', response.status, json);
 
             if (!response.ok) {
                 setError(json.error);
@@ -70,6 +122,7 @@ export const Client = () => {
             });
 
             const json = await response.json();
+console.log('Registration response:', response.status, json);
 
             if (!response.ok) {
                 setError(json.error);
@@ -96,6 +149,7 @@ export const Client = () => {
                 headers: { "Content-Type": "application/json" }
             });
             const json = await response.json();
+console.log('Registration response:', response.status, json);
 
             if (!response.ok) {
                 setError(json.error);
@@ -111,5 +165,5 @@ export const Client = () => {
             console.error("Error fetching BMI history:", error);
         }
     }
-    return { updateBMI, addWorkoutLog, addFitnessGoal, getFitnessData, isLoading, error };
+    return { updateBMI, addWorkoutLog, addFitnessGoal, getFitnessData, registerClient, isLoading, error };
 };

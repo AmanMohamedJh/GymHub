@@ -1,159 +1,216 @@
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaStar, FaMapMarkerAlt } from "react-icons/fa";
+import { FaChartLine, FaLocationArrow, FaMapMarkerAlt } from "react-icons/fa";
 import "./Styles/browseGyms.css";
 
 const BrowseGyms = () => {
-  const [gyms, setGyms] = useState([]);
-  const [advancedSearch, setAdvancedSearch] = useState(false);
-  const [city, setCity] = useState("");
-  const [amenity, setAmenity] = useState("");
-  const [minRating, setMinRating] = useState("");
+  const [gyms, setGyms] = useState([]); // Original gym list
+  const [filteredGyms, setFilteredGyms] = useState([]); // Filtered gyms
+  const [searchQuery, setSearchQuery] = useState(""); // Search location query
+  const [filterRating, setFilterRating] = useState(0); // Filter rating (0 means no rating filter)
 
+  // Fetch gyms once when the component is mounted
   useEffect(() => {
     const fetchGyms = async () => {
       try {
         const res = await fetch("/api/gym/getALlgym");
         const data = await res.json();
-        // Defensive: ensure data is an array
+        console.log("Fetched gyms:", data); // Debugging: Check the fetched data
         setGyms(Array.isArray(data) ? data : []);
+        setFilteredGyms(Array.isArray(data) ? data : []);
       } catch (err) {
+        console.error("Error fetching gyms:", err); // Debugging: Log error
         setGyms([]);
+        setFilteredGyms([]); // Handle error
       }
     };
     fetchGyms();
   }, []);
 
-  const handleAdvancedSearch = () => setAdvancedSearch((v) => !v);
+  // This useEffect will re-filter the gyms based on searchQuery and filterRating
+  useEffect(() => {
+    console.log("Filtering gyms with searchQuery:", searchQuery, "filterRating:", filterRating); // Debugging
+    filterGyms(searchQuery, filterRating); // Reapply the filters when either of them changes
+  }, [searchQuery, filterRating]);
 
-  const filteredGyms = gyms.filter((gym) => {
-    let match = true;
-    if (city && gym.location?.city) {
-      match =
-        match && gym.location.city.toLowerCase().includes(city.toLowerCase());
+  // Search bar input change handler
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value); // Update search query
+  };
+
+  // Rating filter change handler
+  const handleFilterChange = (e) => {
+    setFilterRating(Number(e.target.value)); // Update the selected rating
+  };
+
+  // Filtering function based on location and rating
+  const filterGyms = (query, rating) => {
+    console.log("Filtering with query:", query, "and rating:", rating); // Debugging
+    const filtered = gyms.filter((gym) => {
+      const queryLower = query.toLowerCase();
+
+      // Check if gym name or location matches the query
+      const nameMatches = gym.name?.toLowerCase().includes(queryLower);
+      const locationMatches =
+        gym.location?.city?.toLowerCase().includes(queryLower) ||
+        gym.location?.district?.toLowerCase().includes(queryLower) ||
+        gym.location?.street?.toLowerCase().includes(queryLower);
+
+      // Rating filter: Only include gyms with rating >= filterRating
+      return (
+        (query ? nameMatches || locationMatches : true) &&
+        (rating ? gym.avgRating >= rating : true)
+      );
+    });
+
+
+    console.log("Filtered gyms:", filtered); // Debugging: Check the filtered gyms
+    setFilteredGyms(filtered); // Set filtered gyms to state
+  };
+
+  const handleFindNearbyGyms = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
     }
-    if (amenity && gym.amenities) {
-      match =
-        match &&
-        gym.amenities.some((a) =>
-          a.toLowerCase().includes(amenity.toLowerCase())
-        );
-    }
-    if (minRating && gym.avgRating) {
-      match = match && gym.avgRating >= parseFloat(minRating);
-    }
-    return match;
-  });
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude, accuracy } = position.coords;
+        console.log("User Lat:", latitude, "User Lng:", longitude, "Accuracy in meters:", accuracy);
+
+        // Use this accurate position in your state
+        const userLat = latitude;
+        const userLng = longitude;
+        const radiusKm = 80;
+
+        const filtered = gyms.filter((gym) => {
+          if (!gym.location?.coordinates) return false;
+          const gymLat = gym.location?.coordinates?.lat;
+          const gymLng = gym.location?.coordinates?.lng;
+          console.log(gym.name, "userLat: ", userLat, " userLng: ", userLng, " gymLat: ", gymLat, " gymLng: ", gymLng);
+
+          if (gymLat === undefined || gymLng === undefined) return false;
+
+          const distance = getDistanceFromLatLonInKm(userLat, userLng, gymLat, gymLng);
+          console.log("dis:", distance, "rad:", radiusKm);
+          return distance <= radiusKm;
+        });
+
+        setFilteredGyms(filtered);
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+        if (error.code === 1) {
+          // Do nothing if location access is denied
+        } else if (error.code === 2) {
+          alert("Location unavailable. Please check your device location settings.");
+        } else if (error.code === 3) {
+          alert("Location request timed out. Please try again.");
+        } else {
+          alert("Failed to get your location. Please check your browser and device settings.");
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  };
+
+  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth radius in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
 
   return (
-    <div className="browse-gyms-page-bg">
-      <div className="browsegyms-container">
-        <div className="browsegyms-titlebar-bg">
-          <div className="browsegyms-titlebar-content">
-            <h1 className="browsegyms-hero-title">
-              Explore Sri Lanka's Top Gyms
-            </h1>
-            <p className="browsegyms-hero-sub">
-              Smart search. Real reviews. Modern fitness.
-            </p>
-            <div className="filters-container-modern browsegyms-titlebar-search">
-              <div className="search-wrapper-modern">
-                <input
-                  type="text"
-                  placeholder="Quick search by city..."
-                  className="search-bar browsegyms-search-bar-modern"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
+    <div className="browse-trainers-container">
+      <h2 className="page-title">Find Your Perfect Gym</h2>
+
+      <div className="search-filter-container">
+        <input
+          type="text"
+          placeholder="Search by Location..."
+          className="search-input"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+        <select
+          className="filter-rating"
+          value={filterRating}
+          onChange={handleFilterChange}
+        >
+          <option value={0}>All Ratings</option>
+          <option value={4}>4+ Stars</option>
+          <option value={4.5}>4.5+ Stars</option>
+          <option value={5}>5 Stars</option>
+        </select>
+        <button className="browsegyms-details-btn" onClick={handleFindNearbyGyms}>
+          <FaMapMarkerAlt /> Nearby Gyms
+        </button>
+      </div>
+
+      <div className="trainers-list">
+        {filteredGyms.length === 0 ? (
+          <p>No gyms available at your region.</p>
+        ) : (
+          filteredGyms.map((gym) => (
+            <div key={gym._id} className="trainer-card">
+              <div className="browsegyms-card-header">
+                <span className="browsegyms-gym-name">{gym.name}</span>
+              </div>
+              <div className="browsegyms-card-body">
+                <img
+                  src={
+                    gym.images && gym.images.length > 0
+                      ? gym.images[0].startsWith("http")
+                        ? gym.images[0]
+                        : `${process.env.REACT_APP_API_URL
+                          ? process.env.REACT_APP_API_URL.replace(
+                            /\/$/,
+                            ""
+                          )
+                          : ""
+                        }/${gym.images[0].replace(/^\//, "")}`
+                      : "/placeholder.jpg"
+                  }
+                  alt={gym.name}
+                  className="browsegyms-gym-image"
                 />
-                <button
-                  className="advanced-search-toggle"
-                  onClick={handleAdvancedSearch}
-                >
-                  {advancedSearch ? "Hide Advanced" : "Advanced Search"}
+              </div>
+              <p>Location: <FaMapMarkerAlt /> {gym.location?.city || "-"}</p>
+              <p>Rating: {gym.avgRating ? gym.avgRating : "No rating"}★</p>
+              <p>Facilities:
+                {(gym.amenities || []).map((amenity, idx) => (
+                  <span key={idx} className="browsegyms-offer-item">
+                    {amenity}
+                  </span>
+                ))}
+              </p>
+
+              <Link to={`/gyms/${gym._id}`} style={{ textDecoration: "none" }}>
+                <button className="browsegyms-details-btn">
+                  <FaChartLine /> View Full Details
                 </button>
-              </div>
-              {advancedSearch && (
-                <div className="advanced-search-fields">
-                  <input
-                    type="text"
-                    placeholder="Amenity (e.g. pool, parking)"
-                    className="browsegyms-search-bar-modern"
-                    value={amenity}
-                    onChange={(e) => setAmenity(e.target.value)}
-                  />
-                  <input
-                    type="number"
-                    min="0"
-                    max="5"
-                    step="0.1"
-                    placeholder="Min Rating"
-                    className="browsegyms-search-bar-modern"
-                    value={minRating}
-                    onChange={(e) => setMinRating(e.target.value)}
-                  />
-                </div>
-              )}
+              </Link>
             </div>
-          </div>
-        </div>
-        <div className="gyms-list browsegyms-list grid-browsegyms-list grid-browsegyms-list-tight">
-          {filteredGyms.length > 0 ? (
-            filteredGyms.map((gym) => (
-              <div key={gym._id} className="browsegyms-card">
-                <div className="browsegyms-card-header">
-                  <span className="browsegyms-gym-name">{gym.name}</span>
-                </div>
-                <div className="browsegyms-card-body">
-                  <img
-                    src={
-                      gym.images && gym.images.length > 0
-                        ? gym.images[0].startsWith("http")
-                          ? gym.images[0]
-                          : `${
-                              process.env.REACT_APP_API_URL
-                                ? process.env.REACT_APP_API_URL.replace(
-                                    /\/$/,
-                                    ""
-                                  )
-                                : ""
-                            }/${gym.images[0].replace(/^\//, "")}`
-                        : "/placeholder.jpg"
-                    }
-                    alt={gym.name}
-                    className="browsegyms-gym-image"
-                  />
-                  <div className="browsegyms-info-row">
-                    <span className="browsegyms-rating">
-                      <FaStar style={{ color: "#fbbf24", marginRight: 4 }} />
-                      {gym.avgRating ? gym.avgRating : "No rating"}
-                    </span>
-                    <span className="browsegyms-location">
-                      <FaMapMarkerAlt style={{ marginRight: 4 }} />
-                      {gym.location?.city || "-"}
-                    </span>
-                    <Link
-                      to={`/gyms/${gym._id}`}
-                      className="browsegyms-details-btn"
-                    >
-                      See more details
-                    </Link>
-                  </div>
-                  <div className="browsegyms-offers">
-                    {(gym.amenities || []).map((amenity, idx) => (
-                      <span key={idx} className="browsegyms-offer-item">
-                        {amenity}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div style={{ textAlign: "center", width: "100%", color: "#888" }}>
-              No gyms found in this location.
-            </div>
-          )}
-        </div>
+          ))
+        )}
       </div>
     </div>
   );

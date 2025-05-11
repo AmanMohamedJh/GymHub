@@ -11,6 +11,7 @@ const subscriptionController = require("./src/controller/Subscription/subscripti
 const equipmentRoutes = require("./src/routes/Gym_Owner/equipment");
 const gymRoutes = require("./src/routes/Gym_Owner/gym");
 const clientRoutes = require("./src/routes/Client/client");
+const gymBookingRoutes = require("./src/routes/Client/gymBooking");
 const contactUsRouter = require("./src/routes/Contactus/contactUs");
 const {
   router: clientGymRegistrationRoutes,
@@ -25,7 +26,7 @@ const {
 // Trainer Routes
 const trainerRegistrationRoutes = require("./src/routes/Trainer/trainerRegistrationRoutes");
 const trainerSessionRoutes = require("./src/routes/Trainer/trainerSessionRoutes");
-
+const clientTrainerSessionsRoutes = require("./src/routes/Client/clientTrainerSessions");
 const progressRoutes = require("./src/routes/Trainer/progressRoutes");
 const trainerTipsRoutes = require("./src/routes/Trainer/trainerTipsRoutes");
 
@@ -57,7 +58,7 @@ app.use("/api/subscription", subscriptionRoutes);
 app.use("/api/equipment", equipmentRoutes);
 app.use("/api/gym", gymRoutes);
 app.use("/api/client", clientRoutes);
-
+app.use("/api/gym-booking", gymBookingRoutes);
 app.use("/api/gym-reviews", gymReviewRoutes); // for public/client
 app.use("/api/gym-owner/gym-reviews", gymReviewRoutes); // for owner dashboard
 
@@ -76,7 +77,7 @@ app.use("/api/gymOwner", gymOwnerRouter);
 // Trainer routes
 app.use("/api/trainer/registration", trainerRegistrationRoutes);
 app.use("/api/trainer/session", trainerSessionRoutes);
-
+app.use("/api/clientTrainerSessions", clientTrainerSessionsRoutes);
 app.use("/api/trainer/progress", progressRoutes);
 app.use("/api/trainer/tips", trainerTipsRoutes);
 

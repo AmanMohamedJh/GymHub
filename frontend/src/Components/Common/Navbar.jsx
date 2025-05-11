@@ -14,7 +14,7 @@ import "../Common/NavbarDropdown.css"; // custom dropdown style
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Gyms", href: "/client-browse-gym" },
-  { name: "Trainers", href: "/client-browse-trainer" },
+  { name: "Trainers", href: "/client-browse-trainers" },
   { name: "Contact Us", href: "/contact" },
   { name: "About Us", href: "/about" },
 ];
