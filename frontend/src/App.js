@@ -80,6 +80,8 @@ import SubscriptionPage from "./pages/Subscription/SubscriptionPage";
 import SuccessPage from "./pages/Subscription/SuccessPage";
 import FailurePage from "./pages/Subscription/FailurePage";
 import MySubscription from "./pages/Subscription/MySubscription";
+import EditAboutUs from "./pages/Admin/EditAboutUs.jsx";
+import EditProfileSetting from "./pages/Admin/EditProfileSetting.jsx";
 
 function App() {
   const { user } = useAuthContext();
@@ -518,6 +520,14 @@ function App() {
                   <Route
                     path="contact-management"
                     element={<ContactUsManagement />}
+                  />
+                  <Route
+                    path="edit-about-us"
+                    element={<EditAboutUs />}
+                  />
+                  <Route
+                    path="profile-settings"
+                    element={<EditProfileSetting />}
                   />
                 </Route>
               </Routes>

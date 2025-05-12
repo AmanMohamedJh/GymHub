@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Styles/TrainerRegistration.css';
+// import './Styles/TrainerRegistration.css';
 import { useProfile } from '../../hooks/useProfile';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useNavigate } from 'react-router-dom';

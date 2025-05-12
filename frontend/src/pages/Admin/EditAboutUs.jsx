@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Styles/ContactUsManagement.css';
 
-const ContactUsManagement = () => {
+const EditAboutUs = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMessage, setSelectedMessage] = useState(null);
@@ -13,42 +13,13 @@ const ContactUsManagement = () => {
 
   const fetchMessages = async () => {
     try {
-      // const response = await fetch('/api/admin/contact-messages');
-
-      // give me fake response data promise for this 
-      const response = await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            ok: true,
-            json: () => Promise.resolve([
-              {
-                _id: '1',
-                name: 'John Doe',
-                email: "  ",  
-                subject: 'Test Subject',
-                message: 'This is a test message.',
-                status: 'pending',
-                createdAt: '2023-10-01T12:00:00Z',
-              },
-              {
-                _id: '2',
-                name: 'Jane Smith',
-                email: "  ",  
-                subject: 'Another Subject',
-                message: 'This is another test message.',
-                status: 'replied',
-                createdAt: '2023-10-02T12:00:00Z',
-              },  
-            ]),
-          });
-        }, 1000);
-      });
+      const response = await fetch('/api/admin/contact-messages');
       const data = await response.json();
       setMessages(data);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching messages:', error);
-
+      
       setLoading(false);
     }
   };
@@ -179,4 +150,4 @@ const ContactUsManagement = () => {
   );
 };
 
-export default ContactUsManagement;
+export default EditAboutUs;

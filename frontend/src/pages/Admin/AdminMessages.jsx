@@ -90,7 +90,7 @@ const AdminMessages = () => {
         <h2>Message Center</h2>
         <div className="messages-controls">
           <div className="search-filter-container">
-            <div className="search-box">
+            <div className="filter-options">
               <FaSearch className="search-icon" />
               <input
                 type="text"

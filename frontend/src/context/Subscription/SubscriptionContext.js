@@ -35,7 +35,7 @@ export const SubscriptionProvider = ({ children }) => {
             
             if (response.ok) {
                 setSubscription(data);
-                console.log('Subscription data:', data); // Debug log
+                
             } else {
                 setSubscription(null);
             }

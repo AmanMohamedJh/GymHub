@@ -149,7 +149,6 @@ body {
 .action-buttons {
   display: flex;
   gap: 15px;
-  margin-top: 30px;
 }
 
 .btn {
