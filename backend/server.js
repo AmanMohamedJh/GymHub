@@ -83,6 +83,7 @@ app.use("/api/trainer/tips", trainerTipsRoutes);
 
 // Admin routes
 app.use("/api/admin/clients", require("./src/routes/Admin/clients"));
+app.use("/api/admin/gyms", require("./src/routes/Admin/gyms"));
 
 // Serve static files from the uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
