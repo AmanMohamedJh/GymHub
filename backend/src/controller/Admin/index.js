@@ -19,6 +19,16 @@ const {
   deleteContactMessage,
   replyToContactMessage,
 } = require("./contactus/index");
+const {
+  getAllSubscriptions,
+  updateSubscriptionPrice,
+  getSubscriptionPlans,
+} = require("./subscription/index");
+
+const {
+  getSubscriptionById,
+  updateSubscriptionStatus,
+} = require("./subscription/subscriptionController");
 
 module.exports = {
   getClientsController,
@@ -37,10 +47,16 @@ module.exports = {
   deleteTrainerController,
   getUserProfileController,
   updateUserProfileController,
-
   getStats,
 
   getContactMessages,
   deleteContactMessage,
   replyToContactMessage,
+
+  // Subscription controllers
+  getSubscriptionPlans,
+  getAllSubscriptions,
+  getSubscriptionById,
+  updateSubscriptionPrice,
+  updateSubscriptionStatus,
 };

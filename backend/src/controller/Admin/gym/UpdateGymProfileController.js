@@ -9,13 +9,11 @@ const Gym = require("../../../models/Gym_Owner/Gym");
 const updateGymProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, location } = req.body;
+    const { name } = req.body;
 
     // Validate input
-    if (!name && !location) {
-      return res
-        .status(400)
-        .json({ message: "Please provide name or location to update" });
+    if (!name) {
+      return res.status(400).json({ message: "Please provide name to update" });
     }
 
     // Find the gym by id
@@ -28,33 +26,6 @@ const updateGymProfile = async (req, res) => {
     // Update the gym data
     if (name) {
       gym.name = name;
-    }
-
-    if (location) {
-      // Update existing location object or create a new one
-      gym.location = {
-        ...(gym.location || {}),
-        street: location.street || (gym.location ? gym.location.street : ""),
-        city: location.city || (gym.location ? gym.location.city : ""),
-        district:
-          location.district || (gym.location ? gym.location.district : ""),
-      };
-
-      // Only update coordinates if provided
-      if (location.coordinates) {
-        gym.location.coordinates = {
-          lat:
-            location.coordinates.lat ||
-            (gym.location && gym.location.coordinates
-              ? gym.location.coordinates.lat
-              : null),
-          lng:
-            location.coordinates.lng ||
-            (gym.location && gym.location.coordinates
-              ? gym.location.coordinates.lng
-              : null),
-        };
-      }
     }
 
     await gym.save();

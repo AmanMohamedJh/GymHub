@@ -14,7 +14,7 @@ const subscriptionSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      enum: [3500, 15000],
+      // enum: [3500, 15000],
       required: true,
       default: 3500,
     },
