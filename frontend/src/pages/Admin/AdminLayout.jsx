@@ -22,10 +22,7 @@ const AdminLayout = ({ state }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [notifications] = useState([
-    { id: 1, text: "New gym registration", time: "5 min ago" },
-    { id: 2, text: "New trainer application", time: "10 min ago" },
-  ]);
+ 
 
   const { user } = useAuthContext();
 
@@ -104,16 +101,14 @@ const AdminLayout = ({ state }) => {
           >
             <FaEnvelope />
             <span>Feedbacks</span>
-            {notifications.length > 0 && (
-              <span className="notification-badge">{notifications.length}</span>
-            )}
+           
           </Link>
           <Link
-            to="/admin/edit-about-us"
-            className={`nav-item ${isActive("/admin/edit-about-us")}`}
+            to="/admin/edit-subscription"
+            className={`nav-item ${isActive("/admin/edit-subscription")}`}
           >
             <BsFillHouseGearFill />
-            <span>Edit About Us</span>
+            <span>Subscription</span>
           </Link>
           <Link
             to="/admin/profile-settings"

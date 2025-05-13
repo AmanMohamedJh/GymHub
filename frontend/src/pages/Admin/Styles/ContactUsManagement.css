@@ -5,9 +5,9 @@
 }
 
 .contact-management h2 {
-  color: #333;
+  color: #f0f0f0;
   margin-bottom: 2rem;
-  text-align: center;
+  font-size: 2rem;
 }
 
 .messages-grid {

@@ -35,15 +35,6 @@ const AdminGymManagement = () => {
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
   const [editProfileFormData, setEditProfileFormData] = useState({
     name: "",
-    location: {
-      street: "",
-      city: "",
-      district: "",
-      coordinates: {
-        lat: "",
-        lng: "",
-      },
-    },
   });
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
@@ -59,9 +50,7 @@ const AdminGymManagement = () => {
           Authorization: `Bearer ${user.token}`,
         },
       });
-      console.log(response.data);
       return response.data;
-
     } catch (error) {
       throw new Error(error.response?.data?.message || "Failed to fetch gyms");
     }
@@ -143,15 +132,6 @@ const AdminGymManagement = () => {
     setSelectedGym(gym);
     setEditProfileFormData({
       name: gym.name,
-      location: {
-        street: gym.location?.street,
-        city: gym.location?.city,
-        district: gym.location?.district,
-        coordinates: {
-          lat: gym.location.coordinates?.lat,
-          lng: gym.location.coordinates?.lng,
-        },
-      },
     });
     setIsEditProfileModalOpen(true);
   };
@@ -184,8 +164,8 @@ const AdminGymManagement = () => {
     }
   };
 
-  const handleToggleStatus = async (gym) => {
-    const newStatus = gym.status === "active" ? "inactive" : "active";
+  const handleToggleStatus = async (gym, status) => {
+    const newStatus = status;
     try {
       await updateGymStatus(gym.id, newStatus);
       toast({
@@ -352,20 +332,28 @@ const AdminGymManagement = () => {
                     <td>
                       <div className="action-buttons">
                         <button
-                          onClick={() => handleToggleStatus(gym)}
-                          className="btn-approve"
-                          disabled={gym.status === "active"}
-                          title="Activate Gym"
+                          className="btn-view"
+                          onClick={() => handleToggleStatus(gym, "pending")}
+                          disabled={gym.status === "pending"}
+                          title="Pending gym"
                         >
-                          <FaCheckCircle /> Activate
+                          <FaInfoCircle /> Pending
                         </button>
                         <button
-                          onClick={() => handleToggleStatus(gym)}
-                          className="btn-reject"
-                          disabled={gym.status === "inactive"}
-                          title="Deactivate Gym"
+                          className=" btn-approve"
+                          onClick={() => handleToggleStatus(gym, "approved")}
+                          disabled={gym.status === "approved"}
+                          title="Approved gym"
                         >
-                          <FaBan /> Deactivate
+                          <FaCheckCircle /> Approved
+                        </button>
+                        <button
+                          className="btn-reject"
+                          onClick={() => handleToggleStatus(gym, "rejected")}
+                          disabled={gym.status === "rejected"}
+                          title="Rejected gym"
+                        >
+                          <FaBan /> Rejected
                         </button>
                         <button
                           className="btn-edit"
@@ -374,13 +362,7 @@ const AdminGymManagement = () => {
                         >
                           <FaEdit /> Edit
                         </button>
-                        <button
-                          className="btn-view"
-                          onClick={() => console.log("View Details")}
-                          title="View Gym Details"
-                        >
-                          <FaInfoCircle /> Details
-                        </button>
+
                         <button
                           className="btn-delete"
                           onClick={() => handleOpenDeleteConfirmModal(gym)}
@@ -414,16 +396,7 @@ const AdminGymManagement = () => {
                   required
                 />
               </div>
-              <div className="form-group">
-                <label>Location:</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={editProfileFormData.location.city}
-                  onChange={handleEditProfileFormChange}
-                  required
-                />
-              </div>
+             
               <div className="form-buttons">
                 <button type="submit" className="btn-save">
                   Save Changes

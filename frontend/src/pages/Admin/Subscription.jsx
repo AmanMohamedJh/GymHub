@@ -1,44 +1,86 @@
-import React, { useState } from 'react';
-import './Styles/SubscriptionManagement.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./Styles/SubscriptionManagement.css";
+import { useAuthContext } from "../../hooks/useAuthContext";
+
+const API_BASE_URL = "http://localhost:4000/api/admin";
 
 const SubscriptionDashboard = () => {
-  const [subscriptions, setSubscriptions] = useState([
-    { id: 1, type: 'Monthly', amount: 50, description: 'Access to all gym facilities for 30 days' },
-    { id: 2, type: 'Yearly', amount: 500, description: 'Full access for 12 months with a discount' },
-  ]);
+  const [subscriptions, setSubscriptions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentSubscription, setCurrentSubscription] = useState(null);
-  const [newAmount, setNewAmount] = useState('');
+  const [newAmount, setNewAmount] = useState("");
+  const [error, setError] = useState(null);
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    const fetchSubscriptions = async () => {
+      try {
+        if (!user?.token) {
+          throw new Error("No authentication token available");
+        }
+        const response = await axios.get(`${API_BASE_URL}/subscriptions`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+        setSubscriptions(response.data);
+      } catch (error) {
+        setError(
+          error.response?.data?.message || "Failed to fetch subscriptions"
+        );
+      }
+    };
+
+    fetchSubscriptions();
+  }, [user]);
 
   const openEditModal = (subscription) => {
     setCurrentSubscription(subscription);
-    setNewAmount(subscription.amount);
+    setNewAmount(subscription.amount?.toString());
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentSubscription(null);
-    setNewAmount('');
+    setNewAmount("");
   };
 
-  const handleSave = () => {
-    if (newAmount <= 0) {
-      alert('Amount must be greater than 0');
-      return;
+  const handleSave = async () => {
+    try {
+      if (!user?.token) {
+        throw new Error("No authentication token available");
+      }
+      const response = await axios.put(
+        `${API_BASE_URL}/subscriptions/${currentSubscription.id}/update-price`,
+        { price: parseFloat(newAmount) },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      setSubscriptions(
+        subscriptions.map((sub) =>
+          sub.id === currentSubscription.id
+            ? { ...sub, amount: response.data.price || parseFloat(newAmount) }
+            : sub
+        )
+      );
+      closeModal();
+    } catch (error) {
+      setError(
+        error.response?.data?.message || "Failed to update subscription price"
+      );
     }
-    setSubscriptions(
-      subscriptions.map((sub) =>
-        sub.id === currentSubscription.id ? { ...sub, amount: parseFloat(newAmount) } : sub
-      )
-    );
-    closeModal();
   };
 
   return (
     <div className="dashboard-wrapper">
       <div className="subscription-card">
         <h1 className="subscription-title">Gym Subscription Management</h1>
+        {error && <p className="error-message">{error}</p>}
         <div className="subscription-table-container">
           <table className="subscription-table">
             <thead>
@@ -52,9 +94,15 @@ const SubscriptionDashboard = () => {
             <tbody>
               {subscriptions.map((subscription) => (
                 <tr key={subscription.id} className="subscription-table-row">
-                  <td className="subscription-table-cell">{subscription.type}</td>
-                  <td className="subscription-table-cell">${subscription.amount}</td>
-                  <td className="subscription-table-cell">{subscription.description}</td>
+                  <td className="subscription-table-cell">
+                    {subscription.type}
+                  </td>
+                  <td className="subscription-table-cell">
+                    ${subscription.amount}
+                  </td>
+                  <td className="subscription-table-cell">
+                    {subscription.description}
+                  </td>
                   <td className="subscription-table-cell">
                     <button
                       onClick={() => openEditModal(subscription)}
@@ -73,7 +121,9 @@ const SubscriptionDashboard = () => {
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-box">
-            <h2 className="modal-title">Edit {currentSubscription?.type} Subscription</h2>
+            <h2 className="modal-title">
+              Edit {currentSubscription?.type} Subscription
+            </h2>
             <div className="modal-field">
               <label className="modal-label">Amount ($)</label>
               <input
@@ -86,8 +136,12 @@ const SubscriptionDashboard = () => {
               />
             </div>
             <div className="modal-buttons">
-              <button onClick={closeModal} className="modal-cancel-button">Cancel</button>
-              <button onClick={handleSave} className="modal-save-button">Save</button>
+              <button onClick={closeModal} className="modal-cancel-button">
+                Cancel
+              </button>
+              <button onClick={handleSave} className="modal-save-button">
+                Save
+              </button>
             </div>
           </div>
         </div>

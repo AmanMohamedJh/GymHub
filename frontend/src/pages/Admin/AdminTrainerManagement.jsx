@@ -9,193 +9,13 @@ import {
   FaFileExport,
   FaFilter,
   FaSort,
+  FaInfoCircle,
 } from "react-icons/fa";
 import "./Styles/AdminTrainerManagement.css";
 import axios from "axios";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
-const API_BASE_URL = "http://localhost:4000/api";
-
-// Fetch all trainers
-const getTrainers = async () => {
-  try {
-    // const response = await axios.get(`${API_BASE_URL}/trainers`);
-    // return response.data;
-
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          {
-            id: 1,
-            name: "John Doe",
-            specialization: "Weightlifting",
-            experience: "5 years",
-            gym: "Gold's Gym",
-            status: "active",
-            rating: 4.5,
-            clientCount: 20,
-            certifications: ["ACE", "NSCA"],
-          },
-          {
-            id: 2,
-            name: "Jane Smith",
-            specialization: "Yoga",
-            experience: "3 years",
-            gym: "Planet Fitness",
-            status: "suspended",
-            rating: 4.0,
-            clientCount: 15,
-            certifications: ["Yoga Alliance"],
-          },
-          {
-            id: 3,
-            name: "Mike Johnson",
-            specialization: "CrossFit",
-            experience: "7 years",
-            gym: "CrossFit Box",
-            status: "active",
-            rating: 4.8,
-            clientCount: 30,
-            certifications: ["CrossFit Level 1"],
-          },
-          {
-            id: 4,
-            name: "Emily Davis",
-            specialization: "Pilates",
-            experience: "4 years",
-            gym: "Anytime Fitness",
-            status: "pending",
-            rating: 4.2,
-            clientCount: 10,
-            certifications: ["Pilates Method Alliance"],
-          },
-          {
-            id: 5,
-            name: "Chris Brown",
-            specialization: "Nutrition",
-            experience: "6 years",
-            gym: "LA Fitness",
-            status: "active",
-            rating: 4.7,
-            clientCount: 25,
-            certifications: ["CISSN", "Precision Nutrition"],
-          },
-          {
-            id: 6,
-            name: "Sarah Wilson",
-            specialization: "Zumba",
-            experience: "2 years",
-            gym: "YMCA",
-            status: "suspended",
-            rating: 3.9,
-            clientCount: 12,
-            certifications: ["Zumba Instructor"],
-          },
-          {
-            id: 7,
-            name: "David Lee",
-            specialization: "Boxing",
-            experience: "8 years",
-            gym: "Boxing Club",
-            status: "active",
-            rating: 4.6,
-            clientCount: 18,
-            certifications: ["USA Boxing Coach"],
-          },
-          {
-            id: 8,
-            name: "Laura Taylor",
-            specialization: "Dance",
-            experience: "3 years",
-            gym: "Dance Studio",
-            status: "pending",
-            rating: 4.1,
-            clientCount: 14,
-            certifications: ["Dance Teacher Certification"],
-          },
-          {
-            id: 9,
-            name: "Daniel Martinez",
-            specialization: "Strength Training",
-            experience: "5 years",
-            gym: "24 Hour Fitness",
-            status: "active",
-            rating: 4.4,
-            clientCount: 22,
-            certifications: ["CSCS", "NSCA-CPT"],
-          },
-          {
-            id: 10,
-            name: "Sophia Anderson",
-            specialization: "Cardio",
-            experience: "4 years",
-            gym: "Gold's Gym",
-            status: "suspended",
-            rating: 3.8,
-            clientCount: 11,
-            certifications: ["AFAA Group Fitness Instructor"],
-          },
-        ]);
-      }, 1000);
-    });
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to fetch trainers"
-    );
-  }
-};
-
-// Update a trainer's profile (name, email, phone)
-const updateTrainerProfile = async (id, data) => {
-  try {
-    const response = await axios.put(
-      `${API_BASE_URL}/trainers/${id}/profile`,
-      data
-    );
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to update trainer profile"
-    );
-  }
-};
-
-const updateTrainerCertifications = async (id, certifications) => {
-  try {
-    const response = await axios.put(
-      `${API_BASE_URL}/trainers/${id}/certifications`,
-      { certifications }
-    );
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to update certifications"
-    );
-  }
-};
-
-const updateTrainerStatus = async (id, status) => {
-  try {
-    const response = await axios.put(`${API_BASE_URL}/trainers/${id}/status`, {
-      status,
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to update trainer status"
-    );
-  }
-};
-
-const deleteTrainer = async (id) => {
-  try {
-    const response = await axios.delete(`${API_BASE_URL}/trainers/${id}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to delete trainer"
-    );
-  }
-};
+const API_BASE_URL = "http://localhost:4000/api/admin";
 
 const useToast = () => {
   return {
@@ -220,13 +40,83 @@ const AdminTrainerManagement = () => {
     phone: "",
   });
 
-  const [isManageCertsModalOpen, setIsManageCertsModalOpen] = useState(false);
-  const [certsFormData, setCertsFormData] = useState("");
-
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
 
   const { toast } = useToast();
+  const { user } = useAuthContext();
+
+  // Fetch all trainers
+  const getTrainers = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/trainers`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch trainers"
+      );
+    }
+  };
+
+  // Update a trainer's profile (name, email, phone)
+  const updateTrainerProfile = async (id, data) => {
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/trainers/${id}/profile`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to update trainer profile"
+      );
+    }
+  };
+
+  const updateTrainerStatus = async (id, status) => {
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/trainers/${id}/status`,
+        {
+          status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to update trainer status"
+      );
+    }
+  };
+
+  const deleteTrainer = async (id) => {
+    try {
+      const response = await axios.delete(`${API_BASE_URL}/trainers/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to delete trainer"
+      );
+    }
+  };
 
   const fetchTrainersData = async () => {
     setIsLoading(true);
@@ -248,16 +138,6 @@ const AdminTrainerManagement = () => {
   useEffect(() => {
     fetchTrainersData();
   }, []);
-
-  const handleOpenEditProfileModal = (trainer) => {
-    setSelectedTrainer(trainer);
-    setEditProfileFormData({
-      name: trainer.name,
-      email: trainer.email,
-      phone: trainer.phone,
-    });
-    setIsEditProfileModalOpen(true);
-  };
 
   const handleEditProfileFormChange = (e) => {
     const { name, value } = e.target;
@@ -287,46 +167,8 @@ const AdminTrainerManagement = () => {
     }
   };
 
-  const handleOpenManageCertsModal = (trainer) => {
-    setSelectedTrainer(trainer);
-    setCertsFormData(trainer.certifications.join("\n"));
-    setIsManageCertsModalOpen(true);
-  };
-
-  const handleCertsFormChange = (e) => {
-    setCertsFormData(e.target.value);
-  };
-
-  const handleSubmitManageCerts = async (e) => {
-    e.preventDefault();
-    if (!selectedTrainer) return;
-    const newCertifications = certsFormData
-      .split("\n")
-      .map((s) => s.trim())
-      .filter(Boolean);
-    try {
-      await updateTrainerCertifications(selectedTrainer.id, newCertifications);
-      toast({
-        title: "Certifications Updated",
-        description: `${selectedTrainer.name}'s certifications have been updated.`,
-      });
-      fetchTrainersData();
-      setIsManageCertsModalOpen(false);
-      setSelectedTrainer(null);
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error updating certifications",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to update certifications.",
-      });
-    }
-  };
-
-  const handleToggleStatus = async (trainer) => {
-    const newStatus = trainer.status === "active" ? "suspended" : "active";
+  const handleToggleStatus = async (trainer, status) => {
+    const newStatus = status;
     try {
       await updateTrainerStatus(trainer.id, newStatus);
       toast({
@@ -437,9 +279,9 @@ const AdminTrainerManagement = () => {
               onChange={(e) => setFilterStatus(e.target.value)}
             >
               <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="suspended">Suspended</option>
               <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
             </select>
           </div>
           <div className="filter-options">
@@ -483,7 +325,7 @@ const AdminTrainerManagement = () => {
                   <td>{trainer.gym}</td>
                   <td>
                     <span
-                      className={`status-badge status-${trainer.status.toLowerCase()}`}
+                      className={`status-badge status-${trainer.status?.toLowerCase()}`}
                     >
                       {trainer.status}
                     </span>
@@ -492,35 +334,30 @@ const AdminTrainerManagement = () => {
                   <td>{trainer.clientCount}</td>
                   <td className="action-buttons">
                     <button
-                      onClick={() => handleToggleStatus(trainer)}
-                      className="btn-approve"
-                      disabled={trainer.status === "active"}
-                      title="Activate Trainer"
-                    >
-                      <FaCheckCircle /> Activate
-                    </button>
-                    <button
-                      onClick={() => handleToggleStatus(trainer)}
-                      className="btn-reject"
-                      disabled={trainer.status === "suspended"}
-                      title="Suspend Trainer"
-                    >
-                      <FaBan /> Suspend
-                    </button>
-                    <button
-                      onClick={() => handleOpenEditProfileModal(trainer)}
-                      className="btn-edit"
-                      title="Edit Trainer"
-                    >
-                      <FaEdit /> Edit
-                    </button>
-                    <button
-                      onClick={() => handleOpenManageCertsModal(trainer)}
                       className="btn-view"
-                      title="Manage Certifications"
+                      onClick={() => handleToggleStatus(trainer, "pending")}
+                      disabled={trainer.status === "pending"}
+                      title="Pending trainer"
                     >
-                      <FaCertificate /> Certs
+                      <FaInfoCircle /> Pending
                     </button>
+                    <button
+                      className=" btn-approve"
+                      onClick={() => handleToggleStatus(trainer, "approved")}
+                      disabled={trainer.status === "approved"}
+                      title="Approved trainer"
+                    >
+                      <FaCheckCircle /> Approved
+                    </button>
+                    <button
+                      className="btn-reject"
+                      onClick={() => handleToggleStatus(trainer, "rejected")}
+                      disabled={trainer.status === "rejected"}
+                      title="Rejected trainer"
+                    >
+                      <FaBan /> Rejected
+                    </button>
+
                     <button
                       onClick={() => handleOpenDeleteConfirmModal(trainer)}
                       className="btn-delete"
@@ -579,38 +416,6 @@ const AdminTrainerManagement = () => {
                 <button
                   type="button"
                   onClick={() => setIsEditProfileModalOpen(false)}
-                  className="btn-cancel"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Manage Certifications Modal */}
-      {isManageCertsModalOpen && selectedTrainer && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Manage Certifications - {selectedTrainer.name}</h3>
-            <form onSubmit={handleSubmitManageCerts}>
-              <div className="form-group">
-                <label>Certifications (one per line):</label>
-                <textarea
-                  value={certsFormData}
-                  onChange={handleCertsFormChange}
-                  rows={5}
-                  placeholder="Enter certifications, one per line"
-                />
-              </div>
-              <div className="form-buttons">
-                <button type="submit" className="btn-save">
-                  Save Certifications
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsManageCertsModalOpen(false)}
                   className="btn-cancel"
                 >
                   Cancel

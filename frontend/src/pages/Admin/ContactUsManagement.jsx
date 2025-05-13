@@ -1,53 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import './Styles/ContactUsManagement.css';
+import React, { useState, useEffect } from "react";
+import "./Styles/ContactUsManagement.css";
+import axios from "axios";
+import { useAuthContext } from "../../hooks/useAuthContext";
+
+const API_BASE_URL = "http://localhost:4000/api/admin";
 
 const ContactUsManagement = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedMessage, setSelectedMessage] = useState(null);
-  const [reply, setReply] = useState('');
-
-  useEffect(() => {
-    fetchMessages();
-  }, []);
+  const [selectedMessage, setSelectedMessage] = useState();
+  const [reply, setReply] = useState("");
+  const { user } = useAuthContext();
 
   const fetchMessages = async () => {
     try {
-      // const response = await fetch('/api/admin/contact-messages');
-
-      // give me fake response data promise for this 
-      const response = await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            ok: true,
-            json: () => Promise.resolve([
-              {
-                _id: '1',
-                name: 'John Doe',
-                email: "  ",  
-                subject: 'Test Subject',
-                message: 'This is a test message.',
-                status: 'pending',
-                createdAt: '2023-10-01T12:00:00Z',
-              },
-              {
-                _id: '2',
-                name: 'Jane Smith',
-                email: "  ",  
-                subject: 'Another Subject',
-                message: 'This is another test message.',
-                status: 'replied',
-                createdAt: '2023-10-02T12:00:00Z',
-              },  
-            ]),
-          });
-        }, 1000);
+      const response = await axios.get(`${API_BASE_URL}/contact-messages`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
       });
-      const data = await response.json();
-      setMessages(data);
+      console.log("Fetched messages:", response.data);
+      setMessages(response.data);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      console.error("Error fetching messages:", error);
 
       setLoading(false);
     }
@@ -55,39 +31,44 @@ const ContactUsManagement = () => {
 
   const handleDeleteMessage = async (messageId) => {
     try {
-      const response = await fetch(`/api/admin/contact-messages/${messageId}`, {
-        method: 'DELETE'
-      });
+      const response = await axios.delete(
+        `${API_BASE_URL}/contact-messages/${messageId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       if (response.ok) {
-        alert('Message deleted successfully');
         fetchMessages();
       }
     } catch (error) {
-      console.error('Error deleting message:', error);
-      alert('Failed to delete message');
+      console.error("Error deleting message:", error);
     }
   };
 
   const handleSendReply = async (messageId) => {
     try {
-      const response = await fetch(`/api/admin/contact-messages/${messageId}/reply`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ reply }),
-      });
+      const response = await axios.post(
+        `${API_BASE_URL}/contact-messages/${messageId}/reply`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       if (response.ok) {
-        alert('Reply sent successfully');
         setSelectedMessage(null);
-        setReply('');
+        setReply("");
         fetchMessages();
       }
     } catch (error) {
-      console.error('Error sending reply:', error);
-      alert('Failed to send reply');
+      console.error("Error sending reply:", error);
     }
   };
+  useEffect(() => {
+    fetchMessages();
+  }, []);
 
   if (loading) {
     return <div className="loading">Loading...</div>;
@@ -96,7 +77,7 @@ const ContactUsManagement = () => {
   return (
     <div className="contact-management">
       <h2>Contact Messages Management</h2>
-      
+
       <div className="messages-grid">
         {messages.map((message) => (
           <div key={message._id} className={`message-card ${message.status}`}>
@@ -107,16 +88,23 @@ const ContactUsManagement = () => {
               </span>
             </div>
             <div className="message-content">
-              <p><strong>From:</strong> {message.name}</p>
-              <p><strong>Email:</strong> {message.email}</p>
-              <p><strong>Message:</strong></p>
+              <p>
+                <strong>From:</strong> {message.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {message.email}
+              </p>
+              <p>
+                <strong>Message:</strong>
+              </p>
               <p className="message-text">{message.message}</p>
               <p className="message-date">
-                <strong>Received:</strong> {new Date(message.createdAt).toLocaleDateString()}
+                <strong>Received:</strong>{" "}
+                {new Date(message.createdAt).toLocaleDateString()}
               </p>
             </div>
             <div className="action-buttons">
-              {message.status === 'pending' && (
+              {message.status === "pending" && (
                 <button
                   className="reply-btn"
                   onClick={() => setSelectedMessage(message)}
@@ -140,7 +128,9 @@ const ContactUsManagement = () => {
           <div className="modal-content">
             <h3>Reply to {selectedMessage.name}</h3>
             <div className="original-message">
-              <p><strong>Original Message:</strong></p>
+              <p>
+                <strong>Original Message:</strong>
+              </p>
               <p>{selectedMessage.message}</p>
             </div>
             <div className="reply-form">
@@ -161,7 +151,7 @@ const ContactUsManagement = () => {
                   className="cancel-btn"
                   onClick={() => {
                     setSelectedMessage(null);
-                    setReply('');
+                    setReply("");
                   }}
                 >
                   Cancel

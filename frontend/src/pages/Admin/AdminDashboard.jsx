@@ -1,41 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { FaUsers, FaDumbbell, FaUserTie,  } from 'react-icons/fa';
-import './Styles/AdminDashboard.css';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { FaUsers, FaDumbbell, FaUserTie } from "react-icons/fa";
+import "./Styles/AdminDashboard.css";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import axios from "axios";
 
 const AdminDashboard = () => {
   // Mock data for demonstration
-  const [stats, setStats] = useState({
-    totalClients: 1250,
-    activeGyms: 45,
-    totalTrainers: 120,
-    pendingClients: 5,
-    pendingGyms: 3,
-    pendingTrainers: 8,
-    unreadMessages: 12,
-    totalRevenue: 125000,
-    clientGrowth: 15,
-    gymGrowth: 8,
-    trainerGrowth: 12,
-    revenueGrowth: 25,
-    newRegister:100
-  });
+  const [stats, setStats] = useState({});
+  const { user } = useAuthContext();
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('http://localhost:5000/admin/stats');
-        const data = await response.json();
-        setStats(data);
+        const response = await axios.get(
+          `http://localhost:4000/api/admin/stats`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        console.log("Clients data:", response.data);
+        setStats(response.data);
       } catch (error) {
-        console.error('Error fetching stats:', error);
+        console.error("Error fetching stats:", error);
       }
     };
 
     fetchStats();
   }, []);
-
-  
 
   return (
     <div className="admin-dashboard">
@@ -48,7 +42,6 @@ const AdminDashboard = () => {
           <div className="stat-info">
             <h3>Total Clients</h3>
             <p>{stats.totalClients}</p>
-           
           </div>
         </div>
         <div className="stat-card active-gyms">
@@ -58,7 +51,6 @@ const AdminDashboard = () => {
           <div className="stat-info">
             <h3>Active Gyms</h3>
             <p>{stats.activeGyms}</p>
-           
           </div>
         </div>
         <div className="stat-card total-trainers">
@@ -68,21 +60,18 @@ const AdminDashboard = () => {
           <div className="stat-info">
             <h3>Total Trainers</h3>
             <p>{stats.totalTrainers}</p>
-           
           </div>
         </div>
         <div className="stat-card total-trainers">
           <div className="stat-icon">
-          {/* New Registrations icons */}
-            <FaUserTie /> 
+            {/* New Registrations icons */}
+            <FaUserTie />
           </div>
           <div className="stat-info">
             <h3>New Registrations</h3>
             <p>{stats.newRegister}</p>
-           
           </div>
         </div>
-
       </div>
 
       {/* Main Content Grid */}
@@ -112,14 +101,8 @@ const AdminDashboard = () => {
                 <span className="badge">{stats.pendingTrainers}</span>
               )}
             </Link>
-           
           </div>
         </div>
-
-       
-
-       
-       
       </div>
     </div>
   );

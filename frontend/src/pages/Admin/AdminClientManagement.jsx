@@ -35,7 +35,7 @@ const AdminClientManagement = () => {
   const [editProfileFormData, setEditProfileFormData] = useState({
     name: "",
     email: "",
-    membershipType: "",
+    password: "",
   });
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
@@ -140,7 +140,7 @@ const AdminClientManagement = () => {
     setEditProfileFormData({
       name: client.name,
       email: client.email,
-      membershipType: client.membershipType,
+      password: client.password,
     });
     setIsEditProfileModalOpen(true);
   };
@@ -173,8 +173,8 @@ const AdminClientManagement = () => {
     }
   };
 
-  const handleToggleStatus = async (client) => {
-    const newStatus = client.status === "Active" ? "Inactive" : "Active";
+  const handleToggleStatus = async (client,status) => {
+    const newStatus = status;
     try {
       await updateClientStatus(client.id, newStatus);
       toast({
@@ -273,10 +273,12 @@ const AdminClientManagement = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Active":
-        return "status-active";
-      case "Inactive":
-        return "status-inactive";
+      case "Pending":
+        return "status-pending";
+      case "Approved":
+        return "status-approved";
+      case "Rejected":
+        return "status-rejected";
       default:
         return "";
     }
@@ -303,8 +305,9 @@ const AdminClientManagement = () => {
               onChange={(e) => setFilterStatus(e.target.value)}
             >
               <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
             </select>
           </div>
           <div className="filter-options">
@@ -368,20 +371,28 @@ const AdminClientManagement = () => {
                     <td>
                       <div className="action-buttons">
                         <button
-                          className="btn-approve"
-                          onClick={() => handleToggleStatus(client)}
-                          disabled={client.status === "Active"}
-                          title="Activate Client"
+                          className="btn-view"
+                          onClick={() => handleToggleStatus(client,"pending")}
+                          disabled={client.status === "pending"}
+                          title="Pending Client"
                         >
-                          <FaCheckCircle /> Activate
+                          <FaInfoCircle />  Pending
+                        </button>
+                        <button
+                          className=" btn-approve"
+                          onClick={() => handleToggleStatus(client, "approved")}
+                          disabled={client.status === "approved"}
+                          title="Approved Client"
+                        >
+                          <FaCheckCircle /> Approved
                         </button>
                         <button
                           className="btn-reject"
-                          onClick={() => handleToggleStatus(client)}
-                          disabled={client.status === "Inactive"}
-                          title="Deactivate Client"
+                          onClick={() => handleToggleStatus(client, "rejected")}
+                          disabled={client.status === "rejected"}
+                          title="Rejected Client"
                         >
-                          <FaBan /> Deactivate
+                         <FaBan /> Rejected
                         </button>
                         <button
                           className="btn-edit"
@@ -390,13 +401,7 @@ const AdminClientManagement = () => {
                         >
                           <FaEdit /> Edit
                         </button>
-                        <button
-                          className="btn-view"
-                          onClick={() => console.log("View Details")} // Placeholder for details view
-                          title="View Client Details"
-                        >
-                          <FaInfoCircle /> Details
-                        </button>
+                        
                         <button
                           className="btn-delete"
                           onClick={() => handleOpenDeleteConfirmModal(client)}
@@ -440,7 +445,7 @@ const AdminClientManagement = () => {
                   required
                 />
               </div>
-              <div className="form-group">
+              {/* <div className="form-group">
                 <label>Membership Type:</label>
                 <select
                   name="membershipType"
@@ -451,7 +456,7 @@ const AdminClientManagement = () => {
                   <option value="Premium">Premium</option>
                   <option value="Basic">Basic</option>
                 </select>
-              </div>
+              </div> */}
               <div className="form-buttons">
                 <button type="submit" className="btn-save">
                   Save Changes

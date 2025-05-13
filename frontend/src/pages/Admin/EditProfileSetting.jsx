@@ -1,57 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
-  FaDumbbell,
-  FaIdCard,
-  FaLock,
-  FaShieldAlt,
   FaUser,
-  FaUserCircle,
-  FaUserFriends,
+  FaShieldAlt,
 } from "react-icons/fa";
 import "../../styles/register/register.css";
 import axios from "axios";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
-const API_BASE_URL = "http://localhost:4000/api";
-
-// Fetch current user profile
-const getUserProfile = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/users/profile`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`, // Assumes token is stored in localStorage
-      },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to fetch user profile"
-    );
-  }
-};
-
-// Update user profile
-const updateUserProfile = async (data) => {
-  try {
-    const response = await axios.put(`${API_BASE_URL}/users/profile`, data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to update user profile"
-    );
-  }
-};
-
-const useToast = () => {
-  return {
-    toast: ({ title, description, variant }) => {
-      console.log(`Toast: ${title} - ${description} ${variant || ""}`);
-    },
-  };
-};
+const API_BASE_URL = "http://localhost:4000/api/admin";
 
 const EditProfileSetting = () => {
   const [formData, setFormData] = useState({
@@ -62,33 +18,38 @@ const EditProfileSetting = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
+  const [error, setError] = useState(null);
+  const { user } = useAuthContext();
 
   // Fetch user profile on mount
   useEffect(() => {
     const fetchProfile = async () => {
       setIsLoading(true);
       try {
-        const profile = await getUserProfile();
+        if (!user?.token) {
+          throw new Error("No authentication token available");
+        }
+        const response = await axios.get(`${API_BASE_URL}/users/profile`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
         setFormData({
-          name: profile.name || "",
-          email: profile.email || "",
-          phone: profile.phone || "",
+          name: response.data.name || "",
+          email: response.data.email || "",
+          phone: response.data.phone || "",
           password: "", // Password is not pre-filled for security
         });
       } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Error fetching profile",
-          description:
-            error instanceof Error ? error.message : "An unknown error occurred.",
-        });
+        setError(
+          error.response?.data?.message || "Failed to fetch user profile"
+        );
       } finally {
         setIsLoading(false);
       }
     };
     fetchProfile();
-  }, []);
+  }, [user]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -97,8 +58,11 @@ const EditProfileSetting = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
     try {
-      // Only send fields that have values (exclude empty password if unchanged)
+      if (!user?.token) {
+        throw new Error("No authentication token available");
+      }
       const updateData = {
         name: formData.name,
         email: formData.email,
@@ -107,18 +71,15 @@ const EditProfileSetting = () => {
       if (formData.password) {
         updateData.password = formData.password;
       }
-      await updateUserProfile(updateData);
-      toast({
-        title: "Profile Updated",
-        description: "Your profile has been updated successfully.",
+      await axios.put(`${API_BASE_URL}/users/profile`, updateData, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
       });
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error updating profile",
-        description:
-          error instanceof Error ? error.message : "Failed to update profile.",
-      });
+      setError(
+        error.response?.data?.message || "Failed to update user profile"
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -129,74 +90,77 @@ const EditProfileSetting = () => {
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <form className="register-form" onSubmit={handleSubmit}>
-          <div className="register-section">
-            <div className="section-title">
-              <FaUser />
-              <span>Personal Information</span>
+        <>
+          {error && <p className="error-message">{error}</p>}
+          <form className="register-form" onSubmit={handleSubmit}>
+            <div className="register-section">
+              <div className="section-title">
+                <FaUser />
+                <span>Personal Information</span>
+              </div>
+              <div className="form-group">
+                <label htmlFor="name">Full Name</label>
+                <input
+                  className="input-field-register"
+                  type="text"
+                  name="name"
+                  id="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email Address</label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="phone">Phone Number</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  id="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="name">Full Name</label>
-              <input
-                className="input-field-register"
-                type="text"
-                name="name"
-                id="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email Address</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="phone">Phone Number</label>
-              <input
-                type="tel"
-                name="phone"
-                id="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
 
-          <div className="register-section">
-            <div className="section-title">
-              <FaShieldAlt />
-              <span>Security</span>
+            <div className="register-section">
+              <div className="section-title">
+                <FaShieldAlt />
+                <span>Security</span>
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter new password (optional)"
+                />
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter new password (optional)"
-              />
-            </div>
-          </div>
 
-          <button
-            disabled={isSubmitting || isLoading}
-            className="btn-primary"
-            type="submit"
-          >
-            {isSubmitting ? "Saving..." : "Save Changes"}
-          </button>
-        </form>
+            <button
+              disabled={isSubmitting || isLoading}
+              className="btn-primary"
+              type="submit"
+            >
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </button>
+          </form>
+        </>
       )}
     </div>
   );
