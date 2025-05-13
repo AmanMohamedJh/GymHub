@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Apply authentication middleware to admin stats route
 // Uncomment the line below when you want to secure the endpoint
-// router.use(requireAuth);
+router.use(requireAuth);
 
 // Get admin dashboard statistics
 router.get("/", getStats);

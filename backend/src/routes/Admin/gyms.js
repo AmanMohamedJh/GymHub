@@ -5,7 +5,7 @@ const adminControllers = require("../../controller/Admin/index");
 const router = express.Router();
 
 // Apply authentication middleware to all admin routes
-// router.use(requireAuth);
+router.use(requireAuth);
 
 // Get all gyms with detailed information
 router.get("/", adminControllers.getGyms);
