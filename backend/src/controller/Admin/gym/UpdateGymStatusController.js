@@ -35,8 +35,7 @@ const updateGymStatus = async (req, res) => {
     // Update the gym status
     gym.status = status;
 
-    // Save the updated gym
-    const updatedGym = await gym.save();
+    await gym.save();
 
     // Return the updated gym status
     return res.status(200).json({

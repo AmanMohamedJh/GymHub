@@ -30,18 +30,11 @@ const getGyms = async (req, res) => {
         status: "active",
       });
 
-      // Format location
-      const location = gym.location
-        ? `${gym.location.street ? gym.location.street + ", " : ""}${
-            gym.location.city || ""
-          }${gym.location.district ? ", " + gym.location.district : ""}`
-        : "No location specified";
-
       // Add to results array
       gymsWithDetails.push({
         id: gym._id,
         name: gym.name,
-        location: location,
+        location: gym.location,
         status: gym.status,
         members: activeMembers,
         rating: rating,

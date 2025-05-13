@@ -57,19 +57,7 @@ const updateGymProfile = async (req, res) => {
       }
     }
 
-    // Save the updated gym
-    const updatedGym = await gym.save();
-
-    // Format location for response
-    const formattedLocation = updatedGym.location
-      ? `${
-          updatedGym.location.street ? updatedGym.location.street + ", " : ""
-        }${updatedGym.location.city || ""}${
-          updatedGym.location.district
-            ? ", " + updatedGym.location.district
-            : ""
-        }`
-      : "No location specified";
+    await gym.save();
 
     // Return the updated gym data
     return res.status(200).json({
