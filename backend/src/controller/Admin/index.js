@@ -14,6 +14,11 @@ const deleteTrainerController = require("./trainer/DeleteTrainerController");
 const getUserProfileController = require("./user/GetUserProfileController");
 const updateUserProfileController = require("./user/UpdateUserProfileController");
 const { getStats } = require("./stats/statsController");
+const {
+  getContactMessages,
+  deleteContactMessage,
+  replyToContactMessage,
+} = require("./contactus/ContactUsManagementController");
 
 module.exports = {
   getClientsController,
@@ -30,9 +35,12 @@ module.exports = {
   updateTrainerCertificationsController,
   updateTrainerStatusController,
   deleteTrainerController,
-
   getUserProfileController,
   updateUserProfileController,
 
   getStats,
+
+  getContactMessages,
+  deleteContactMessage,
+  replyToContactMessage,
 };

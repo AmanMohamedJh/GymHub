@@ -87,6 +87,7 @@ app.use("/api/admin/gyms", require("./src/routes/Admin/gyms"));
 app.use("/api/admin/trainers", require("./src/routes/Admin/trainers"));
 app.use("/api/admin/users", require("./src/routes/Admin/users"));
 app.use("/api/admin/stats", require("./src/routes/Admin/stats")); // New stats route for admin dashboard
+app.use("/api/admin", require("./src/routes/Admin/contactus")); // Contact us management route
 
 // Serve static files from the uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
