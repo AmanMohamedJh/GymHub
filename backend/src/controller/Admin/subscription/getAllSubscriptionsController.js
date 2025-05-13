@@ -3,7 +3,7 @@ const Subscription = require("../../../models/Subscription/SubscriptionModel");
 /**
  * Get all user subscriptions
  */
-exports.getAllSubscriptions = async (req, res) => {
+const getAllSubscriptions = async (req, res) => {
   try {
     const subscriptions = await Subscription.find().populate(
       "userId",
@@ -49,3 +49,5 @@ exports.getAllSubscriptions = async (req, res) => {
       .json({ message: "Error fetching subscriptions", error: error.message });
   }
 };
+
+module.exports = getAllSubscriptions;

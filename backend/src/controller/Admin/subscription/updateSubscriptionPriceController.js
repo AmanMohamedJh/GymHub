@@ -3,7 +3,7 @@ const Subscription = require("../../../models/Subscription/SubscriptionModel");
 /**
  * Update subscription price
  */
-exports.updateSubscriptionPrice = async (req, res) => {
+const updateSubscriptionPrice = async (req, res) => {
   try {
     const id = req.params.id;
     const { price } = req.body;
@@ -41,3 +41,5 @@ exports.updateSubscriptionPrice = async (req, res) => {
     });
   }
 };
+
+module.exports = updateSubscriptionPrice;

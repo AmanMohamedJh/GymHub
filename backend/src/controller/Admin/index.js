@@ -25,11 +25,6 @@ const {
   getSubscriptionPlans,
 } = require("./subscription/index");
 
-const {
-  getSubscriptionById,
-  updateSubscriptionStatus,
-} = require("./subscription/subscriptionController");
-
 module.exports = {
   getClientsController,
   updateClientProfileController,
@@ -54,9 +49,6 @@ module.exports = {
   replyToContactMessage,
 
   // Subscription controllers
-  getSubscriptionPlans,
   getAllSubscriptions,
-  getSubscriptionById,
   updateSubscriptionPrice,
-  updateSubscriptionStatus,
 };

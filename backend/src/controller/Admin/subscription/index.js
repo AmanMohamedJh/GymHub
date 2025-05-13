@@ -1,11 +1,7 @@
-const { getAllSubscriptions } = require("./getAllSubscriptionsController");
-const {
-  updateSubscriptionPrice,
-} = require("./updateSubscriptionPriceController");
-const { getSubscriptionPlans } = require("./getSubscriptionPlansController");
+const getAllSubscriptions = require("./getAllSubscriptionsController");
+const updateSubscriptionPrice = require("./updateSubscriptionPriceController");
 
 module.exports = {
   getAllSubscriptions,
   updateSubscriptionPrice,
-  getSubscriptionPlans,
 };
