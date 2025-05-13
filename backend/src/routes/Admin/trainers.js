@@ -19,9 +19,6 @@ router.put(
   adminControllers.updateTrainerCertificationsController
 );
 
-// Update trainer status (active/suspended)
-router.put("/:id/status", adminControllers.updateTrainerStatusController);
-
 // Delete a trainer
 router.delete("/:id", adminControllers.deleteTrainerController);
 
