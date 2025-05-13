@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useSendContact } from "../hooks/Contactus/useContactUs";
 import "./ContactUs.css";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import {
   FaPhone,
   FaEnvelope,
@@ -12,6 +15,15 @@ import {
   FaYoutube,
   FaClock,
 } from "react-icons/fa";
+
+// Fix Leaflet default icon issue
+// (same as RegisterGym.jsx)
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+  iconUrl: require("leaflet/dist/images/marker-icon.png"),
+  shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+});
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -232,6 +244,49 @@ const ContactUs = () => {
               You can manage your membership through your account dashboard or
               contact our support team for assistance.
             </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Leaflet Map Section */}
+      <div
+        style={{
+          background: "#fff",
+          paddingBottom: 40,
+          paddingTop: 0,
+          marginBottom: "-20px",
+        }}
+      >
+        <div
+          className="contact-map-section"
+          style={{
+            margin: "40px auto 0 auto",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: 900,
+              height: 400,
+              borderRadius: 12,
+              overflow: "hidden",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+            }}
+          >
+            <MapContainer
+              center={[7.8731, 80.7718]}
+              zoom={7}
+              style={{ width: "100%", height: "100%" }}
+              scrollWheelZoom={false}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={[7.8731, 80.7718]} />
+            </MapContainer>
           </div>
         </div>
       </div>
