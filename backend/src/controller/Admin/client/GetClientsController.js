@@ -84,13 +84,13 @@ const getClientsController = async (req, res) => {
 
       // Map client data to required format
       clientsData.push({
-        id: user._id,
+        id: clientProfile._id,
         name: user.name,
         email: user.email,
         membershipType: subscription ? subscription.planType : "Free",
         gym: gymName,
         joinDate: formatDate(clientProfile.bio?.joinedIn),
-        status: gymRegistration ? gymRegistration.status : "inactive",
+        status: clientProfile.status,
         lastActive: formatDate(lastActive),
         paymentStatus: subscription
           ? subscription.status === "Active"

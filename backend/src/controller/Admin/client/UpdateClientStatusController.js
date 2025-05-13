@@ -30,25 +30,9 @@ const updateClientStatusController = async (req, res) => {
       });
     }
 
-    // Verify user exists
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "Client not found",
-      });
-    }
-
-    if (user.role !== "client") {
-      return res.status(400).json({
-        success: false,
-        message: "User is not a client",
-      });
-    }
-
     // Find and update the client's status
     const client = await Client.findOneAndUpdate(
-      { userId: id },
+      { _id: id },
       { status: status },
       { new: true }
     );
