@@ -18,7 +18,7 @@ const {
   getContactMessages,
   deleteContactMessage,
   replyToContactMessage,
-} = require("./contactus/ContactUsManagementController");
+} = require("./contactus/index");
 
 module.exports = {
   getClientsController,
