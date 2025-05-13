@@ -1,4 +1,4 @@
-const TrainerRegistration = require('../../models/Trainer/TrainerRegistration');
+const TrainerRegistration = require("../../models/Trainer/TrainerRegistration");
 
 // Get all trainers
 exports.getAllTrainers = async (req, res) => {
@@ -16,16 +16,24 @@ exports.registerTrainer = async (req, res) => {
     const userId = req.user._id;
     const existing = await TrainerRegistration.findOne({ user: userId });
     if (existing) {
-      return res.status(400).json({ error: 'Trainer already registered.' });
+      return res.status(400).json({ error: "Trainer already registered." });
     }
-    const { name, email, phone, gender, trainingType, address, age, yearsOfExperience } = req.body;
+    const {
+      name,
+      email,
+      phone,
+      gender,
+      trainingType,
+      address,
+      age,
+      yearsOfExperience,
+    } = req.body;
     if (yearsOfExperience === undefined || yearsOfExperience === null) {
-      return res.status(400).json({ error: 'Years of experience is required.' });
+      return res
+        .status(400)
+        .json({ error: "Years of experience is required." });
     }
-    let certificateUrl = '';
-    if (req.file) {
-      certificateUrl = `/uploads/Trainer_certificates/${req.file.filename}`;
-    }
+
     const trainer = new TrainerRegistration({
       user: userId,
       name,
@@ -36,7 +44,6 @@ exports.registerTrainer = async (req, res) => {
       address,
       age,
       yearsOfExperience,
-      certificateUrl
     });
     await trainer.save();
     res.status(201).json(trainer);
@@ -51,15 +58,13 @@ exports.getMyTrainerRegistration = async (req, res) => {
     const userId = req.user._id;
     const trainer = await TrainerRegistration.findOne({ user: userId });
     if (!trainer) {
-      return res.status(404).json({ error: 'Trainer registration not found.' });
+      return res.status(404).json({ error: "Trainer registration not found." });
     }
     res.json(trainer);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
-
 
 // Update current user's trainer registration
 exports.updateMyTrainerRegistration = async (req, res) => {
@@ -71,11 +76,6 @@ exports.updateMyTrainerRegistration = async (req, res) => {
     delete updateFields.name;
     delete updateFields.email;
 
-    // Handle certificate file upload
-    if (req.file) {
-      updateFields.certificateUrl = `/uploads/Trainer_certificates/${req.file.filename}`;
-    }
-
     const updated = await TrainerRegistration.findOneAndUpdate(
       { user: userId },
       { $set: updateFields },
@@ -83,7 +83,7 @@ exports.updateMyTrainerRegistration = async (req, res) => {
     );
 
     if (!updated) {
-      return res.status(404).json({ error: 'Trainer registration not found.' });
+      return res.status(404).json({ error: "Trainer registration not found." });
     }
 
     res.json(updated);
@@ -96,9 +96,11 @@ exports.updateMyTrainerRegistration = async (req, res) => {
 exports.getTrainerRegistrationByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
-    const trainer = await TrainerRegistration.findOne({ user: userId }).populate('user', 'name email');
+    const trainer = await TrainerRegistration.findOne({
+      user: userId,
+    }).populate("user", "name email");
     if (!trainer) {
-      return res.status(404).json({ error: 'Trainer registration not found.' });
+      return res.status(404).json({ error: "Trainer registration not found." });
     }
     res.json(trainer);
   } catch (err) {
@@ -110,11 +112,13 @@ exports.getTrainerRegistrationByUserId = async (req, res) => {
 exports.deleteMyTrainerRegistration = async (req, res) => {
   try {
     const userId = req.user._id;
-    const deleted = await TrainerRegistration.findOneAndDelete({ user: userId });
+    const deleted = await TrainerRegistration.findOneAndDelete({
+      user: userId,
+    });
     if (!deleted) {
-      return res.status(404).json({ error: 'Trainer registration not found.' });
+      return res.status(404).json({ error: "Trainer registration not found." });
     }
-    res.json({ message: 'Trainer registration deleted.' });
+    res.json({ message: "Trainer registration deleted." });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

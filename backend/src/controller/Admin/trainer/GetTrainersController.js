@@ -42,13 +42,6 @@ const getTrainersController = async (req, res) => {
       // Get gym affiliation (if any)
       let gym = "Independent";
 
-      // Get certification list from the certificate URL or use default values
-      let certifications = ["ACE Certified"];
-      if (trainer.trainingType) {
-        // Add training type as certification for demonstration
-        certifications.push(`${trainer.trainingType} Specialist`);
-      }
-
       // Format experience
       const experience = `${trainer.yearsOfExperience} years`;
 
@@ -61,14 +54,9 @@ const getTrainersController = async (req, res) => {
         specialization: trainer.trainingType,
         experience: experience,
         gym: gym,
-        status: userDetails
-          ? userDetails.isEmailVerified
-            ? "active"
-            : "pending"
-          : "pending",
+        status: trainer.status,
         rating: rating,
         clientCount: clientCount,
-        certifications: certifications,
       });
     }
 

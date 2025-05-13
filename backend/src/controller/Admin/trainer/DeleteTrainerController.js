@@ -50,26 +50,6 @@ const deleteTrainerController = async (req, res) => {
         { session }
       );
 
-      // 4. Delete certificate file if it exists
-      if (trainer.certificateUrl) {
-        try {
-          const certificatePath = path.join(
-            __dirname,
-            "../../../../",
-            trainer.certificateUrl
-          );
-          if (fs.existsSync(certificatePath)) {
-            fs.unlinkSync(certificatePath);
-          }
-        } catch (err) {
-          console.error(
-            `Failed to delete certificate: ${trainer.certificateUrl}`,
-            err
-          );
-          // Continue with deletion even if file deletion fails
-        }
-      }
-
       // 5. Delete trainer registration
       await TrainerRegistration.findByIdAndDelete(id, { session });
 
