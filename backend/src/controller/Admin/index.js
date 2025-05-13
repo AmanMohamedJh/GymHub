@@ -7,8 +7,7 @@ const updateGymProfile = require("./gym/UpdateGymProfileController");
 const updateGymStatus = require("./gym/UpdateGymStatusController");
 const deleteGym = require("./gym/DeleteGymController");
 const getTrainersController = require("./trainer/GetTrainersController");
-const updateTrainerProfileController = require("./trainer/UpdateTrainerProfileController");
-const updateTrainerCertificationsController = require("./trainer/UpdateTrainerCertificationsController");
+
 const updateTrainerStatusController = require("./trainer/UpdateTrainerStatusController");
 const deleteTrainerController = require("./trainer/DeleteTrainerController");
 const getUserProfileController = require("./user/GetUserProfileController");
@@ -36,8 +35,6 @@ module.exports = {
   updateGymStatus,
   deleteGym,
   getTrainersController,
-  updateTrainerProfileController,
-  updateTrainerCertificationsController,
   updateTrainerStatusController,
   deleteTrainerController,
   getUserProfileController,
