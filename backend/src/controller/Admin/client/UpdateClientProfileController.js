@@ -1,5 +1,6 @@
 const Client = require("../../../models/Client/clientModel");
 const User = require("../../../models/userModel");
+const Subscription = require("../../../models/Subscription/SubscriptionModel");
 
 /**
  * Controller to update a client's profile information
@@ -46,19 +47,70 @@ const updateClientProfileController = async (req, res) => {
         success: false,
         message: "Client profile not found",
       });
-    }
-
-    // Update client's name if provided
+    } // Update client's name if provided
     if (name) {
       clientProfile.name = name;
       await clientProfile.save();
     }
 
-    // For membership type, we would typically update this in a membership or subscription model
-    // This is just a placeholder - you may need to adjust based on your actual data model
+    // Update membership type in the Subscription model
     if (membershipType) {
-      // Update membership type logic would go here
-      // Example: await Subscription.findOneAndUpdate({ userId: id }, { type: membershipType }, { new: true });
+      // Check if the provided membership type is valid
+      if (!["Free", "Monthly", "Yearly"].includes(membershipType)) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Invalid membership type. Must be 'Free', 'Monthly', or 'Yearly'",
+        });
+      }
+
+      // Find user's current subscription
+      const currentSubscription = await Subscription.findOne({
+        userId: id,
+        status: "Active",
+      });
+
+      if (currentSubscription) {
+        // Update existing subscription
+        currentSubscription.planType = membershipType;
+
+        // If changing to a different plan type, update the end date accordingly
+        if (currentSubscription.planType !== membershipType) {
+          const endDate = new Date();
+          if (membershipType === "Monthly") {
+            endDate.setMonth(endDate.getMonth() + 1);
+          } else if (membershipType === "Yearly") {
+            endDate.setMonth(endDate.getMonth() + 12);
+          }
+          currentSubscription.endDate = endDate;
+        }
+
+        await currentSubscription.save();
+      } else {
+        // Create a new subscription if none exists
+        const endDate = new Date();
+        if (membershipType === "Monthly") {
+          endDate.setMonth(endDate.getMonth() + 1);
+        } else if (membershipType === "Yearly") {
+          endDate.setMonth(endDate.getMonth() + 12);
+        } else {
+          // Free plan for 1 month by default          endDate.setMonth(endDate.getMonth() + 1);
+        }
+
+        await Subscription.create({
+          userId: id,
+          planType: membershipType,
+          status: "Active",
+          paymentId: `admin_update_${Date.now()}`,
+          startDate: new Date(),
+          endDate: endDate,
+        });
+      }
+
+      // Update user's subscription status
+      await User.findByIdAndUpdate(id, {
+        hasActiveSubscription: membershipType !== "Free",
+      });
     }
 
     return res.status(200).json({
