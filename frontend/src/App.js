@@ -82,6 +82,7 @@ import FailurePage from "./pages/Subscription/FailurePage";
 import MySubscription from "./pages/Subscription/MySubscription";
 import EditAboutUs from "./pages/Admin/EditAboutUs.jsx";
 import EditProfileSetting from "./pages/Admin/EditProfileSetting.jsx";
+import EditSubscription from "./pages/Admin/Subscription.jsx";
 
 function App() {
   const { user } = useAuthContext();
@@ -524,6 +525,10 @@ function App() {
                   <Route
                     path="edit-about-us"
                     element={<EditAboutUs />}
+                  />
+                   <Route
+                    path="edit-subscription"
+                    element={<EditSubscription />}
                   />
                   <Route
                     path="profile-settings"

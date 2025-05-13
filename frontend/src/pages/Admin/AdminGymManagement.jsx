@@ -13,90 +13,9 @@ import {
 } from "react-icons/fa";
 import "./Styles/AdminGymManagement.css";
 import axios from "axios";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
-const API_BASE_URL = "http://localhost:4000/api";
-
-// Fetch all gyms
-const getGyms = async () => {
-  try {
-    // const response = await axios.get(`${API_BASE_URL}/gyms`);
-    // return response.data;
-
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          {
-            id: 1,
-            name: "Gym A",
-            location: "Location A",
-            status: "active",
-            members: 100,
-            rating: 4.5,
-          },
-          {
-            id: 2,
-            name: "Gym B",
-            location: "Location B",
-            status: "inactive",
-            members: 50,
-            rating: 3.8,
-          },
-          {
-            id: 3,
-            name: "Gym C",
-            location: "Location C",
-            status: "pending",
-            members: 75,
-            rating: 4.0,
-          },
-        ]);
-      },1000)
-    });
-
-
-  } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to fetch gyms");
-  }
-};
-
-// Update a gym's profile (name, location)
-const updateGymProfile = async (id, data) => {
-  try {
-    const response = await axios.put(
-      `${API_BASE_URL}/gyms/${id}/profile`,
-      data
-    );
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to update gym profile"
-    );
-  }
-};
-
-// Update a gym's status
-const updateGymStatus = async (id, status) => {
-  try {
-    const response = await axios.put(`${API_BASE_URL}/gyms/${id}/status`, {
-      status,
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to update gym status"
-    );
-  }
-};
-
-// Delete a gym
-const deleteGym = async (id) => {
-  try {
-    const response = await axios.delete(`${API_BASE_URL}/gyms/${id}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to delete gym");
-  }
-};
+const API_BASE_URL = "http://localhost:4000/api/admin";
 
 const useToast = () => {
   return {
@@ -116,12 +35,88 @@ const AdminGymManagement = () => {
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
   const [editProfileFormData, setEditProfileFormData] = useState({
     name: "",
-    location: "",
+    location: {
+      street: "",
+      city: "",
+      district: "",
+      coordinates: {
+        lat: "",
+        lng: "",
+      },
+    },
   });
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
 
   const { toast } = useToast();
+  const { user } = useAuthContext();
+
+  // Fetch all gyms
+  const getGyms = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/gyms`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      console.log(response.data);
+      return response.data;
+
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Failed to fetch gyms");
+    }
+  };
+
+  // Update a gym's profile (name, location)
+  const updateGymProfile = async (id, data) => {
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/gyms/${id}/profile`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to update gym profile"
+      );
+    }
+  };
+
+  // Update a gym's status
+  const updateGymStatus = async (id, status) => {
+    try {
+      const response = await axios.put(`${API_BASE_URL}/gyms/${id}/status`, {
+        status,
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to update gym status"
+      );
+    }
+  };
+
+  // Delete a gym
+  const deleteGym = async (id) => {
+    try {
+      const response = await axios.delete(`${API_BASE_URL}/gyms/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Failed to delete gym");
+    }
+  };
 
   const fetchGymsData = async () => {
     setIsLoading(true);
@@ -148,7 +143,15 @@ const AdminGymManagement = () => {
     setSelectedGym(gym);
     setEditProfileFormData({
       name: gym.name,
-      location: gym.location,
+      location: {
+        street: gym.location?.street,
+        city: gym.location?.city,
+        district: gym.location?.district,
+        coordinates: {
+          lat: gym.location.coordinates?.lat,
+          lng: gym.location.coordinates?.lng,
+        },
+      },
     });
     setIsEditProfileModalOpen(true);
   };
@@ -230,7 +233,7 @@ const AdminGymManagement = () => {
     const headers = ["Name", "Location", "Status", "Members", "Rating"];
     const rows = gyms.map((gym) => [
       gym.name,
-      gym.location,
+      gym.location?.city,
       gym.status,
       gym.members,
       gym.rating,
@@ -296,9 +299,9 @@ const AdminGymManagement = () => {
               onChange={(e) => setFilterStatus(e.target.value)}
             >
               <option value="all">All Status</option>
-              <option value="active">Active</option>
               <option value="pending">Pending</option>
-              <option value="inactive">Inactive</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
             </select>
           </div>
           <div className="filter-options">
@@ -336,7 +339,7 @@ const AdminGymManagement = () => {
                 {filteredGyms.map((gym) => (
                   <tr key={gym.id}>
                     <td>{gym.name}</td>
-                    <td>{gym.location}</td>
+                    <td>{gym.location.city}</td>
                     <td>
                       <span
                         className={`status-badge ${getStatusColor(gym.status)}`}
@@ -416,7 +419,7 @@ const AdminGymManagement = () => {
                 <input
                   type="text"
                   name="location"
-                  value={editProfileFormData.location}
+                  value={editProfileFormData.location.city}
                   onChange={handleEditProfileFormChange}
                   required
                 />

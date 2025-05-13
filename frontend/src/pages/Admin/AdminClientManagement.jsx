@@ -13,163 +13,9 @@ import {
 } from "react-icons/fa";
 import "./Styles/AdminClientManagement.css";
 import axios from "axios";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
-const API_BASE_URL = "http://localhost:4000/api";
-
-// Fetch all clients
-const getClients = async () => {
-  try {
-    // const response = await axios.get(`${API_BASE_URL}/clients`);
-    // return response.data;
-
-    // return fake primise data for testing
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          {
-            id: 1,
-            name: "Sarah Johnson",
-            email: "sarah.johnson@example.com",
-            membershipType: "Premium",
-            gym: "FitLife Gym",
-            joinDate: "2025-01-15",
-            status: "Active",
-            lastActive: "2025-05-10",
-            paymentStatus: "Paid",
-            attendance: 85,
-          },
-          {
-            id: 2,
-            name: "Mike Wilson",
-            email: "mike.wilson@example.com",
-            membershipType: "Basic",
-            gym: "Power House",
-            joinDate: "2025-02-01",
-            status: "Inactive",
-            lastActive: "2025-03-10",
-            paymentStatus: "Overdue",
-            attendance: 45,
-          },
-          {
-            id: 3,
-            name: "Emily Davis",
-            email: "emily.davis@example.com",
-            membershipType: "Premium",
-            gym: "Core Fitness",
-            joinDate: "2025-03-20",
-            status: "Active",
-            lastActive: "2025-05-11",
-            paymentStatus: "Paid",
-            attendance: 92,
-          },
-          {
-            id: 4,
-            name: "James Brown",
-            email: "james.brown@example.com",
-            membershipType: "Basic",
-            gym: "Iron Works",
-            joinDate: "2025-01-10",
-            status: "Inactive",
-            lastActive: "2025-04-15",
-            paymentStatus: "Pending",
-            attendance: 60,
-          },
-          {
-            id: 5,
-            name: "Lisa Taylor",
-            email: "lisa.taylor@example.com",
-            membershipType: "Premium",
-            gym: "FitLife Gym",
-            joinDate: "2025-04-05",
-            status: "Active",
-            lastActive: "2025-05-12",
-            paymentStatus: "Paid",
-            attendance: 78,
-          },
-          {
-            id: 6,
-            name: "David Lee",
-            email: "david.lee@example.com",
-            membershipType: "Basic",
-            gym: "Power House",
-            joinDate: "2025-02-15",
-            status: "Active",
-            lastActive: "2025-05-09",
-            paymentStatus: "Overdue",
-            attendance: 55,
-          },
-          {
-            id: 7,
-            name: "Anna Martinez",
-            email: "anna.martinez@example.com",
-            membershipType: "Premium",
-            gym: "Core Fitness",
-            joinDate: "2025-03-01",
-            status: "Inactive",
-            lastActive: "2025-04-20",
-            paymentStatus: "Paid",
-            attendance: 65,
-          },
-          {
-            id: 8,
-            name: "Robert Clark",
-            email: "robert.clark@example.com",
-            membershipType: "Basic",
-            gym: "Iron Works",
-            joinDate: "2025-04-10",
-            status: "Active",
-            lastActive: "2025-05-08",
-            paymentStatus: "Pending",
-            attendance: 70,
-          },
-        ]);
-      }, 1000);
-    });
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to fetch trainers"
-    );
-  }
-};
-
-// Update a client's profile (name, email, membershipType)
-const updateClientProfile = async (id, data) => {
-  try {
-    const response = await axios.put(
-      `${API_BASE_URL}/clients/${id}/profile`,
-      data
-    );
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to update client profile"
-    );
-  }
-};
-
-// Update a client's status
-const updateClientStatus = async (id, status) => {
-  try {
-    const response = await axios.put(`${API_BASE_URL}/clients/${id}/status`, {
-      status,
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to update client status"
-    );
-  }
-};
-
-// Delete a client
-const deleteClient = async (id) => {
-  try {
-    const response = await axios.delete(`${API_BASE_URL}/clients/${id}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to delete client");
-  }
-};
+const API_BASE_URL = "http://localhost:4000/api/admin";
 
 const useToast = () => {
   return {
@@ -178,7 +24,6 @@ const useToast = () => {
     },
   };
 };
-
 const AdminClientManagement = () => {
   const [clients, setClients] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -196,6 +41,78 @@ const AdminClientManagement = () => {
     useState(false);
 
   const { toast } = useToast();
+  const { user } = useAuthContext();
+
+  const getClients = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/clients`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch trainers"
+      );
+    }
+  };
+
+  // Update a client's profile
+  const updateClientProfile = async (id, data) => {
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/clients/${id}/profile`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to update client profile"
+      );
+    }
+  };
+
+  // Update a client's status
+  const updateClientStatus = async (id, status) => {
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/clients/${id}/status`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to update client status"
+      );
+    }
+  };
+
+  // Delete a client
+  const deleteClient = async (id) => {
+    try {
+      const response = await axios.delete(`${API_BASE_URL}/clients/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to delete client"
+      );
+    }
+  };
 
   const fetchClientsData = async () => {
     setIsLoading(true);
@@ -213,6 +130,7 @@ const AdminClientManagement = () => {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     fetchClientsData();
   }, []);
