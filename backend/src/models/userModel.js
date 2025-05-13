@@ -43,6 +43,12 @@ const userSchema = new Schema({
     type: Date,
     default: null,
   },
+  status: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "approved",
+    required: true,
+  },
 });
 
 //// Static signup method needs to be defined before exporting the model to ensure it is part of the schema(Not an AI generated comment)

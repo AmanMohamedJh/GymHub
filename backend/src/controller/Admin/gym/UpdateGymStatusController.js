@@ -19,10 +19,10 @@ const updateGymStatus = async (req, res) => {
     }
 
     // Validate status value
-    if (status !== "active" && status !== "inactive") {
-      return res
-        .status(400)
-        .json({ message: "Status must be either 'active' or 'inactive'" });
+    if (!["pending", "approved", "rejected"].includes(status)) {
+      return res.status(400).json({
+        message: "Status must be either 'pending', 'approved', or 'rejected'",
+      });
     }
 
     // Find the gym by id

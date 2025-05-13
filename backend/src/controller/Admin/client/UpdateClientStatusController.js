@@ -1,9 +1,9 @@
 const User = require("../../../models/userModel");
-const ClientGymRegistration = require("../../../models/Gym_Owner/ClientGymRegistration");
+const Client = require("../../../models/Client/clientModel");
 
 /**
- * Controller to update a client's status (Active/Inactive)
- * Updates the status in the ClientGymRegistration model
+ * Controller to update a client's status (pending/approved/rejected)
+ * Updates the status in the Client model
  */
 const updateClientStatusController = async (req, res) => {
   try {
@@ -19,10 +19,14 @@ const updateClientStatusController = async (req, res) => {
     }
 
     // Validate status value
-    if (status !== "active" && status !== "inactive") {
+    if (
+      status !== "pending" &&
+      status !== "approved" &&
+      status !== "rejected"
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Status must be either 'active' or 'inactive'",
+        message: "Status must be either 'pending', 'approved', or 'rejected'",
       });
     }
 
@@ -42,17 +46,17 @@ const updateClientStatusController = async (req, res) => {
       });
     }
 
-    // Find and update the client's gym registration status
-    const clientRegistration = await ClientGymRegistration.findOneAndUpdate(
-      { clientId: id },
-      { status: status.toLowerCase() },
+    // Find and update the client's status
+    const client = await Client.findOneAndUpdate(
+      { userId: id },
+      { status: status },
       { new: true }
     );
 
-    if (!clientRegistration) {
+    if (!client) {
       return res.status(404).json({
         success: false,
-        message: "Client registration not found",
+        message: "Client profile not found",
       });
     }
 
@@ -61,7 +65,7 @@ const updateClientStatusController = async (req, res) => {
       message: `Client status updated to ${status} successfully`,
       data: {
         clientId: id,
-        status: clientRegistration.status,
+        status: client.status,
       },
     });
   } catch (error) {

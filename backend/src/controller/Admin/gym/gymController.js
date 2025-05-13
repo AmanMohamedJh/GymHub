@@ -27,7 +27,7 @@ const getGyms = async (req, res) => {
       // Count members from ClientGymRegistration
       const activeMembers = await ClientGymRegistration.countDocuments({
         gymId: gym._id,
-        status: "active",
+        status: "approved",
       });
 
       // Add to results array

@@ -19,6 +19,9 @@ router.put(
   adminControllers.updateTrainerCertificationsController
 );
 
+// Update trainer status (pending/approved/rejected)
+router.put("/:id/status", adminControllers.updateTrainerStatusController);
+
 // Delete a trainer
 router.delete("/:id", adminControllers.deleteTrainerController);
 
