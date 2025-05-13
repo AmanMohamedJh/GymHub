@@ -81,6 +81,9 @@ app.use("/api/clientTrainerSessions", clientTrainerSessionsRoutes);
 app.use("/api/trainer/progress", progressRoutes);
 app.use("/api/trainer/tips", trainerTipsRoutes);
 
+// Admin routes
+app.use("/api/admin/clients", require("./src/routes/Admin/clients"));
+
 // Serve static files from the uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
