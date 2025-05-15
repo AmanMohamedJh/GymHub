@@ -1,0 +1,148 @@
+/* Modal overlay */
+.seegymdetails-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px); /* add blur effect */
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start; /* align to top for tall modals */
+  justify-content: center;
+  overflow-y: auto;
+  padding-top: 36px; /* add spacing from top */
+  box-sizing: border-box;
+}
+
+/* Modal box */
+.seegymdetails-modal {
+  background: #fff;
+  border-radius: 18px;
+  max-width: 950px;
+  width: 99vw;
+  min-width: 360px;
+  padding: 48px 52px 38px 52px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.19);
+  position: relative;
+  margin: 0 10px;
+  font-family: inherit;
+  overflow-y: auto;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.seegymdetails-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 1.7rem;
+  color: #1976d2;
+  cursor: pointer;
+}
+
+.seegymdetails-modal-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #e53935;
+  margin-bottom: 28px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.seegymdetails-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.seegymdetails-modal-section {
+  margin-bottom: 22px;
+}
+
+.seegymdetails-modal-label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.seegymdetails-modal .seegymdetails-modal-input,
+.seegymdetails-modal .seegymdetails-modal-select {
+  background: transparent !important;
+  color: #222 !important;
+  padding: 12px 16px !important;
+  border: 1.5px solid #d1e0f7 !important;
+  border-radius: 8px !important;
+  font-size: 1rem;
+  margin-bottom: 0px;
+  transition: border 0.2s, background 0.2s;
+  outline: none;
+  box-shadow: none !important;
+}
+
+.seegymdetails-modal .seegymdetails-modal-input::placeholder {
+  color: #888 !important;
+  opacity: 1;
+}
+
+.seegymdetails-modal-input::placeholder {
+  color: #888;
+  opacity: 1;
+}
+.seegymdetails-modal-input:focus,
+.seegymdetails-modal-select:focus {
+  border: 1.5px solid #1976d2;
+}
+
+.seegymdetails-modal-row {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 12px;
+}
+.seegymdetails-modal-row > div {
+  flex: 1;
+}
+
+.seegymdetails-modal-submit {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.seegymdetails-modal-submit:hover {
+  background: #b71c1c;
+}
+
+/* Prevent page scroll when modal is open */
+body.seegymdetails-modal-open {
+  overflow: hidden !important;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .seegymdetails-modal {
+    max-width: 99vw;
+    padding: 20px 2vw 18px 2vw;
+  }
+  .seegymdetails-modal-row {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .seegymdetails-modal {
+    max-width: 99vw;
+    padding: 20px 2vw 18px 2vw;
+  }
+}

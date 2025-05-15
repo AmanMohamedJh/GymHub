@@ -1,0 +1,672 @@
+/* Browse Gyms Page Styles */
+.browse-gyms-container {
+  max-width: 1200px;
+  margin: auto;
+  margin-top: 7%;
+  margin-bottom: 3%;
+  padding: 2rem;
+  background: rgba(30, 30, 30, 0.38);
+  /* dark glassy effect */
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(13px);
+  -webkit-backdrop-filter: blur(13px);
+  border: 1.5px solid rgba(255, 255, 255, 0.13);
+  transition: background 0.2s;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.filters-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 1rem;
+}
+
+.search-bar {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #e74c3c;
+  background: white;
+  color: #333;
+  width: 70%;
+}
+
+.filter-dropdown {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #e74c3c;
+  background: white;
+  color: #333;
+  width: 25%;
+}
+
+.filter-dropdown option:hover {
+  background-color: #e74c3c;
+}
+
+.gyms-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.gym-card {
+  background: white;
+  color: #333;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  width: 280px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gym-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.gym-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.gym-location,
+.gym-type {
+  font-size: 1.1rem;
+  color: rgba(62, 50, 50, 0.704);
+}
+
+.btn-view {
+  background: #e74c3c;
+  color: #f0f0f0;
+  border: none;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.btn-view:hover {
+  background: #c0392b;
+}
+
+/* BrowseGyms List Card Redesign */
+.browsegyms-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 48px;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+}
+
+.browsegyms-card {
+  flex: 1 1 340px;
+  max-width: 390px;
+  min-width: 290px;
+  background: linear-gradient(180deg, #f9f9f9, #fff);
+  border: 1px solid #ddd;
+  border-radius: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.browsegyms-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
+  transform: translateY(-5px) scale(1.01);
+}
+
+.browsegyms-card-header {
+  background: #f8f8f8;
+  padding: 24px 32px 16px 32px;
+  border-bottom: 1px solid #eee;
+}
+
+.browsegyms-gym-name {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #e74c3c;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.browsegyms-card-body {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+}
+
+.browsegyms-gym-image {
+  width: 100%;
+  max-width: 340px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  border: 1px solid #eee;
+  background: #fafafa;
+}
+
+.browsegyms-info-row-clean {
+  width: 100%;
+  background: #fafbfc;
+  border-radius: 12px;
+  padding: 1.5rem 1.8rem 1.6rem 1.8rem;
+  margin: 1.6rem 0 2rem 0;
+  box-shadow: 0 1px 12px rgba(30,30,30,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.browsegyms-info-main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 3.5rem;
+  padding-bottom: 0.2rem;
+}
+
+.browsegyms-info-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.14rem;
+  padding: 0.2rem 0.4rem 0.2rem 0;
+}
+
+.facilities-row {
+  align-items: flex-start;
+  margin-top: 0.5rem;
+}
+
+.facilities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.7rem;
+  row-gap: 0.35rem;
+  margin-left: 0.7rem;
+  margin-top: 0.1rem;
+}
+
+.browsegyms-offers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 10px;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.browsegyms-offer-item {
+  background: #f8f8f8;
+  color: #e74c3c;
+  border: 1px solid #ffe6e0;
+  border-radius: 5px;
+  padding: 5px 12px;
+  font-size: 0.97rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+/* Search bar override for BrowseGyms */
+.browsegyms-search-bar {
+  width: 340px !important;
+  max-width: 98vw;
+  margin: 0 auto;
+  border: 1.5px solid #e74c3c;
+  border-radius: 8px;
+  font-size: 1.09rem;
+  padding: 12px 16px;
+  background: #fff;
+  color: #333;
+  outline: none;
+  box-shadow: none;
+  transition: border 0.18s;
+}
+
+.browsegyms-search-bar:focus {
+  border: 1.5px solid #b92d1f;
+}
+
+/* Browse Gyms Header Styles */
+.browsegyms-header-glass {
+  width: 100%;
+  margin: 0 auto 2.2rem auto;
+  padding: 2.8rem 0 1.3rem 0;
+  /* extra top padding for navbar space */
+  background: rgba(30, 30, 30, 0.39);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.13);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .browsegyms-header-glass {
+    padding: 2rem 0 1rem 0;
+  }
+}
+
+.browsegyms-main-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  margin-bottom: 0.3rem;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.19), 0 1.5px 0 #e74c3c;
+  background: linear-gradient(90deg, #e74c3c 0%, #fff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.browsegyms-main-sub {
+  font-size: 1.18rem;
+  color: #eaeaea;
+  font-weight: 500;
+  margin-bottom: 0;
+  text-align: center;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 900px) {
+  .browsegyms-list {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .browsegyms-card {
+    max-width: 98vw;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 600px) {
+  .browsegyms-card {
+    max-width: 98vw;
+    padding: 0;
+  }
+
+  .browsegyms-card-header,
+  .browsegyms-card-body {
+    padding-left: 8vw;
+    padding-right: 8vw;
+  }
+
+  .browsegyms-gym-image {
+    max-width: 90vw;
+    height: 150px;
+  }
+}
+
+@media (max-width: 600px) {
+  .browsegyms-main-title {
+    font-size: 1.45rem;
+  }
+
+  .browsegyms-main-sub {
+    font-size: 1rem;
+  }
+}
+
+/* Browse Trainers Page Styles */
+
+/* Advanced Search Bar Styles for BrowseGyms */
+.advanced-search-container {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.advanced-search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #f7f7f7;
+  border-radius: 2rem;
+  box-shadow: 0 4px 8px rgba(60, 30, 30, 0.10);
+  border: 3px solid #fff;
+  padding: 0.3rem 1.3rem 0.3rem 0.3rem;
+  width: 350px;
+  max-width: 95vw;
+  margin: 0 auto;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+
+.search-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  width: 2.1rem;
+  height: 2.1rem;
+  background: #e57373;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  box-shadow: 0 2px 6px rgba(231, 76, 60, 0.12);
+  position: relative;
+  overflow: visible;
+}
+
+.search-icon-wrapper::before {
+  content: '';
+  position: absolute;
+  left: -0.5rem;
+  top: 40%;
+  width: 1.6rem;
+  height: 1.3rem;
+  border-top-left-radius: 1.2rem;
+  border-bottom-left-radius: 1.2rem;
+  background: linear-gradient(120deg, rgba(0,0,0,0.16) 0%, rgba(0,0,0,0.03) 100%);
+  filter: blur(0.5px);
+  z-index: 0;
+}
+
+.advanced-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #444;
+  font-size: 1.13rem;
+  flex: 1;
+  padding: 0.8rem 0.5rem 0.8rem 0.5rem;
+  border-radius: 1.2rem;
+  box-shadow: none;
+}
+
+.advanced-search-input::placeholder {
+  color: #888;
+  opacity: 1;
+}
+
+
+.search-icon-wrapper {
+  display: flex;
+  align-items: center;
+  margin-right: 0.6rem;
+  color: #e74c3c;
+  font-size: 1.2rem;
+}
+
+.advanced-search-input {
+  border: none;
+  outline: none;
+  background: #fff !important;
+  color: #222 !important;
+  font-size: 1.09rem;
+  flex: 1;
+  padding: 0.6rem 0;
+}
+
+.advanced-search-bar:focus-within {
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.13);
+  border-color: #c0392b;
+}
+
+.clear-search-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  color: #e74c3c;
+  cursor: pointer;
+  margin-left: 0.3rem;
+  outline: none;
+  transition: color 0.18s;
+}
+.clear-search-btn:hover {
+  color: #c0392b;
+}
+
+.search-suggestions-list {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1.5px solid #e74c3c;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 0 4px 18px rgba(231, 76, 60, 0.09);
+  z-index: 10;
+  list-style: none;
+  margin: 0;
+  padding: 0.2rem 0;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.search-suggestion-item {
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  font-size: 1.03rem;
+  color: #222;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.15s, color 0.15s;
+}
+.search-suggestion-item:hover {
+  background: #ffe6e0;
+  color: #c0392b;
+}
+.suggestion-icon {
+  color: #e74c3c;
+  font-size: 1.1rem;
+}
+
+.advanced-filter-rating {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 1.5rem;
+  border: 1.5px solid #e74c3c;
+  background: #fff;
+  color: #222;
+  width: 160px;
+  min-width: 120px;
+  outline: none;
+  transition: border 0.18s;
+  margin-left: 0.5rem;
+}
+.advanced-filter-rating:focus {
+  border-color: #c0392b;
+}
+
+.advanced-nearby-btn {
+  background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 1.5rem;
+  padding: 0.6rem 1.6rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  box-shadow: 0 1px 8px rgba(231, 76, 60, 0.09);
+  transition: background 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.advanced-nearby-btn:hover {
+  background: linear-gradient(90deg, #c0392b 0%, #e74c3c 100%);
+  box-shadow: 0 2px 16px rgba(231, 76, 60, 0.13);
+}
+
+.browsegyms-details-btn {
+  width: 100%;
+  display: block;
+  background: #e74c3c;
+  color: #fff !important;
+  font-size: 1.13rem;
+  border: none;
+  border-radius: 10px;
+  padding: 0.95em 0;
+  font-weight: 700;
+  text-decoration: none !important;
+  margin-top: 1.6rem;
+  margin-bottom: 0.2rem;
+  box-shadow: 0 2px 10px rgba(231,76,60,0.13);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.18s, box-shadow 0.18s, color 0.18s;
+}
+
+.browsegyms-details-link {
+  text-decoration: none !important;
+  color: inherit !important;
+  display: block;
+  width: 100%;
+}
+
+.browsegyms-details-btn * {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.browsegyms-details-btn:hover,
+.browsegyms-details-btn:focus {
+  background: #c0392b;
+  color: #fff;
+  box-shadow: 0 6px 22px rgba(231,76,60,0.22);
+  outline: none;
+}
+
+.browse-trainers-container {
+  max-width: 1200px;
+  margin: auto;
+  margin-top: 7%;
+  margin-bottom: 3%;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  color: #333;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333
+}
+
+.search-filter-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  gap: 1rem;
+}
+
+.search-input {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #e74c3c;
+  background: white;
+  color: #333;
+  width: 70%;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #c0392b
+}
+
+.filter-rating {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #e74c3c;
+  background: white;
+  color: #333;
+  width: 25%;
+}
+
+.filter-dropdown option:hover {
+  background-color: #e74c3c;
+
+}
+
+.trainers-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.trainer-card {
+  background: white;
+  color: #333;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+  width: 280px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.trainer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.trainer-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.trainer-card p {
+  font-size: 1.1rem;
+  color: rgba(62, 50, 50, 0.704);
+}
+
+.btn-primary {
+  background: #e74c3c;
+  color: #f0f0f0;
+  border: none;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background: #c0392b;
+}

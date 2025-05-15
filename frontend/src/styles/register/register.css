@@ -1,0 +1,331 @@
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.register-page .navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.register-page .auth-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 90px 20px 20px;
+  position: relative;
+  background-image: url("../../Images/gym-background.jpg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+.register-page .auth-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.register-page .register-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.register-page .register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.register-page .register-header h2 {
+  color: #2d3748;
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.register-page .register-header p {
+  color: #718096;
+  font-size: 0.975rem;
+}
+
+.register-page .register-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.register-page .section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2d3748;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.register-page .section-title svg {
+  color: rgb(227, 73, 50);
+}
+
+.register-page .role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.register-page .role-option {
+  position: relative;
+  cursor: pointer;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  background: white;
+}
+
+.register-page .role-option.active {
+  border-color: rgb(227, 73, 50);
+  background: rgba(227, 73, 50, 0.05);
+}
+
+.register-page .role-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.register-page .role-content {
+  text-align: center;
+}
+
+.register-page .role-icon {
+  color: rgb(227, 73, 50);
+  margin-bottom: 1rem;
+}
+
+.register-page .role-title {
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.register-page .role-description {
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.register-page .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.register-page .form-group {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.register-page .form-group label {
+  display: block;
+  color: #4a5568;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.register-page .form-group input,
+.register-page .form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.975rem;
+  background-color: #ffffff;
+  color: #2d3748;
+}
+
+.register-page .form-group input:focus,
+.register-page .form-group select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.register-page .form-group input[name="adminKey"] {
+  border-color: #ddd;
+  background-color: #f8f9fa;
+  color: #2d3748;
+}
+
+.register-page .form-group input[type="tel"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.975rem;
+  background-color: #ffffff;
+  color: #2d3748;
+}
+.form-group .input-field-register {
+  width: auto;
+}
+.register-page .form-group input[type="tel"]:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.register-page .register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.register-page .register-form button[type="submit"] {
+  width: 100%;
+  padding: 1rem;
+  background-color: rgb(227, 73, 50);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.register-page .register-form button[type="submit"]:disabled {
+  background-color: #cbd5e0;
+  cursor: not-allowed;
+}
+
+.register-page .error-message {
+  background-color: #fff2f2;
+  border: 1px solid #ffcdd2;
+  color: #d32f2f;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  font-size: 0.9rem;
+}
+
+.register-page .error-message::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background-color: #d32f2f;
+}
+
+.register-page .terms-container {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f7fafc;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.register-page .terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.register-page .terms-checkbox input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid rgb(227, 73, 50);
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.register-page .terms-text {
+  font-size: 0.95rem;
+  color: #4a5568;
+}
+
+.register-page .terms-text a {
+  color: rgb(227, 73, 50);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-page .login-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.register-page .login-link p {
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+.register-page .login-link a {
+  color: rgb(227, 73, 50);
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+.register-page .admin-toggle {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.register-page .admin-button {
+  background: none;
+  border: 2px dashed #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.register-page .admin-button:hover {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.register-page .admin-button svg {
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .register-page .register-card {
+    padding: 1.5rem;
+  }
+
+  .register-page .role-grid {
+    grid-template-columns: 1fr;
+  }
+}

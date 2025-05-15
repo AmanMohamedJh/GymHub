@@ -1,0 +1,299 @@
+.admin-management-container {
+  padding: 2rem;
+}
+.management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #333;
+}
+
+.management-header h2 {
+  font-size: 1.8rem;
+  color: rgb(227, 73, 50);
+  margin: 0;
+  font-weight: 600;
+}
+/* Search and Filter Styles */
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-filter-container {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+
+.filter-options,
+
+.filter-box,
+.sort-box {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+.filter-options-button{
+  position: relative;
+  min-width: 100px; 
+  cursor: pointer;
+}
+.search-icon
+.filter-icon,
+.sort-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 1rem;
+}
+.export-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 1rem;
+}
+
+.admin-management-container input[type="text"],
+.admin-management-container select {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #222;
+  color: #f0f0f0;
+  font-size: 0.9rem;
+}
+
+.admin-management-container select {
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Stats Container */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #222;
+  padding: 1.5rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-title {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.stat-value {
+  color: #f0f0f0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  background: #222;
+  border-radius: 10px;
+  margin-top: 2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th {
+  background: #1a1a1a;
+  color: #f0f0f0;
+  font-weight: 600;
+  text-align: left;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+td {
+  padding: 1rem;
+  border-top: 1px solid #333;
+  color: #f0f0f0;
+}
+
+tr:hover td {
+  background: #2a2a2a;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status-active {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+}
+
+.status-inactive {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+.status-pending {
+  background: rgba(241, 196, 15, 0.2);
+  color: #f1c40f;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-approve,
+.btn-reject,
+.btn-edit,
+.btn-view,
+.btn-delete,
+.btn-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.btn-approve {
+  background: #2ecc71;
+}
+
+.btn-approve:hover {
+  background: #27ae60;
+}
+
+.btn-reject {
+  background: #e74c3c;
+}
+
+.btn-reject:hover {
+  background: #c0392b;
+}
+
+.btn-edit {
+  background: #3498db;
+}
+
+.btn-edit:hover {
+  background: #2980b9;
+}
+
+.btn-view {
+  background: #9b59b6;
+}
+
+.btn-view:hover {
+  background: #8e44ad;
+}
+
+.btn-delete {
+  background: #95a5a6;
+}
+
+.btn-delete:hover {
+  background: #7f8c8d;
+}
+
+.btn-export {
+  background: #f39c12;
+  padding: 0.75rem 1.5rem;
+}
+
+.btn-export:hover {
+  background: #d35400;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .search-filter-container {
+    flex-direction: column;
+  }
+.management-header{
+  display: flex;
+  flex-direction: column;
+}
+
+  .filter-options,
+  
+  .filter-box,
+  .sort-box {
+    width: 100%;
+  }
+  .filter-options-button{
+    width:100%;
+  }
+}
+@media (max-width: 768px) {
+  .admin-management-container {
+    padding: 1rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn-approve,
+  .btn-reject,
+  .btn-edit,
+  .btn-view,
+  .btn-delete {
+    width: 100%;
+    justify-content: center;
+  }
+
+  table {
+    font-size: 0.9rem;
+  }
+
+  td,
+  th {
+    padding: 0.75rem;
+  }
+
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,520 @@
+/* GymReviews Page Styles - Themed, Clean, Modular */
+.gymreviews-container {
+  max-width: 1100px;
+  margin: 2.5rem auto;
+  padding: 2.5rem 2rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 14px 0 rgba(31, 38, 135, 0.09);
+  color: #181818;
+}
+.gymreviews-header {
+  margin-bottom: 2.2rem;
+}
+.gymreviews-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.2rem;
+}
+.gymreviews-page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #181818;
+  margin: 0;
+}
+.gymreviews-write-btn {
+  background: #fff;
+  color: #e53935;
+  border: 2px solid #e53935;
+  border-radius: 7px;
+  font-size: 1.07rem;
+  font-weight: 600;
+  padding: 0.45rem 1.4rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  box-shadow: 0 2px 8px 0 rgba(229,57,53,0.08);
+}
+.gymreviews-write-btn:hover {
+  background: #e53935;
+  color: #fff;
+}
+.gymreviews-score-box {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.18rem;
+  margin-bottom: 1.2rem;
+}
+.gymreviews-score {
+  background: #e53935;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.2rem 0.85rem;
+  letter-spacing: 0.5px;
+}
+.gymreviews-status {
+  color: #e53935;
+  font-weight: 600;
+}
+.gymreviews-count {
+  color: #222;
+  font-size: 1.02rem;
+}
+.gymreviews-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 2.2rem;
+}
+.gymreviews-category {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 230px;
+}
+.gymreviews-category > span:first-child {
+  color: #181818 !important;
+  font-weight: 700;
+  min-width: 70px;
+  font-size: 1.06rem;
+  letter-spacing: 0.1px;
+}
+.gymreviews-bar-wrap {
+  flex: 1;
+  background: #f4eaea;
+  border-radius: 8px;
+  height: 9px;
+  margin: 0 0.5rem;
+  overflow: hidden;
+  min-width: 70px;
+  max-width: 120px;
+}
+.gymreviews-bar {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.4s;
+}
+.gymreviews-bar-low {
+  background: #b71c1c !important;
+}
+.gymreviews-cat-score {
+  font-weight: 600;
+  color: #e53935;
+  font-size: 1.05rem;
+  margin-left: 0.2rem;
+}
+.gymreviews-filters {
+  display: flex;
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+.gymreviews-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.gymreviews-filter-group label {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.1rem;
+}
+.gymreviews-filter-group select {
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #e53935;
+  background: #fff;
+  color: #e53935;
+  font-size: 1.04rem;
+}
+.gymreviews-list-section {
+  margin-top: 2.5rem;
+}
+.gymreviews-list-title {
+  font-size: 1.55rem;
+  font-weight: 700;
+  margin-bottom: 2.2rem;
+  color: #181818;
+}
+.gymreviews-review-row {
+  display: flex;
+  gap: 2.2rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1.5px solid #f4eaea;
+}
+.gymreviews-user-col {
+  min-width: 210px;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  align-items: flex-start;
+  font-size: 1.07rem;
+  color: #222;
+}
+.gymreviews-user-name {
+  font-weight: 700;
+  color: #e53935;
+  font-size: 1.09rem;
+}
+.gymreviews-user-email {
+  color: #1a1a1a;
+  font-size: 1.01rem;
+}
+.gymreviews-user-joined {
+  color: #444;
+  font-size: 0.99rem;
+}
+.gymreviews-review-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.gymreviews-review-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  font-size: 1.14rem;
+}
+.gymreviews-review-heading {
+  font-weight: 700;
+  color: #181818;
+  font-size: 1.18rem;
+}
+.gymreviews-review-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  color: #e53935;
+  font-size: 1.13rem;
+}
+.gymreviews-review-emoji {
+  font-size: 1.25rem;
+}
+.gymreviews-review-score {
+  color: #e53935;
+  font-weight: 700;
+  font-size: 1.13rem;
+}
+.gymreviews-review-date {
+  color: #888;
+  font-size: 1.01rem;
+}
+.gymreviews-review-content {
+  color: #222;
+  font-size: 1.09rem;
+  line-height: 1.7;
+}
+.gymreviews-owner-response {
+  margin-top: 0.7rem;
+  background: #fcf3f3;
+  border-left: 4px solid #e53935;
+  padding: 0.7rem 1.2rem;
+  border-radius: 7px;
+  color: #181818;
+  font-size: 1.01rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.gymreviews-owner-label {
+  font-weight: 600;
+  color: #e53935;
+  margin-right: 0.4rem;
+}
+.gymreviews-owner-text {
+  color: #222;
+}
+.review-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.18);
+  z-index: 1002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+}
+.review-modal {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13);
+  max-width: 540px;
+  min-width: 420px;
+  width: 95%;
+  margin: 2.5rem auto;
+  padding: 2.4rem 2.5rem 2.1rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.review-modal h2 {
+  color: #e53935;
+  margin-bottom: 0.8rem;
+  font-size: 1.45rem;
+  border-bottom: 2px solid #e53935;
+  padding-bottom: 0.5rem;
+  font-weight: 700;
+}
+.review-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.review-modal-label-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+.review-modal label {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.18rem;
+  font-size: 1.04rem;
+}
+.review-modal input[type="text"],
+.review-modal textarea {
+  width: 100%;
+  padding: 0.68rem 1.1rem;
+  border: 1.5px solid #e4e4e4;
+  border-radius: 7px;
+  font-size: 1.09rem;
+  margin-bottom: 0.6rem;
+  background: #fafbfc;
+  color: #222;
+  transition: border 0.2s;
+  outline: none;
+  resize: none;
+}
+.review-modal input[type="text"]:focus,
+.review-modal textarea:focus {
+  border: 1.5px solid #e53935;
+}
+.review-modal input[type="range"] {
+  width: 60%;
+  accent-color: #e53935;
+  margin: 0 0.7rem 0.7rem 0;
+  vertical-align: middle;
+}
+.review-modal-categories {
+  background: #f7f7f7;
+  border-radius: 10px;
+  padding: 1.2rem 1.3rem 1.1rem 1.3rem;
+  margin-top: 1.3rem;
+  margin-bottom: 0.7rem;
+  box-shadow: 0 2px 10px 0 rgba(229,57,53,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.review-modal-categories > span {
+  font-weight: 600;
+  color: #b71c1c;
+  margin-bottom: 0.6rem;
+}
+.review-modal-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 0.18rem;
+}
+.review-modal-cat-row label {
+  min-width: 110px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0.5rem 0 0;
+}
+.review-modal-cat-row input[type="range"] {
+  width: 120px;
+  margin: 0 0.5rem 0 0;
+}
+.review-modal-cat-row span {
+  color: #e53935;
+  font-weight: 600;
+  min-width: 20px;
+}
+.review-modal-actions {
+  display: flex;
+  gap: 1.1rem;
+  margin-top: 1.3rem;
+  justify-content: center;
+}
+.review-modal-submit, .review-modal-actions button[type="submit"] {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.52rem 1.35rem;
+  font-weight: 600;
+  font-size: 1.09rem;
+  cursor: pointer;
+  transition: background 0.18s;
+  box-shadow: 0 2px 8px rgba(229,57,53,0.09);
+}
+.review-modal-submit:hover, .review-modal-actions button[type="submit"]:hover {
+  background: #b71c1c;
+}
+.review-modal-actions button[type="button"] {
+  background: #fff;
+  color: #e53935;
+  border: 1.5px solid #e53935;
+  border-radius: 6px;
+  padding: 0.52rem 1.35rem;
+  font-weight: 500;
+  font-size: 1.09rem;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+  margin-left: 0.5rem;
+  box-shadow: 0 2px 8px rgba(229,57,53,0.06);
+}
+.review-modal-actions button[type="button"]:hover {
+  background: #f8f8f8;
+  color: #b71c1c;
+  border: 1.5px solid #b71c1c;
+}
+/* Style the Title input in the review modal to match the Description textarea */
+.review-modal-label-row input[name="heading"] {
+  height: 2.7em;
+  font-size: 1.1rem;
+  font-family: inherit;
+  padding: 0.7em 1em;
+  border-radius: 6px;
+  border: 1px solid #bdbdbd;
+  box-sizing: border-box;
+  margin-bottom: 1.2em;
+  width: 100%;
+  resize: none;
+}
+@media (max-width: 700px) {
+  .review-modal {
+    min-width: 98vw;
+    padding: 1.1rem 0.6rem 1.1rem 0.6rem;
+  }
+  .review-modal-categories {
+    padding: 0.7rem 0.6rem 0.7rem 0.6rem;
+  }
+}
+@media (max-width: 900px) {
+  .gymreviews-container {
+    padding: 1.2rem 0.4rem;
+  }
+  .gymreviews-review-row {
+    flex-direction: column;
+    gap: 1.1rem;
+    padding-bottom: 1.2rem;
+  }
+  .gymreviews-user-col {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+.not-allowed-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.18);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.not-allowed-modal {
+  background: #fff;
+  border-radius: 14px;
+  padding: 2.2rem 2.3rem 1.3rem 2.3rem;
+  min-width: 360px;
+  max-width: 98vw;
+  box-shadow: 0 2px 32px 0 rgba(31,38,135,0.18);
+  color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.not-allowed-modal h2, .not-allowed-modal h3 {
+  margin: 0 0 0.7rem 0;
+  font-size: 1.28rem;
+  font-weight: 700;
+  color: #e53935;
+}
+.not-allowed-modal label {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.2rem;
+  display: block;
+}
+.not-allowed-modal input[type="text"],
+.not-allowed-modal textarea {
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  border: 1.2px solid #eee;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
+  background: #fafafa;
+  color: #222;
+  resize: none;
+}
+.not-allowed-modal input[type="range"] {
+  width: 120px;
+  margin: 0 0.7rem 0 0.7rem;
+}
+.not-allowed-modal-categories {
+  margin: 1.1rem 0 0.5rem 0;
+  font-size: 1.01rem;
+  color: #333;
+}
+.not-allowed-modal-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+.not-allowed-modal-actions {
+  display: flex;
+  gap: 1.1rem;
+  margin-top: 1.1rem;
+}
+.not-allowed-modal-submit {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  font-size: 1.06rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.not-allowed-modal-submit:hover {
+  background: #b71c1c;
+}
+.not-allowed-modal-register {
+  background: #fff;
+  color: #e53935;
+  border: 1.5px solid #e53935;
+  border-radius: 6px;
+  padding: 0.4rem 1.1rem;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 1.01rem;
+  transition: background 0.18s, color 0.18s;
+}
+.not-allowed-modal-register:hover {
+  background: #e53935;
+  color: #fff;
+}
+.not-allowed-modal-error {
+  color: #e53935;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}

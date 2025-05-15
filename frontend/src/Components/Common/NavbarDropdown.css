@@ -1,0 +1,29 @@
+.dropdown-menu-custom {
+  min-width: 140px;
+  width: 180px;
+  background: #222;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  padding: 0.3rem 0;
+  font-size: 0.98rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.dropdown-menu-custom .dropdown-item {
+  padding: 7px 18px;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  text-align: left;
+  font-weight: 600;
+}
+.dropdown-menu-custom .dropdown-item:hover {
+  background: #323232;
+  color: #ff3333;
+}

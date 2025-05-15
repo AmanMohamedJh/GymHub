@@ -1,0 +1,98 @@
+/* Container Styles */
+.progress-container {
+  background-color: #111;
+  color: #fff;
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+/* Header Section */
+.progress-container .header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.progress-container .header-section h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.progress-container .profile-info {
+  display: flex;
+  align-items: center;
+}
+
+.progress-container .profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.progress-container .client-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.progress-container .client-info h3 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.progress-container .client-info p {
+  font-size: 16px;
+  color: #bbb;
+}
+
+/* Progress Overview Section */
+.progress-container .overview-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.progress-container .workout-summary {
+  width: 45%;
+}
+
+.progress-container .summary-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.progress-container .summary-item h5 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.progress-container .summary-item p {
+  font-size: 16px;
+  color: #ffd700;
+}
+
+/* Workout History Section */
+.progress-container .history-section {
+  margin-bottom: 30px;
+}
+
+.progress-container .history-section h4 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.progress-container .history-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.progress-container .history-section li {
+  font-size: 16px;
+  margin-bottom: 10px;
+}

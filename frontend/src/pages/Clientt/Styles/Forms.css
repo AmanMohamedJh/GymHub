@@ -1,0 +1,239 @@
+.form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.form-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+}
+
+.form-container input[type="text"],
+.form-container input[type="number"],
+.form-container input[type="password"],
+.form-container input[type="email"],
+.form-container select,
+.form-container textarea {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 0.75rem;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.form-container input::placeholder {
+  color: #999;
+}
+
+.form-container .exercise-item input {
+  background-color: white !important;
+  color: #333 !important;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  padding-right: 3rem;
+}
+
+.form-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  background-color: #f0f0f0;
+  z-index: 1010;
+}
+
+.close-button:hover {
+  background-color: #e0e0e0;
+  color: #dc3545;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  background-color: white;
+  color: #333;
+}
+
+.form-control::placeholder {
+  color: #999;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.exercise-list {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.exercise-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.exercise-item:last-child {
+  border-bottom: none;
+}
+
+.remove-exercise {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.remove-exercise:hover {
+  background: #dc354520;
+}
+
+.add-exercise {
+  width: 100%;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border: 1px dashed #007bff;
+  border-radius: 5px;
+  color: #007bff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.add-exercise:hover {
+  background: #007bff10;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.btn-secondary:hover {
+  background: #545b62;
+}
+
+.progress-input {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.progress-input input[type="range"] {
+  flex: 1;
+}
+
+.progress-value {
+  min-width: 4rem;
+  text-align: right;
+  color: #666;
+}

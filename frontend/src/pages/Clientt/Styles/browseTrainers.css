@@ -1,0 +1,292 @@
+/* Browse Trainers Page Styles */
+.browse-trainers-container {
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 7%;
+    margin-bottom: 3%;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    color: #333;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333
+}
+
+.trainer-search-bar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 36px;
+    padding: 18px;
+    background: #f6f7fa;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(231, 76, 60, 0.07);
+    flex-wrap: wrap;
+}
+
+.trainer-search-input {
+    flex: 2 1 220px;
+    padding: 12px 16px;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    border: 1.5px solid #e74c3c;
+    background: #222;
+    color: #fff;
+    transition: border-color 0.2s;
+    outline: none;
+}
+
+.trainer-search-input:focus {
+    border-color: #c0392b;
+    background: #181818;
+}
+
+.trainer-filter-select {
+    flex: 1 1 150px;
+    padding: 12px 14px;
+    font-size: 1.05rem;
+    border-radius: 6px;
+    border: 1.5px solid #e74c3c;
+    background: #fff;
+    color: #333;
+    outline: none;
+    margin-left: 0.5rem;
+    transition: border-color 0.2s;
+}
+
+.trainer-filter-select:focus {
+    border-color: #c0392b;
+}
+
+@media (max-width: 700px) {
+    .trainer-search-bar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+    .trainer-search-input, .trainer-filter-select {
+        width: 100%;
+        min-width: unset;
+        margin-left: 0;
+    }
+}
+
+.trainers-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.trainer-card {
+    background: linear-gradient(135deg, #fff 60%, #f7f8fa 100%);
+    color: #222;
+    border: 2px solid transparent;
+    border-radius: 22px;
+    padding: 44px 28px 32px 28px;
+    width: 330px;
+    min-height: 370px;
+    text-align: center;
+    transition: transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s cubic-bezier(.4,2,.6,1), border 0.25s;
+    box-shadow: 0 8px 32px 0 rgba(231,76,60,0.10), 0 1.5px 0 #f9d423;
+    position: relative;
+    overflow: visible;
+    margin-bottom: 22px;
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-image: linear-gradient(120deg, #e74c3c 0%, #f9d423 100%) 1;
+    background-image:
+        linear-gradient(135deg, #fff 70%, #f5f7fa 100%),
+        repeating-radial-gradient(circle at 80% 20%, #f9d42322 0px, #fff0 30px);
+}
+
+.trainer-card:hover {
+    transform: translateY(-14px) scale(1.04);
+    box-shadow: 0 20px 44px rgba(231, 76, 60, 0.18), 0 2px 0 #f9d423;
+    border-color: #e74c3c;
+}
+
+.trainer-avatar {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e74c3c 60%, #f9d423 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #fff;
+    position: absolute;
+    top: -42px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 18px rgba(231, 76, 60, 0.18);
+    border: 4px solid #fff;
+    z-index: 2;
+}
+
+.trainer-card .avatar-spacer {
+    height: 42px;
+    width: 100%;
+}
+
+.trainer-card h3 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    margin-top: 0;
+    letter-spacing: 0.7px;
+    color: #222;
+}
+
+.trainer-card .divider {
+    width: 50%;
+    height: 2px;
+    margin: 14px auto 18px auto;
+    background: linear-gradient(90deg, #e74c3c 0%, #f9d423 100%);
+    border-radius: 2px;
+    opacity: 0.18;
+}
+
+.trainer-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(245, 247, 250, 0.72);
+    border-radius: 14px;
+    padding: 18px 0 18px 0;
+    margin: 0 0 16px 0;
+    box-shadow: 0 1px 8px rgba(231, 76, 60, 0.06);
+    animation: fadeInDetails 0.7s cubic-bezier(.4,2,.6,1);
+}
+
+.trainer-details p {
+    font-size: 1.19rem;
+    color: #6a6060;
+    margin: 7px 0;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.45;
+    transition: color 0.18s;
+}
+
+.trainer-details .label {
+    color: #e74c3c;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    margin-right: 4px;
+}
+
+@keyframes fadeInDetails {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 700px) {
+    .trainer-details {
+        padding: 12px 0 12px 0;
+    }
+    .trainer-details p {
+        font-size: 1.02rem;
+    }
+}
+
+
+@media (max-width: 700px) {
+    .trainer-card {
+        width: 98vw;
+        padding: 32px 6vw 24px 6vw;
+        min-height: 320px;
+    }
+    .trainer-avatar {
+        width: 62px;
+        height: 62px;
+        font-size: 1.6rem;
+        top: -31px;
+    }
+    .trainer-card h3 {
+        font-size: 1.2rem;
+    }
+}
+
+
+.btn-red {
+    background: linear-gradient(90deg, #e53935 0%, #e74c3c 100%);
+    color: #fff;
+    border: none;
+    font-size: 1.13rem;
+    font-weight: 700;
+    padding: 0.85rem 2.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 26px;
+    box-shadow: 0 3px 16px rgba(231, 76, 60, 0.13);
+    transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.7px;
+}
+
+.btn-red:hover {
+    background: linear-gradient(90deg, #b71c1c 0%, #c0392b 100%);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 24px rgba(231, 76, 60, 0.18);
+}
+
+
+@media (max-width: 700px) {
+    .browse-trainers-container {
+        padding: 1rem;
+    }
+    .trainers-list {
+        flex-direction: column;
+        gap: 18px;
+    }
+    .trainer-card {
+        width: 95vw;
+        min-width: unset;
+        padding: 20px 10px;
+    }
+}
+
+
+.trainer-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.trainer-card p {
+    font-size: 1.1rem;
+    color: rgba(62, 50, 50, 0.704);
+}
+
+.btn-primary {
+    background: #e74c3c;
+    color: #f0f0f0;
+    border: none;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background: #c0392b;
+}

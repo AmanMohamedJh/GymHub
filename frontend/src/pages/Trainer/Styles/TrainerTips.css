@@ -1,0 +1,136 @@
+.trainer-tips-container {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 32px 32px 24px 32px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+}
+
+.trainer-tips-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ff5252;
+  margin-bottom: 32px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.trainer-tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.trainer-tip-card {
+  background: #f7f7fa;
+  border-radius: 12px;
+  padding: 22px 32px 18px 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-left: 4px solid #ff5252;
+  transition: box-shadow 0.2s;
+}
+.trainer-tip-card:hover {
+  box-shadow: 0 8px 24px rgba(255,82,82,0.10);
+}
+
+.trainer-tip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.trainer-tip-author {
+  font-weight: 600;
+  color: #ff5252;
+  letter-spacing: 0.5px;
+}
+.trainer-tip-date {
+  font-size: 0.95rem;
+  color: #bdbdbd;
+}
+.trainer-tip-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 6px;
+}
+.trainer-tip-desc {
+  color: #333;
+  font-size: 1.05rem;
+  margin-bottom: 14px;
+}
+
+.trainer-tip-replies {
+  background: #f0f0f5;
+  border-radius: 8px;
+  padding: 12px 14px 10px 14px;
+  margin-top: 10px;
+}
+.trainer-tip-replies-title {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #ff5252;
+  margin-bottom: 8px;
+}
+.trainer-tip-no-replies {
+  color: #888;
+  font-size: 0.97rem;
+  margin-bottom: 8px;
+}
+.trainer-tip-reply {
+  background: #fff;
+  border-radius: 6px;
+  padding: 9px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.reply-author {
+  font-weight: 600;
+  color: #ffb300;
+  margin-right: 12px;
+}
+.reply-date {
+  font-size: 0.92rem;
+  color: #bdbdbd;
+}
+.reply-comment {
+  margin-top: 3px;
+  color: #333;
+  font-size: 1.01rem;
+}
+
+.trainer-tip-reply-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.reply-input {
+  flex: 1;
+  padding: 7px 12px;
+  border-radius: 5px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  color: #222;
+  font-size: 1rem;
+  outline: none;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.reply-input:focus {
+  box-shadow: 0 0 0 2px #ff5252;
+  border: 1.5px solid #ff5252;
+}
+.reply-submit-btn {
+  background: #ff5252;
+  color: #fff;
+  border: none;
+  padding: 7px 18px;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.reply-submit-btn:hover {
+  background: #ff1744;
+}

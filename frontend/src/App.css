@@ -1,0 +1,32 @@
+/* Import Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap");
+
+/* Global Styles */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Utility Classes */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.max-w-2xl {
+  max-width: 600px;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -1,0 +1,36 @@
+/* Common Styles */
+
+/* Button Styles */
+.btn-primary,
+.btn-secondary {
+  padding: 12px 24px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border-radius: 5px !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  transition: background-color 0.3s ease !important;
+  border: none !important;
+}
+
+.btn-primary {
+  background-color: rgb(227, 73, 50) !important;
+  color: black !important;
+}
+
+.btn-primary:hover {
+  background-color: rgb(200, 60, 40) !important;
+}
+
+.btn-secondary {
+  background-color: transparent !important;
+  border: 2px solid white !important;
+  color: white !important;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/*These button css are used in all the pages through 
+/* will help not to duplicate the css in all the pages and will maintain consistency*/
